@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.util
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 
 fun <T> debounce(
     delayMillis: Long,
