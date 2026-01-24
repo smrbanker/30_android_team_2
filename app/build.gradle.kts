@@ -63,14 +63,14 @@ dependencies {
     // endregion
 
     // glide
-    implementation (libs.glide)
+    implementation(libs.glide)
     annotationProcessor(libs.compiler)
     // end glide
 
     // gson-retrofit
-    implementation (libs.gson)
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     // end gson-retrofit
 
     // viewmodel
@@ -84,8 +84,8 @@ dependencies {
     // end koin
 
     // fragment
-    implementation (libs.fragment.ktx)
-    implementation (libs.viewpager2)
+    implementation(libs.fragment.ktx)
+    implementation(libs.viewpager2)
     // end fragment
 
     // okHttp
