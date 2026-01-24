@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="vacancies_search">Поиск вакансий</string>
+    <string name="enter_query">Введите запрос</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="cannot_get_vacancies_list">Не удалось получить список вакансий</string>
 </resources>
