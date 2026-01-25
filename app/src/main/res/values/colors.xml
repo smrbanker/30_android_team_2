@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="background_day">#FDFDFD</color>
+    <color name="background_night">#1A1B22</color>
+    
+    <color name="text_primary_day">#1A1B22</color>
+    <color name="text_secondary_day">#858585</color>
+    
+    <color name="text_primary_night">#FFFFFF</color>
+    <color name="text_secondary_night">#AEAFB4</color>
+    
+    <color name="blue">#2B58F9</color>
+    <color name="blue_pressed">#1C3FC1</color>
+    <color name="red">#FF3B30</color>
+    
+    <color name="surface_day">#FFFFFF</color>
+    <color name="divider_day">#E5E5E5</color>
+    <color name="icon_tint_day">#1A1B22</color>
+    <color name="hint_text_day">#858585</color>
+    
+    <color name="surface_night">#22232C</color>
+    <color name="divider_night">#3E3F44</color>
+    <color name="icon_tint_night">#FFFFFF</color>
+    <color name="hint_text_night">#AEAFB4</color>
+    
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
 </resources>
