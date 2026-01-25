@@ -7,6 +7,6 @@ const val RESULT_CODE_FORBIDDEN = 403
 const val RESULT_CODE_NOT_FOUND = 404
 const val RESULT_CODE_SERVER_ERROR = 500
 
-open class Response() {
+open class Response {
     var resultCode = 0
 }
