@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.data.network
 
 import android.content.Context
-//import android.net.ConnectivityManager
-//import android.net.NetworkCapabilities
+// import android.net.ConnectivityManager
+// import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
@@ -31,29 +31,29 @@ class RetrofitNetworkClient(
             return Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
         }
 
-        if (dto is CountryRequest) { //TODO
+        if (dto is CountryRequest) { // TODO
         }
-        if (dto is IndustryRequest) { //TODO
+        if (dto is IndustryRequest) { // TODO
         }
-        if (dto is RegionRequest) { //TODO
+        if (dto is RegionRequest) { // TODO
         }
-        if (dto is SearchRequest) { //TODO
+        if (dto is SearchRequest) { // TODO
         }
-        if (dto is VacancyRequest) { //TODO
+        if (dto is VacancyRequest) { // TODO
         }
 
         val response = when (dto) {
-            is CountryRequest -> {}//TODO
-            is IndustryRequest -> {}//TODO
-            is RegionRequest -> {}//TODO
-            is SearchRequest -> {}//TODO
-            else -> {} //VacancyRequest TODO
+            is CountryRequest -> {} // TODO
+            is IndustryRequest -> {} // TODO
+            is RegionRequest -> {} // TODO
+            is SearchRequest -> {} // TODO
+            else -> {} // VacancyRequest TODO
         }
 
         return Response().apply { resultCode }
     }
 
-    //ЭТА ФУНКЦИЯ БЕЗ НАСТРОЙКИ ANDROID_MANIFEST НЕ РАБОТАЕТ. ПРОВЕРИЛ, ВСЕ ОК, НО ПОКА ЗАКОММЕНТИРОВАЛ
+    // ЭТА ФУНКЦИЯ БЕЗ НАСТРОЙКИ ANDROID_MANIFEST НЕ РАБОТАЕТ. ПРОВЕРИЛ, ВСЕ ОК, НО ПОКА ЗАКОММЕНТИРОВАЛ
     private fun isConnected(): Boolean { return true }
     /*    val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
