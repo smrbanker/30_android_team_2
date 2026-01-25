@@ -38,19 +38,21 @@
 
     <!-- Возможно тут уедет hint и placeholder при вводе текста. Надо будет тестить  -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="?attr/textInputFilledStyle"
         android:layout_marginTop="24dp"
         android:layout_marginHorizontal="16dp"
         app:boxStrokeWidth="0dp"
-        android:hint="Ожидаемая зарплата"
+        android:hint="@string/expected_salary"
         android:textColorHint="@color/gray_to_white"
         app:expandedHintEnabled="false"
-        app:placeholderText="Введите сумму"
+        app:placeholderText="@string/enter_amount"
         app:placeholderTextColor="@color/gray_to_white">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_12dp"
@@ -58,6 +60,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
