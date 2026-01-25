@@ -6,7 +6,7 @@ data class VacancyDto(
     val description: String,
     val salaryFrom: Int?,
     val salaryTo: Int?,
-    val currency: String,
+    val currency: String?,
     val address: Address?,
     val experience: Experience?,
     val schedule: Schedule?,
