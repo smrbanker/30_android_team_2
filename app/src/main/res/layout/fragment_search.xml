@@ -28,7 +28,7 @@
         android:id="@+id/edit_text_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginHorizontal="16dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -39,6 +39,7 @@
             android:background="@drawable/rounded_12dp"
             android:backgroundTint="@color/light_gray_to_gray"
             android:paddingStart="16dp"
+            android:inputType="number"
             android:hint="@string/enter_query"
             android:textColorHint="@color/gray_to_white"
             style="@style/DefaultTextRegular"
