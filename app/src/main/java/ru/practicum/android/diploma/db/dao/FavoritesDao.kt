@@ -21,5 +21,5 @@ interface FavoritesDao {
     suspend fun deleteFavoriteVacancy(favoriteVacancy: VacancyDetailEntity)
 
     @Query("SELECT * FROM favorites_vacancies_table ORDER BY insert_time DESC")
-    suspend fun getAllFavoriteVacancy(): Flow<List<VacancyDetailEntity>>
+    fun getAllFavoriteVacancy(): Flow<List<VacancyDetailEntity>>
 }
