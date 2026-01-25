@@ -4,8 +4,6 @@ import android.content.Context
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.requests.CountryRequest
-import ru.practicum.android.diploma.data.dto.requests.IndustryRequest
 import ru.practicum.android.diploma.data.dto.requests.RegionRequest
 import ru.practicum.android.diploma.data.dto.requests.SearchRequest
 import ru.practicum.android.diploma.data.dto.requests.VacancyRequest
