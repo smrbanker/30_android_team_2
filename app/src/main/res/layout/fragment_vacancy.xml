@@ -34,6 +34,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
+    <LinearLayout
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <ImageView
+            android:id="@+id/placeholder_image"
+            android:layout_width="match_parent"
+            android:layout_height="223dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/image_vacancy_not_found" />
+
+        <TextView
+            android:id="@+id/placeholder_text"
+            style="@style/DefaultTextMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="16dp"
+            android:textSize="22sp"
+            tools:text="@string/vacancy_not_found_or_deleted" />
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_border"
         android:layout_width="wrap_content"
@@ -99,8 +130,8 @@
                 style="@style/DefaultTextMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
                 android:textColor="@color/black"
+                android:textSize="22sp"
                 tools:text="ЕДА" />
 
             <TextView
