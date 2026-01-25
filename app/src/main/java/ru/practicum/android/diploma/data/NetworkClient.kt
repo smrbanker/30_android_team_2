@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.data.dto.Response
 interface NetworkClient {
     suspend fun doCountryRequest(): Response
     suspend fun doIndustryRequest(): Response
-    suspend fun doRegionRequest(dto: Any): Response
-    suspend fun doSearchRequest(dto: Any): Response
-    suspend fun doVacancyRequest(dto: Any): Response
+    suspend fun doRegionRequest(id: String): Response
+    suspend fun doSearchRequest(options: Map<String, String>): Response
+    suspend fun doVacancyRequest(id: String): Response
 }

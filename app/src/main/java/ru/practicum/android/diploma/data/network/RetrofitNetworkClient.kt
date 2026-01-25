@@ -36,45 +36,36 @@ class RetrofitNetworkClient(
         return Response().apply { resultCode }
     }
 
-    override suspend fun doRegionRequest(dto: Any): Response {
+    override suspend fun doRegionRequest(id: String): Response {
         // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
         //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         // }
 
-        if (dto !is RegionRequest) {
-            return Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
-        } else { // TO DO
-        }
+        // TO DO
 
         // val response = // TO DO
 
         return Response().apply { resultCode }
     }
 
-    override suspend fun doSearchRequest(dto: Any): Response {
+    override suspend fun doSearchRequest(options: Map<String, String>): Response {
         // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
         //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         // }
 
-        if (dto !is SearchRequest) {
-            return Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
-        } else { // TO DO
-        }
+        // TO DO
 
         // val response = // TO DO
 
         return Response().apply { resultCode }
     }
 
-    override suspend fun doVacancyRequest(dto: Any): Response {
+    override suspend fun doVacancyRequest(id: String): Response {
         // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
         //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         // }
 
-        if (dto !is VacancyRequest) {
-            return Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
-        } else { // TO DO
-        }
+       // TO DO
 
         // val response = // TO DO
 
