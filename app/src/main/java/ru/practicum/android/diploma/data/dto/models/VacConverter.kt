@@ -1,22 +1,24 @@
 package ru.practicum.android.diploma.data.dto.models
 
-fun vacancyToFull(vacancyDto: VacancyDto): Vacancy = with(vacancyDto) {
+import ru.practicum.android.diploma.domain.models.Vacancy
+
+fun vacancyToFull(vacancyDto: VacancyDetail): Vacancy = with(vacancyDto) {
     Vacancy(
         id = id,
         name = name,
         description = description,
-        salaryFrom = zeroIfNull(salary?.from),
-        salaryTo = zeroIfNull(salary?.to),
-        currency = emptyIfNull(salary?.currency),
-        city = emptyIfNull(address?.city),
-        street = emptyIfNull(address?.street),
-        building = emptyIfNull(address?.building),
-        fullAddress = emptyIfNull(address?.fullAddress),
-        experience = emptyIfNull(experience?.name),
-        schedule = emptyIfNull(schedule?.name),
-        employment = emptyIfNull(employment?.name),
-        contact = emptyIfNull(contacts?.name),
-        email = emptyIfNull(contacts?.email),
+        salaryFrom = salary?.from,
+        salaryTo = salary?.to,
+        currency = salary?.currency,
+        city = address?.city,
+        street = address?.street,
+        building = address?.building,
+        fullAddress = address?.fullAddress,
+        experience = experience?.name,
+        schedule = schedule?.name,
+        employment = employment?.name,
+        contact = contacts?.name,
+        email = contacts?.email,
         phone = phoneToString(contacts?.phone),
         employer = employer.name,
         logo = employer.logo,
@@ -26,9 +28,6 @@ fun vacancyToFull(vacancyDto: VacancyDto): Vacancy = with(vacancyDto) {
         industry = industry.name
     )
 }
-
-private fun emptyIfNull(value: String?) = value ?: ""
-private fun zeroIfNull(value: Int?) = value ?: 0
 
 fun phoneToString(phones: List<String>?): String {
     if (phones == null) {
