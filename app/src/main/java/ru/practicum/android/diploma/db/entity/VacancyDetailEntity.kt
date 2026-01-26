@@ -10,17 +10,31 @@ data class VacancyDetailEntity(
     val id: String,
     val name: String,
     val description: String,
-    val salary: String?,
-    val address: String?,
+    @ColumnInfo(name = "salary_from")
+    val salaryFrom: Int?,
+    @ColumnInfo(name = "salary_to")
+    val salaryTo: Int?,
+    val currency: String?,
+    val city: String?,
+    val street: String?,
+    val building: String?,
+    @ColumnInfo(name = "full_address")
+    val fullAddress: String?,
     val experience: String?,
     val schedule: String?,
     val employment: String?,
-    val contacts: String?,
-    val employer: String,
+    @ColumnInfo(name = "contacts_name")
+    val contactsName: String?,
+    @ColumnInfo(name = "contacts_email")
+    val contactsEmail: String?,
+    @ColumnInfo(name = "contacts_phone")
+    val contactsPhone: String?, // List<String>
+    @ColumnInfo(name = "employer_name")
+    val employerName: String,
+    @ColumnInfo(name = "employer_logo")
+    val employerLogo: String,
     val area: String,
-    val skills: String,
+    val skills: String, // List<String>
     val url: String,
-    val industry: String,
-    @ColumnInfo(name = "insert_time")
-    val insertTimestampMillis: Long = System.currentTimeMillis()
+    val industry: String
 )

@@ -14,12 +14,9 @@ interface FavoritesDao {
     @Insert(entity = VacancyDetailEntity::class, onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertNewFavoriteVacancy(favoriteVacancy: VacancyDetailEntity)
 
-    @Update(entity = VacancyDetailEntity::class, onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun updateFavoriteVacancy(favoriteVacancy: VacancyDetailEntity)
-
     @Delete(entity = VacancyDetailEntity::class)
     suspend fun deleteFavoriteVacancy(favoriteVacancy: VacancyDetailEntity)
 
-    @Query("SELECT * FROM favorites_vacancies_table ORDER BY insert_time DESC")
-    fun getAllFavoriteVacancy(): Flow<List<VacancyDetailEntity>>
+    @Query("SELECT * FROM favorites_vacancies_table")
+    suspend fun getAllFavoriteVacancy(): List<VacancyDetailEntity>
 }
