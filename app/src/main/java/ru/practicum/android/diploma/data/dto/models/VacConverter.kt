@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.data.dto.models
 
-fun vacancyToFull(vacancyDto: VacancyDto): VacRowDto = with(vacancyDto) {
-    VacRowDto(
+fun vacancyToFull(vacancyDto: VacancyDto): Vacancy = with(vacancyDto) {
+    Vacancy(
         id = id,
         name = name,
         description = description,
@@ -34,17 +34,17 @@ fun phoneToString(phones: List<String>?): String {
     if (phones == null) {
         return ""
     }
-    var result = ""
+    val result = StringBuilder()
     phones.forEach { phone ->
-        result += "- ${phone}\n"
+        result.append("- ${phone}\n")
     }
-    return result
+    return result.toString()
 }
 
 fun skillsToString(skills: List<String>): String {
-    var result = ""
+    val result = StringBuilder()
     skills.forEach { skill ->
-        result += "• ${skill}\n"
+        result.append("• ${skill}\n")
     }
-    return result
+    return result.toString()
 }

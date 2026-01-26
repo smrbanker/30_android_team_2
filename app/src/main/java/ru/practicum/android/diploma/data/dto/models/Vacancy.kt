@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.dto.models
 
-data class VacRowDto(
+data class Vacancy( // ЭТО ФАКТИЧЕСКИ КЛАСС ДЛЯ ДМИТРИЯ
     val id: String,
     val name: String,
     val description: String,
