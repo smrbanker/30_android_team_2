@@ -4,9 +4,7 @@ data class VacancyDto(
     val id: String,
     val name: String,
     val description: String,
-    val salaryFrom: Int?,
-    val salaryTo: Int?,
-    val currency: String?,
+    val salary: Salary?,
     val address: Address?,
     val experience: Experience?,
     val schedule: Schedule?,
@@ -17,6 +15,12 @@ data class VacancyDto(
     val skills: List<String>,
     val url: String,
     val industry: IndustryDto
+)
+
+data class Salary(
+    val from: Int?,
+    val to: Int?,
+    val currency: String?
 )
 
 data class Address(
