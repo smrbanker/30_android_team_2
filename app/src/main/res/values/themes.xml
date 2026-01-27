@@ -1,29 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Light theme -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/blue_pressed</item>
-        <item name="colorOnPrimary">@color/white1</item>
-        
-        <item name="colorSecondary">@color/blue</item>
-        <item name="colorSecondaryVariant">@color/blue_pressed</item>
-        <item name="colorOnSecondary">@color/white1</item>
-        
-        <item name="android:colorBackground">@color/background_day</item>
-        <item name="colorSurface">@color/surface_day</item>
-        <item name="colorOnBackground">@color/text_primary_day</item>
-        <item name="colorOnSurface">@color/text_primary_day</item>
-        
-        <item name="android:textColorPrimary">@color/text_primary_day</item>
-        <item name="android:textColorSecondary">@color/text_secondary_day</item>
-        <item name="android:textColorHint">@color/hint_text_day</item>
-        
-        <item name="android:statusBarColor">@color/background_day</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        
-        <item name="android:navigationBarColor">@color/background_day</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o">true</item>
-    </style>
+
 
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
 </resources>

@@ -1,27 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Dark theme -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/blue_pressed</item>
-        <item name="colorOnPrimary">@color/white1</item>
-        
-        <item name="colorSecondary">@color/blue</item>
-        <item name="colorSecondaryVariant">@color/blue_pressed</item>
-        <item name="colorOnSecondary">@color/white1</item>
-        
-        <item name="android:colorBackground">@color/background_night</item>
-        <item name="colorSurface">@color/surface_night</item>
-        <item name="colorOnBackground">@color/text_primary_night</item>
-        <item name="colorOnSurface">@color/text_primary_night</item>
-        
-        <item name="android:textColorPrimary">@color/text_primary_night</item>
-        <item name="android:textColorSecondary">@color/text_secondary_night</item>
-        <item name="android:textColorHint">@color/hint_text_night</item>
-        
-        <item name="android:statusBarColor">@color/background_night</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        
-        <item name="android:navigationBarColor">@color/background_night</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o">false</item>
+    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Customize your dark theme here. -->
+    <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <item name="colorPrimary">@color/white</item>
+    <item name="backgroundColor">@color/black</item>
     </style>
 </resources>
