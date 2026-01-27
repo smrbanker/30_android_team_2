@@ -40,7 +40,6 @@
             android:background="@drawable/rounded_12dp"
             android:backgroundTint="@color/light_gray_to_gray"
             android:paddingStart="16dp"
-            android:inputType="number"
             android:hint="@string/enter_query"
             android:textColorHint="@color/gray_to_white"
             style="@style/DefaultTextRegular"
