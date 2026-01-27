@@ -16,7 +16,7 @@ minSdk = "26"
 compileSdk = "34"
 navigationFragmentKtx = "2.2.0"
 retrofit = "2.3.0"
-roomRuntime = "2.5.1"
+roomRuntime = "2.6.1"
 targetSdk = "33"
 
 # Detekt
