@@ -22,4 +22,5 @@
     <string name="enter_amount">Введите сумму</string>
     <string name="dont_show_without_salary">Не показывать без зарплаты</string>
     <string name="vacancy_not_found_or_deleted">Вакансия не найдена или удалена</string>
+    <string name="main">Главная</string>
 </resources>

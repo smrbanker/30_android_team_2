@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/backgroundColor">
+    android:background="?attr/backgroundColor"
+    tools:context=".ui.search.fragment.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -39,7 +40,6 @@
             android:background="@drawable/rounded_12dp"
             android:backgroundTint="@color/light_gray_to_gray"
             android:paddingStart="16dp"
-            android:inputType="number"
             android:hint="@string/enter_query"
             android:textColorHint="@color/gray_to_white"
             style="@style/DefaultTextRegular"
