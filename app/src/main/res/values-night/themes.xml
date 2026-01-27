@@ -3,11 +3,11 @@
     <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/blue_pressed</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/white1</item>
         
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/blue_pressed</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/white1</item>
         
         <item name="android:colorBackground">@color/background_night</item>
         <item name="colorSurface">@color/surface_night</item>

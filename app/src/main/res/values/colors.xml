@@ -23,7 +23,7 @@
     <color name="icon_tint_night">#FFFFFF</color>
     <color name="hint_text_night">#AEAFB4</color>
     
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <color name="black1">#000000</color>
+    <color name="white1">#FFFFFF</color>
     <color name="transparent">#00000000</color>
 </resources>
