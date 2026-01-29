@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.db.FavouritesRepository
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.util.VacancyDbConverter
 
-class FavouriteRepositoryImpl(
+class FavouritesRepositoryImpl(
     private val database: Database,
     private val vacancyDbConverter: VacancyDbConverter
 ) : FavouritesRepository {
