@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Standard spacing -->
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_20">20dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_32">32dp</dimen>
+    <dimen name="spacing_40">40dp</dimen>
+    <dimen name="spacing_48">48dp</dimen>
+    
+    <!-- Text sizes -->
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
+    
+    <!-- Element sizes -->
+    <dimen name="button_height">44dp</dimen>
+    <dimen name="button_corner_radius">12dp</dimen>
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="icon_size_24">24dp</dimen>
+    <dimen name="icon_size_32">32dp</dimen>
+    <dimen name="icon_size_40">40dp</dimen>
+    <dimen name="icon_size_48">48dp</dimen>
+    
+    <!-- Container spacing -->
+    <dimen name="screen_horizontal_padding">16dp</dimen>
+    <dimen name="screen_vertical_padding">16dp</dimen>
+    
+    <!-- List sizes -->
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="list_item_spacing">8dp</dimen>
+    
+    <!-- Component heights -->
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="bottom_navigation_height">56dp</dimen>
+    <dimen name="search_bar_height">48dp</dimen>
+    
+    <!-- Line thickness -->
+    <dimen name="divider_thickness">1dp</dimen>
+    <dimen name="border_thickness">1dp</dimen>
+    
+    <!-- Elevations -->
+    <dimen name="elevation_small">2dp</dimen>
+    <dimen name="elevation_medium">4dp</dimen>
+    <dimen name="elevation_large">8dp</dimen>
+</resources>
+

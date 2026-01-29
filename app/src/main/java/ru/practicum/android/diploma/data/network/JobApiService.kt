@@ -1,0 +1,27 @@
+package ru.practicum.android.diploma.data.network
+
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.QueryMap
+import ru.practicum.android.diploma.data.dto.responses.FilterArea
+import ru.practicum.android.diploma.data.dto.responses.FilterIndustry
+import ru.practicum.android.diploma.data.dto.responses.VacancyDetail
+import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
+
+interface JobApiService {
+
+    @GET("vacancies")
+    suspend fun searchVacancies(@QueryMap options: Map<String, String>): VacancyResponse
+
+    @GET("vacancies/{v_id}")
+    suspend fun getVacancy(@Path("v_id") id: Int): VacancyDetail
+
+    @GET("areas")
+    suspend fun getCountries(): FilterArea
+
+    @GET("areas/{a_id}")
+    suspend fun getRegions(@Path("a_id") areaId: Int): FilterArea
+
+    @GET("industries")
+    suspend fun getIndustries(): FilterIndustry
+}

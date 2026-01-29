@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="Sergei_Smirnov">Сергей smrbanker Смирнов</string>
+    <string name="Nikita_Saltykov">Никита xVerlink Салтыков</string>
+    <string name="Dmitry_Schukin">Дмитрий Щукин</string>
+    <string name="Ekaterina_Alekseeva">Екатерина ZAZAZLIK Алексеева</string>
+    <string name="vacancies_search">Поиск вакансий</string>
+    <string name="enter_query">Введите запрос</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="cannot_get_vacancies_list">Не удалось получить список вакансий</string>
+    <string name="favorites">Избранное</string>
+    <string name="list_is_empty">Список пуст</string>
+    <string name="team">Команда</string>
+    <string name="working_on_the_app">Над приложением работали</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="vacancy_description">Описание вакансии</string>
+    <string name="requested_experience">Требуемый опыт</string>
+    <string name="filtration_settings">Настройки фильтрации</string>
+    <string name="workplace">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="enter_amount">Введите сумму</string>
+    <string name="dont_show_without_salary">Не показывать без зарплаты</string>
+    <string name="vacancy_not_found_or_deleted">Вакансия не найдена или удалена</string>
+    <string name="main">Главная</string>
 </resources>
