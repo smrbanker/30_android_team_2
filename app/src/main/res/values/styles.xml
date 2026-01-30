@@ -19,4 +19,16 @@
         <item name="android:textSize">32sp</item>
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
+
+    <style name="TitleItemStyle">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="TextItemStyle">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
 </resources>
