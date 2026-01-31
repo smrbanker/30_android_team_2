@@ -1,6 +1,10 @@
 package ru.practicum.android.diploma.data.network
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Response
 
@@ -45,15 +49,16 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
-
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
+        if (!isConnected()) {
+            return Response().apply { resultCode = Response.RESULT_CODE_NO_INTERNET }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                jobApiService.searchVacancies(options).apply { resultCode = Response.RESULT_CODE_SUCCESS }
+            } catch (e: Exception) {
+                Response().apply { resultCode = Response.RESULT_CODE_SERVER_ERROR }
+            }
+        }
     }
 
     override suspend fun doVacancyRequest(id: String): Response {
@@ -69,7 +74,7 @@ class RetrofitNetworkClient(
     }
 
     // ЭТА ФУНКЦИЯ БЕЗ НАСТРОЙКИ ANDROID_MANIFEST НЕ РАБОТАЕТ. ПРОВЕРИЛ, ВСЕ ОК, НО ПОКА ЗАКОММЕНТИРОВАЛ
-    /*private fun isConnected(): Boolean {
+    private fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
@@ -82,5 +87,5 @@ class RetrofitNetworkClient(
             }
         }
         return false
-    }*/
+    }
 }
