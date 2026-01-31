@@ -52,5 +52,7 @@ private fun currencyFormatter(currency: String?): String {
                 currency
             }
         }
-    } else return ""
+    } else {
+        return ""
+    }
 }

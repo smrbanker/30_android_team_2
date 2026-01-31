@@ -24,7 +24,7 @@ class FavouritesViewHolder(private val binding: ItemVacancyBinding) : RecyclerVi
         val logo = model.logo
         val path = binding.ivIcon
         val placeholder = R.drawable.placeholder_32px
-        setImage(context, logo, path, placeholder, 12)
+        setImage(context, logo, path, placeholder, ROUND_RADIUS)
         path.clipToOutline = true
     }
 
@@ -35,5 +35,9 @@ class FavouritesViewHolder(private val binding: ItemVacancyBinding) : RecyclerVi
             .transform(CenterInside(), RoundedCorners(dp))
             .placeholder(placeholder)
             .into(path)
+    }
+
+    companion object {
+        private const val ROUND_RADIUS = 12
     }
 }
