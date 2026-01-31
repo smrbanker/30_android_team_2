@@ -20,14 +20,14 @@ class SearchVacancyDetailsRepositoryImpl(
         when (vacancyResponse.resultCode) {
             RESULT_CODE_SUCCESS -> {
                 val vacancy = vacancyToFull((vacancyResponse as VacancyDetailResponse).vacancyDetail)
-                val requestResult =  Resource.Success(vacancy)
+                val requestResult = Resource.Success(vacancy)
                 emit(requestResult)
             }
             RESULT_CODE_NO_INTERNET -> {
                 emit(Resource.Error(Resource.CONNECTION_PROBLEM))
             }
             else -> {
-                emit (Resource.Error(Resource.SERVER_ERROR))
+                emit(Resource.Error(Resource.SERVER_ERROR))
             }
         }
     }
