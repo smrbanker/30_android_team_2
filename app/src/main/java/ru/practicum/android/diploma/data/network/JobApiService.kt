@@ -7,7 +7,7 @@ import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.responses.FilterArea
 import ru.practicum.android.diploma.data.dto.responses.FilterIndustry
-import ru.practicum.android.diploma.data.dto.responses.VacancyDetail
+import ru.practicum.android.diploma.data.dto.responses.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 
 interface JobApiService {
@@ -23,7 +23,7 @@ interface JobApiService {
     ): VacancyResponse
 
     @GET("vacancies/{v_id}")
-    suspend fun getVacancy(@Path("v_id") id: Int): VacancyDetail
+    suspend fun getVacancy(@Path("v_id") id: Int): VacancyDetailResponse
 
     @GET("areas")
     suspend fun getCountries(): FilterArea
