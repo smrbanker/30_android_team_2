@@ -23,7 +23,7 @@ interface JobApiService {
     ): VacancyResponse
 
     @GET("vacancies/{v_id}")
-    suspend fun getVacancy(@Path("v_id") id: Int): VacancyDetailResponse
+    suspend fun getVacancy(@Path("v_id") id: String): VacancyDetailResponse
 
     @GET("areas")
     suspend fun getCountries(): FilterArea
