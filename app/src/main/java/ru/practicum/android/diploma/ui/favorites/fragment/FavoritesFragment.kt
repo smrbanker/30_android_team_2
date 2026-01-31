@@ -24,11 +24,11 @@ class FavoritesFragment : Fragment() {
     private val binding get() = _binding!!
     private val vacanciesList = ArrayList<Vacancy>()
     private var adapter: FavouritesAdapter? = null
-    private lateinit var favouritesList: RecyclerView
-    private lateinit var imageView: ImageView
-    private lateinit var textView: TextView
-    private lateinit var layoutView: LinearLayout
-    private lateinit var progressBar: ProgressBar
+    private var favouritesList: RecyclerView? = null
+    private var imageView: ImageView? = null
+    private var textView: TextView? = null
+    private var layoutView: LinearLayout? = null
+    private var progressBar: ProgressBar? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -43,10 +43,10 @@ class FavoritesFragment : Fragment() {
             callDetails(vacancy)
         })
 
-        favouritesList = binding.recyclerView
-        favouritesList.layoutManager =
+        // favouritesList = binding.recyclerView
+        favouritesList?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        favouritesList.adapter = adapter
+        favouritesList?.adapter = adapter
 
         imageView = binding.placeholderImage
         textView = binding.placeholderText
@@ -83,31 +83,31 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        progressBar.visibility = View.GONE
-        favouritesList.visibility = View.GONE
-        layoutView.visibility = View.VISIBLE
-        imageView.visibility = View.VISIBLE
-        textView.visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.image_empty_favorites_placeholder)
-        textView.text = getString(R.string.list_is_empty)
+        progressBar?.visibility = View.GONE
+        favouritesList?.visibility = View.GONE
+        layoutView?.visibility = View.VISIBLE
+        imageView?.visibility = View.VISIBLE
+        textView?.visibility = View.VISIBLE
+        imageView?.setImageResource(R.drawable.image_empty_favorites_placeholder)
+        textView?.text = getString(R.string.list_is_empty)
     }
 
     private fun showError() {
-        progressBar.visibility = View.GONE
-        favouritesList.visibility = View.GONE
-        layoutView.visibility = View.VISIBLE
-        imageView.visibility = View.VISIBLE
-        textView.visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.image_wrong_query_placeholder)
-        textView.text = getString(R.string.cannot_get_vacancies_list)
+        progressBar?.visibility = View.GONE
+        favouritesList?.visibility = View.GONE
+        layoutView?.visibility = View.VISIBLE
+        imageView?.visibility = View.VISIBLE
+        textView?.visibility = View.VISIBLE
+        imageView?.setImageResource(R.drawable.image_wrong_query_placeholder)
+        textView?.text = getString(R.string.cannot_get_vacancies_list)
     }
 
     private fun showContent(vacancies: List<Vacancy>) {
-        progressBar.visibility = View.GONE
-        favouritesList.visibility = View.VISIBLE
-        layoutView.visibility = View.GONE
-        imageView.visibility = View.GONE
-        textView.visibility = View.GONE
+        progressBar?.visibility = View.GONE
+        favouritesList?.visibility = View.VISIBLE
+        layoutView?.visibility = View.GONE
+        imageView?.visibility = View.GONE
+        textView?.visibility = View.GONE
 
         vacanciesList.clear()
         vacanciesList.addAll(vacancies)
@@ -115,12 +115,13 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showLoading() {
-        progressBar.visibility = View.VISIBLE
+        progressBar?.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         adapter = null
+        favouritesList = null
         _binding = null
     }
 }
