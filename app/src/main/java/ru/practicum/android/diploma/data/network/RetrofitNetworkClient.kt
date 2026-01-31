@@ -57,6 +57,7 @@ class RetrofitNetworkClient(
             try {
                 jobApiService.searchVacancies(options).apply { resultCode = Response.RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
+                e.printStackTrace()
                 Response().apply { resultCode = Response.RESULT_CODE_SERVER_ERROR }
             }
         }
