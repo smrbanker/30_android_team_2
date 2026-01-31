@@ -74,7 +74,7 @@ class RetrofitNetworkClient(
                 try {
                     val response = jobApiService.getVacancy(id.toInt())
                     response.apply { resultCode = RESULT_CODE_SUCCESS }
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
                 }
             }

@@ -14,17 +14,23 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 class SearchVacancyDetailsRepositoryImpl(
     private val networkClient: NetworkClient,
 ) : SearchVacancyDetailsRepository {
+
     override fun searchVacancyDetails(id: String): Flow<Resource<Vacancy>> = flow {
 
         val vacancyResponse = networkClient.doVacancyRequest(id)
-        if (vacancyResponse.resultCode == RESULT_CODE_SUCCESS) {
-            val vacancy = vacancyToFull((vacancyResponse as VacancyDetailResponse).vacancyDetail)
-            val requestResult =  Resource.Success(vacancy)
-            emit(requestResult)
-        }else if (vacancyResponse.resultCode == RESULT_CODE_NO_INTERNET){
-            emit(Resource.Error(Resource.CONNECTION_PROBLEM))
-        }else {
-            emit(Resource.Error(Resource.SERVER_ERROR))
+
+        when (vacancyResponse.resultCode) {
+            RESULT_CODE_SUCCESS -> {
+                val vacancy = vacancyToFull((vacancyResponse as VacancyDetailResponse).vacancyDetail)
+                val requestResult =  Resource.Success( vacancy )
+                emit(requestResult)
+            }
+            RESULT_CODE_NO_INTERNET -> {
+                emit(Resource.Error(Resource.CONNECTION_PROBLEM))
+            }
+            else -> {
+                emit (Resource.Error( Resource.SERVER_ERROR))
+            }
         }
     }
 
