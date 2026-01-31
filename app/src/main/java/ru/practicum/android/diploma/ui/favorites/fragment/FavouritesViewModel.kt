@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.favorites.fragment
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +12,6 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import java.sql.SQLException
 
 class FavouritesViewModel(
-    private val context: Context,
     private val favouritesInteractor: FavouritesInteractor
 ) : ViewModel() {
 
