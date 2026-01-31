@@ -43,7 +43,7 @@ class FavoritesFragment : Fragment() {
             callDetails(vacancy)
         })
 
-        // favouritesList = binding.recyclerView
+        favouritesList = binding.recyclerView
         favouritesList?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         favouritesList?.adapter = adapter
@@ -55,8 +55,6 @@ class FavoritesFragment : Fragment() {
 
         val viewModel by viewModel<FavouritesViewModel>()
 
-        // viewModel.addSomeVacancies()
-        // viewModel.deleteSomeVacancies()
         viewModel.fillData()
 
         viewModel.observeState().observe(viewLifecycleOwner) {
