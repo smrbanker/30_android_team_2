@@ -10,7 +10,8 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 
 class VacancyRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val converter: VacancyConverter) : VacancyRepository {
+    private val converter: VacancyConverter
+) : VacancyRepository {
     override suspend fun getVacancies(filteredQuery: Map<String, String>): Resource<List<Vacancy>> {
         val response = networkClient.doSearchRequest(filteredQuery)
         return when (response.resultCode) {

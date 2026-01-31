@@ -6,6 +6,6 @@ sealed class Resource<T>(val data: T? = null, val message: String? = null) {
 
     companion object {
         const val CONNECTION_PROBLEM = "Нет интернета"
-        const val SERVER_ERROR ="Внутренняя ошибка сервера"
+        const val SERVER_ERROR = "Внутренняя ошибка сервера"
     }
 }

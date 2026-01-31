@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okio.IOException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Response
 
@@ -55,7 +56,7 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 jobApiService.searchVacancies(options).apply { resultCode = Response.RESULT_CODE_SUCCESS }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 Response().apply { resultCode = Response.RESULT_CODE_SERVER_ERROR }
             }
         }
@@ -81,9 +82,9 @@ class RetrofitNetworkClient(
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
             }
         }
         return false

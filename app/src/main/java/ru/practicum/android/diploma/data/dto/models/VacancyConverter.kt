@@ -34,7 +34,7 @@ class VacancyConverter(private val gson: Gson) {
 
     private fun convertStringListToString(stringList: List<String>?): String {
         return if (stringList != null) {
-            gson.toJson(stringList, object : TypeToken<List<String>>(){}.type)
+            gson.toJson(stringList, object : TypeToken<List<String>>() {}.type)
         } else {
             ""
         }
