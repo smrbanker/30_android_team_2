@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.IOException
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_SERVER_ERROR
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_SUCCESS
 import ru.practicum.android.diploma.data.dto.Response
 
 class RetrofitNetworkClient(
@@ -51,14 +54,14 @@ class RetrofitNetworkClient(
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {
         if (!isConnected()) {
-            return Response().apply { resultCode = Response.RESULT_CODE_NO_INTERNET }
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         }
         return withContext(Dispatchers.IO) {
             try {
-                jobApiService.searchVacancies(options).apply { resultCode = Response.RESULT_CODE_SUCCESS }
+                jobApiService.searchVacancies(options).apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
-                Response().apply { resultCode = Response.RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }

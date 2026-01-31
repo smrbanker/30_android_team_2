@@ -2,12 +2,12 @@ package ru.practicum.android.diploma.data.dto.responses
 
 import com.google.gson.annotations.SerializedName
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.models.VacancyDto
+import ru.practicum.android.diploma.data.dto.models.VacancyDetail
 
 data class VacancyResponse(
-    val found: Int, // Эти поля по сути не нужны - они нигде не испольлзуются, убираю?
-    val pages: Int, // Эти поля по сути не нужны - они нигде не испольлзуются, убираю?
-    val page: Int, // Эти поля по сути не нужны - они нигде не испольлзуются, убираю?
+    val found: Int,
+    val pages: Int,
+    val page: Int,
     @SerializedName("items")
-    val vacancies: List<VacancyDto>
+    val vacancies: List<VacancyDetail>
 ) : Response()

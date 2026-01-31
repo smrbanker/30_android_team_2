@@ -1,9 +1,8 @@
 package ru.practicum.android.diploma.data.dto.responses
 
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.models.VacancyDto
+import ru.practicum.android.diploma.data.dto.models.VacancyDetail
 
-// Файл к удалению
 data class VacancyDetail(
-    val vacancyDto: VacancyDto
+    val vacancyDetail: VacancyDetail
 ) : Response()

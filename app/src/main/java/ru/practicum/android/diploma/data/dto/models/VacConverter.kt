@@ -2,8 +2,7 @@ package ru.practicum.android.diploma.data.dto.models
 
 import ru.practicum.android.diploma.domain.models.Vacancy
 
-// Файл к удалению
-fun vacancyToFull(vacancyDto: VacancyDto): Vacancy = with(vacancyDto) {
+fun vacancyToFull(vacancyDetail: VacancyDetail): Vacancy = with(vacancyDetail) {
     Vacancy(
         id = id,
         name = name,
