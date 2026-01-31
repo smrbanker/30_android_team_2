@@ -1,0 +1,110 @@
+package ru.practicum.android.diploma.ui.favorites.fragment
+
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.db.FavouritesInteractor
+import ru.practicum.android.diploma.domain.models.Vacancy
+import java.sql.SQLException
+
+class FavouritesViewModel(
+    private val context: Context,
+    private val favouritesInteractor: FavouritesInteractor
+) : ViewModel() {
+
+    private val stateLiveData = MutableLiveData<FavouritesState>(FavouritesState.Loading)
+    fun observeState(): LiveData<FavouritesState> = stateLiveData
+
+    fun fillData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                favouritesInteractor
+                    .getAllFavoriteVacancy()
+                    .collect { vacancies ->
+                        processResult(vacancies)
+                    }
+            } catch (e: SQLException) {
+                Log.e("SQLException", e.toString())
+                stateLiveData.postValue(FavouritesState.Error)
+            }
+        }
+    }
+
+    private fun processResult(vacancies: List<Vacancy>) {
+        if (vacancies.isEmpty()) {
+            renderState(FavouritesState.Empty)
+        } else {
+            renderState(FavouritesState.Content(vacancies))
+        }
+    }
+
+    private fun renderState(state: FavouritesState) {
+        stateLiveData.postValue(state)
+    }
+
+    // НИЖЕ ДВЕ ФУНКЦИИ ДЛЯ РУЧНОГО ТЕСТИРОВАНИЯ РАБОТОСПОСОБНОСТИ. ПРОСТО УДАЛИТЬ, КАК ПОЯВИТСЯ НОРМАЛЬНЫЙ ЗАПРОС
+    /* fun addSomeVacancies() {
+        val vacancy = Vacancy(
+            "1",
+            "Full Stack Developer в Microsoft",
+            "Писать код",
+            1500,
+            2500,
+            "EUR",
+            "Москва",
+            "Street",
+            "12",
+            "Address",
+            "От 1 года до 3 лет",
+            "Полная занятость",
+            "Удаленная работа",
+            null,
+            null,
+            null,
+            "Microsoft",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png",
+            "Москва",
+            "",
+            "",
+            ""
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            favouritesInteractor.insertNewFavoriteVacancy(vacancy)
+        }
+    }
+
+    fun deleteSomeVacancies() {
+        val vacancy = Vacancy(
+            "1",
+            "Full Stack Developer в Microsoft",
+            "Писать код",
+            1500,
+            2500,
+            "EUR",
+            "Москва",
+            "Street",
+            "12",
+            "Address",
+            "От 1 года до 3 лет",
+            "Полная занятость",
+            "Удаленная работа",
+            null,
+            null,
+            null,
+            "Microsoft",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png",
+            "Москва",
+            "",
+            "",
+            ""
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            favouritesInteractor.deleteFavoriteVacancy(vacancy)
+        }
+    } */
+}

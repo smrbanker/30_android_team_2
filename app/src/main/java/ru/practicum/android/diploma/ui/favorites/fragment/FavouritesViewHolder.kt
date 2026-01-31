@@ -16,7 +16,7 @@ class FavouritesViewHolder(private val binding: ItemVacancyBinding) : RecyclerVi
     fun bind(model: Vacancy) = with(binding) {
         val context = itemView.context
 
-        val title = model.description + ", " + model.area
+        val title = model.name + ", " + model.area
         ivTitle.text = title
         ivCompany.text = model.employer
         ivSalary.text = salaryFormatter(model, context)

@@ -35,6 +35,7 @@
     <TextView
         android:id="@+id/ivTitle"
         style="@style/TitleItemStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_9"
         app:layout_constraintEnd_toEndOf="@id/right_border"
@@ -45,6 +46,7 @@
     <TextView
         android:id="@+id/ivCompany"
         style="@style/TextItemStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/right_border"
         app:layout_constraintStart_toStartOf="@id/left_border"
@@ -54,6 +56,7 @@
     <TextView
         android:id="@+id/ivSalary"
         style="@style/TextItemStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_9"
         app:layout_constraintBottom_toBottomOf="parent"
