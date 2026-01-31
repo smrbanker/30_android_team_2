@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.di
 
 import androidx.room.Room
+import com.google.gson.Gson
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -19,6 +20,7 @@ val dataModule = module {
 
     single { get<Database>().FavoritesDao() }
 
+    factory { Gson() }
     single<JobApiService> {
         Retrofit.Builder()
             .baseUrl("https://practicum-diploma-8bc38133faba.herokuapp.com/")

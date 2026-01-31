@@ -2,4 +2,5 @@
 <resources>
     <color name="light_gray_to_gray">@color/gray</color>
     <color name="gray_to_white">@color/white</color>
+    <color name="iv_icon">#1A1B22</color>
 </resources>
