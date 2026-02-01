@@ -67,15 +67,20 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun doVacancyRequest(id: String): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
+        if (!isConnected()) {
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        } else {
+            return withContext(Dispatchers.IO) {
+                try {
+                    val response = jobApiService.getVacancy(id)
+                    response.apply { resultCode = RESULT_CODE_SUCCESS }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                }
+            }
+        }
 
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
     }
 
     // ЭТА ФУНКЦИЯ БЕЗ НАСТРОЙКИ ANDROID_MANIFEST НЕ РАБОТАЕТ. ПРОВЕРИЛ, ВСЕ ОК, НО ПОКА ЗАКОММЕНТИРОВАЛ
