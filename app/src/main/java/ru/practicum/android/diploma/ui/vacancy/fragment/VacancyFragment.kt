@@ -30,12 +30,14 @@ class VacancyFragment : Fragment() {
 
         viewModel.checkFavourite(id) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
 
-        viewModel.observeFavouriteInfo().observe(viewLifecycleOwner) { // ИЗМЕНЕНИЕ СОСТОЯНИЯ КНОПКИ, КАК ОТВЕТ VIEWMODEL
-            when (it) {
-                true -> favour.setImageResource(R.drawable.ic_like_full)
-                false -> favour.setImageResource(R.drawable.ic_like_outlined)
+        // ИЗМЕНЕНИЕ СОСТОЯНИЯ КНОПКИ, КАК ОТВЕТ VIEWMODEL
+        viewModel.observeFavouriteInfo()
+            .observe(viewLifecycleOwner) {
+                when (it) {
+                    true -> favour.setImageResource(R.drawable.ic_like_full)
+                    false -> favour.setImageResource(R.drawable.ic_like_outlined)
+                }
             }
-        }
 
         favour.setOnClickListener { // ПРИ НАЖАТИИ НА КНОПКУ МЕНЯЕМ ЕЕ СОСТОЯНИЕ И БД (ДОБАВИТЬ/УДАЛИТЬ)
             // viewModel.changeFavourite(vacancy) // РАЗКОММЕНТИРУЙ, КОГДА БУДЕТ VACANCY ДЛЯ ДОБАВЛЕНИЯ В ИЗБРАННОЕ
