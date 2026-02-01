@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.domain.models.Resource
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.presentation.SearchViewModel
@@ -130,7 +129,8 @@ class SearchFragment : Fragment() {
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
         binding.apply {
-            searchResultCount.text = requireContext().resources.getQuantityString(R.plurals.vacancies_found, itemsFound, itemsFound)
+            searchResultCount.text = requireContext()
+                .resources.getQuantityString(R.plurals.vacancies_found, itemsFound, itemsFound)
             searchResultCount.isVisible = true
             recyclerView.isVisible = true
             placeholder.isVisible = false
