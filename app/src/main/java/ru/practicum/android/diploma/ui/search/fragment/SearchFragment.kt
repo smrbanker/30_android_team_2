@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.presentation.SearchViewModel
 import ru.practicum.android.diploma.ui.favorites.fragment.FavouritesAdapter
+import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyFragment
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
@@ -32,7 +33,8 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         _vacancyList = mutableListOf()
         _adapter = FavouritesAdapter(vacancyList) { vacancy ->
-            // реализовать переход на экран вакансии
+            findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment,
+                VacancyFragment.createArgs(vacancy.id))
         }
         return binding.root
     }

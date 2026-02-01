@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 
@@ -19,5 +20,11 @@ class VacancyFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val VACANCY_ID = "VACANCY_ID"
+        fun createArgs(vacancyId: String): Bundle =
+            bundleOf(VACANCY_ID to vacancyId)
     }
 }
