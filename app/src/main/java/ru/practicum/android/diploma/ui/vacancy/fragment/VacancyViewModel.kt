@@ -25,14 +25,14 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                 try {
                     favouritesInteractor.deleteFavoriteVacancy(vacancy)
                 } catch (e: SQLException) {
-                    Log.e("SQLException", e.toString())
+                    Log.e(SQL_EXCEPTION, e.toString())
                     // stateLiveData.postValue(VacancyDetailState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
                 }
             } else {
                 try {
                     favouritesInteractor.insertNewFavoriteVacancy(vacancy)
                 } catch (e: SQLException) {
-                    Log.e("SQLException", e.toString())
+                    Log.e(SQL_EXCEPTION, e.toString())
                     // stateLiveData.postValue(VacancyDetailState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
                 }
             }
@@ -54,7 +54,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     renderFavorite(false)
                 }
             } catch (e: SQLException) {
-                Log.e("SQLException", e.toString())
+                Log.e(SQL_EXCEPTION, e.toString())
                 // stateLiveData.postValue(VacancyDetailState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
             }
         }
@@ -62,5 +62,9 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
 
     private fun renderFavorite(favourite: Boolean) {
         favouriteInfo.postValue(favourite)
+    }
+
+    companion object {
+        private const val SQL_EXCEPTION = "SQLException"
     }
 }
