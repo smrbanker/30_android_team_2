@@ -43,7 +43,8 @@
             android:hint="@string/enter_query"
             android:textColorHint="@color/gray_to_white"
             style="@style/DefaultTextRegular"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:imeOptions="actionDone"/>
 
         <ImageView
             android:id="@+id/icon_lens"
