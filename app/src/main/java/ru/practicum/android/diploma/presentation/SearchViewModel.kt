@@ -17,7 +17,7 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
 
     private val currentPage = 1
     private var searchJob: Job? = null
-    private val vacancySearchDebounce = debounce<String>(DEBOUNCE_DELAY, viewModelScope, true) { text->
+    private val vacancySearchDebounce = debounce<String>(DEBOUNCE_DELAY, viewModelScope, true) { text ->
         search(text)
     }
 

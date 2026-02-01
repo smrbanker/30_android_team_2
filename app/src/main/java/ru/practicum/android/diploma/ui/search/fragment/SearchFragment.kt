@@ -63,8 +63,8 @@ class SearchFragment : Fragment() {
         }
 
         binding.editText.addTextChangedListener(
-            beforeTextChanged = {_, _, _, _ -> },
-            onTextChanged = {text, _, _, _ ->
+            beforeTextChanged = { _, _, _, _ -> },
+            onTextChanged = { text, _, _, _ ->
                 binding.clearTextButton.isVisible = !text.isNullOrEmpty()
                 binding.iconLens.isVisible = text.isNullOrEmpty()
 
@@ -72,7 +72,7 @@ class SearchFragment : Fragment() {
                     viewModel.searchDebounce(text.toString())
                 }
             },
-            afterTextChanged = {text: Editable? ->  }
+            afterTextChanged = { text: Editable? -> }
         )
 
         binding.clearTextButton.setOnClickListener {
@@ -95,8 +95,9 @@ class SearchFragment : Fragment() {
         when (state) {
             is VacancyState.Loading -> showLoading()
             is VacancyState.Empty -> showEmpty()
-            is VacancyState.Error -> showError(state.errorMessage)
             is VacancyState.Content -> showContent(state.vacanciesList, state.itemsFound)
+            // is VacancyState.Error -> showError(state.errorMessage)
+            else -> return // Тут будет обработка ошибок от Екатерины
         }
     }
 
@@ -113,7 +114,8 @@ class SearchFragment : Fragment() {
     private fun showEmpty() {
         binding.apply {
             placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
-            placeholderText.text = requireContext().resources.getString(R.string.cannot_get_vacancies_list)
+            placeholderText.text = requireContext()
+                .resources.getString(R.string.cannot_get_vacancies_list)
 
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
@@ -137,7 +139,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showError(errorMessage: String) {
+    /*private fun showError(errorMessage: String) {
         setPlaceholder(errorMessage)
         binding.apply {
             searchResultCount.isVisible = false
@@ -149,7 +151,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setPlaceholder(errorMessage: String) {
-        when(errorMessage) {
+        when (errorMessage) {
             Resource.CONNECTION_PROBLEM -> {
                 binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
                 binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
@@ -159,5 +161,5 @@ class SearchFragment : Fragment() {
                 binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
             }
         }
-    }
+    }*/
 }
