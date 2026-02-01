@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.vacancy.fragment
+package ru.practicum.android.diploma.ui.filtration
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,5 +19,9 @@ class FiltrationSettingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun newInstance() = FiltrationSettingsFragment()
     }
 }

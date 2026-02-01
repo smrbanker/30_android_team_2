@@ -37,6 +37,6 @@
         android:label="VacancyFragment" />
     <fragment
         android:id="@+id/filtrationSettingsFragment"
-        android:name="ru.practicum.android.diploma.ui.vacancy.fragment.FiltrationSettingsFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationSettingsFragment"
         android:label="FiltrationSettingsFragment" />
 </navigation>
