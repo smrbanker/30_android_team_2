@@ -10,16 +10,19 @@ class VacancyInteractorImpl(private val repository: VacancyRepository) : Vacancy
     override suspend fun getVacancies(filteredQuery: Map<String, String>): VacancyState {
         return when (val resource = repository.getVacancies(filteredQuery)) {
             is Resource.Success -> {
-                handleSuccess(requireNotNull(resource.data))
+                handleSuccess(
+                    requireNotNull(resource.data).vacancies,
+                    requireNotNull(resource.data).found
+                )
             }
             is Resource.Error -> handleError(requireNotNull(resource.message))
         }
     }
-    private fun handleSuccess(vacanciesList: List<Vacancy>): VacancyState {
+    private fun handleSuccess(vacanciesList: List<Vacancy>, itemsFound: Int): VacancyState {
         return if (vacanciesList.isEmpty()) {
             VacancyState.Empty
         } else {
-            VacancyState.Content(vacanciesList)
+            VacancyState.Content(vacanciesList, itemsFound)
         }
     }
 
