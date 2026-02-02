@@ -77,7 +77,8 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
         }
         renderState(
             VacancyDetailsState.Content(
-                vacancy = items, vacancy
+                vacancy = items,
+                vacancyFull = vacancy
             )
         )
     }

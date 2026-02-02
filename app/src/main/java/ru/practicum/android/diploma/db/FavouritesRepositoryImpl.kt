@@ -28,8 +28,11 @@ class FavouritesRepositoryImpl(
 
     override suspend fun getFavoriteVacancy(id: String): Vacancy? {
         val vacancy = database.getFavoriteVacancy(id)
-        return if (vacancy == null) { null }
-        else { vacancyDbConverter.map(vacancy) }
+        return if (vacancy == null) {
+            null
+        } else {
+            vacancyDbConverter.map(vacancy)
+        }
     }
 
     private fun convertFromVacancyDetailEntity(vacancies: List<VacancyDetailEntity>): List<Vacancy> {

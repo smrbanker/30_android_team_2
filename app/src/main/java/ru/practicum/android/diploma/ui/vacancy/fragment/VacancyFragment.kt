@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.ui.vacancy.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -69,8 +66,8 @@ class VacancyFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        favour.setOnClickListener { // ПРИ НАЖАТИИ НА КНОПКУ МЕНЯЕМ ЕЕ СОСТОЯНИЕ И БД (ДОБАВИТЬ/УДАЛИТЬ)
-            viewModel.changeFavourite(vacancyForFavourite) // РАЗКОММЕНТИРУЙ, КОГДА БУДЕТ VACANCY ДЛЯ ДОБАВЛЕНИЯ В ИЗБРАННОЕ
+        favour.setOnClickListener {
+            viewModel.changeFavourite(vacancyForFavourite)
         }
     }
 
