@@ -35,36 +35,35 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
             )
             viewModelScope.launch {
                 val result = vacancyInteractor.searchVacancyDetails(id)
+                val items = mutableListOf<VacancyCastItem>()
+                if (result.data != null) {
+                    items.addAll(buildVacancyCastItemList(result.data))
+                }
+                when {
+                    result.message != null -> {
+                        renderState(
+                            VacancyDetailsState.Error(
+                                errorMessage = R.string.server_error.toString(),
+                            )
+                        )
+                    }
 
-                        val items = mutableListOf<VacancyCastItem>()
-                        if (result.data != null) {
-                            items.addAll(buildVacancyCastItemList(result.data))
-                        }
-                        when {
-                            result.message != null -> {
-                                renderState(
-                                    VacancyDetailsState.Error(
-                                        errorMessage = R.string.server_error.toString(),
-                                    )
-                                )
-                            }
+                    items.isEmpty() -> {
+                        renderState(
+                            VacancyDetailsState.Empty(
+                                emptyMessage = R.string.vacancy_not_found_or_deleted.toString()
+                            )
+                        )
+                    }
 
-                            items.isEmpty() -> {
-                                renderState(
-                                    VacancyDetailsState.Empty(
-                                        emptyMessage = R.string.vacancy_not_found_or_deleted.toString()
-                                    )
-                                )
-                            }
-
-                            else -> {
-                                renderState(
-                                    VacancyDetailsState.Content(
-                                        vacancy = items,
-                                    )
-                                )
-                            }
-                        }
+                    else -> {
+                        renderState(
+                            VacancyDetailsState.Content(
+                                vacancy = items,
+                            )
+                        )
+                    }
+                }
 
             }
         }

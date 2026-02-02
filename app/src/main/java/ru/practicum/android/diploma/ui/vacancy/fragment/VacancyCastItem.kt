@@ -10,7 +10,7 @@ sealed interface VacancyCastItem {
         val employer: String,
         val logo: String,
         val area: String
-    ): VacancyCastItem
+    ) : VacancyCastItem
 
     data class ExperienceItem(
         val title: String,
