@@ -20,6 +20,7 @@ interface JobApiService {
     @GET("vacancies")
     suspend fun searchVacancies(@QueryMap options: Map<String, String>): VacancyResponse
 
+    @Headers("Authorization: Bearer $TOKEN")
     @GET("vacancies/{v_id}")
     suspend fun getVacancy(@Path("v_id") id: String): VacancyDetailResponse
 

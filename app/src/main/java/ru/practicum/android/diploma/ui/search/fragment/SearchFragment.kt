@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
         _vacancyList = mutableListOf()
         _adapter = FavouritesAdapter(vacancyList) { vacancy ->
             findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment,
-                VacancyFragment.createArgs(vacancy.id))
+                VacancyFragment.createArgsId(vacancy.id))
         }
         return binding.root
     }
