@@ -2,8 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
-    id("org.jetbrains.kotlin.kapt")
-    id("kotlin-parcelize")
 }
 
 android {
@@ -38,9 +36,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-    }
-
-    buildFeatures {
         viewBinding = true
     }
 }
@@ -52,6 +47,28 @@ dependencies {
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
+    implementation(libs.ui.recyclerView)
+    implementation("androidx.cardview:cardview:1.0.0")
+
+    // Network
+    implementation(libs.network.retrofit)
+    implementation(libs.network.retrofitGson)
+    implementation(libs.network.okhttp)
+    implementation(libs.network.okhttpLogging)
+    implementation(libs.network.gson)
+
+    // Dependency Injection
+    implementation(libs.di.koinAndroid)
+    implementation(libs.di.koinCore)
+
+    // Architecture Components
+    implementation(libs.arch.lifecycleViewModel)
+    implementation(libs.arch.lifecycleLiveData)
+    implementation(libs.arch.lifecycleRuntime)
+
+    // Coroutines
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
 
     // region Unit tests
     testImplementation(libs.unitTests.junit)
@@ -61,50 +78,4 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
-
-    // glide
-    implementation(libs.glide)
-    annotationProcessor(libs.compiler)
-    // end glide
-
-    // gson-retrofit
-    implementation(libs.gson)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    // end gson-retrofit
-
-    // viewmodel
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.activity.ktx)
-    // end viewmodel
-
-    // koin
-    implementation(libs.koin.android)
-    // end koin
-
-    // fragment
-    implementation(libs.fragment.ktx)
-    implementation(libs.viewpager2)
-    // end fragment
-
-    // okHttp
-    implementation(libs.logging.interceptor)
-    // end okHttp
-
-    // navigation
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
-    implementation(libs.fragment.ktx)
-    // end navigation
-
-    // coroutines
-    implementation(libs.kotlinx.coroutines.android)
-    // end coroutines
-
-    // room database
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
-    // end room database
 }
