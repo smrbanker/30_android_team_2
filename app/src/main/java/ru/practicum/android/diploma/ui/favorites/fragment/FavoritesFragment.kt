@@ -68,7 +68,7 @@ class FavoritesFragment : Fragment() {
         val vacancyJson: String = gson.toJson(vacancy)
         findNavController().navigate(
             R.id.action_favoritesFragment_to_vacancyFragment,
-            VacancyFragment.createArgsVacancy(vacancyJson) // ПОЛНЫЙ VACANCY
+            VacancyFragment.createArgsVacancy(vacancyJson) // ПОЛНЫЙ VACANCY IN JSON
         )
     }
 
