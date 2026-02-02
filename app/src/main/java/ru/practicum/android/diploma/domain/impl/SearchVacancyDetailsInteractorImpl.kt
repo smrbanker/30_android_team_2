@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 
 class SearchVacancyDetailsInteractorImpl(private val repository: SearchVacancyDetailsRepository) :
     SearchVacancyDetailsInteractor {
+
     override suspend fun searchVacancyDetails(id: String): Resource<Vacancy> {
         return repository.searchVacancyDetails(id)
     }

@@ -136,9 +136,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                 } catch (e: SQLException) {
                     Log.e(SQL_EXCEPTION, e.toString())
                     stateLiveData.postValue(
-                        VacancyDetailsState
-                        .Error(
-                            e.toString()
+                        VacancyDetailsState.Error(e.toString()
                         )
                     ) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
                 }
@@ -148,9 +146,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                 } catch (e: SQLException) {
                     Log.e(SQL_EXCEPTION, e.toString())
                     stateLiveData.postValue(
-                        VacancyDetailsState.Error(
-                            e.toString()
-                        )
+                        VacancyDetailsState.Error(e.toString())
                     ) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
                 }
             }
