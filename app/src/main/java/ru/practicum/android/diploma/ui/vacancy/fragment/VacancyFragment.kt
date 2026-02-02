@@ -36,10 +36,10 @@ class VacancyFragment : Fragment() {
         // НАЧАЛО КОДА ДЛЯ ОТРАБОТКИ НАЖАТИЯ НА КНОПКУ ИЗБРАННОГО
         val favour = binding.likeButton
 
-        if(!id.isNullOrEmpty() && vacancyFromDB == null) {
+        if (!id.isNullOrEmpty() && vacancyFromDB == null) {
             // viewModel.checkFavourite(id!!) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
             viewModel.searchVacancyId(id!!)
-        } else if(id.isNullOrEmpty() && vacancyFromDB != null) {
+        } else if (id.isNullOrEmpty() && vacancyFromDB != null) {
             // viewModel.checkFavourite(vacancyFromDB!!.id) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
             viewModel.setVacancyFromBase(vacancyFromDB!!)
         }
@@ -82,15 +82,15 @@ class VacancyFragment : Fragment() {
             is VacancyDetailsState.Empty -> showEmpty(state.emptyMessage)
         }
     }
-    private fun showLoading(){
+    private fun showLoading() {
         binding.progressBar.isVisible = true
-        binding.detailRecyclerView.isVisible= false
+        binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = false
     }
 
-    private fun showContent(vacancy: List<VacancyCastItem>){
+    private fun showContent(vacancy: List<VacancyCastItem>) {
         binding.progressBar.isVisible = false
-        binding.detailRecyclerView.isVisible= true
+        binding.detailRecyclerView.isVisible = true
         binding.placeholder.isVisible = false
         detailAdapter.updateAdapter(vacancy)
         detailAdapter.notifyDataSetChanged()
@@ -98,13 +98,13 @@ class VacancyFragment : Fragment() {
 
     private fun showError(errorMessage: String) {
         binding.progressBar.isVisible = false
-        binding.detailRecyclerView.isVisible= false
+        binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
         binding.placeholderText.text = getString(errorMessage.toInt())
     }
     private fun showEmpty(emptyMessage: String) {
         binding.progressBar.isVisible = false
-        binding.detailRecyclerView.isVisible= false
+        binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
         binding.placeholderText.text = getString(emptyMessage.toInt())
     }
@@ -112,7 +112,8 @@ class VacancyFragment : Fragment() {
         val id = arguments?.getString("VACANCY_ID")
         return id
     }
-    fun getMockVacancy(): Vacancy{
+
+    /* fun getMockVacancy(): Vacancy {
         return Vacancy(
             "0001b24b-da81-48cd-a420-91e3fbfc5ef0",
             "Backend Developer в Apple",
@@ -137,7 +138,7 @@ class VacancyFragment : Fragment() {
             "cek6h0n4ffe7ur.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com/vacancies/0001b24b-da81-48cd-a420-91e3fbfc5ef0",
             "Сельское хозяйство"
         )
-    }
+    } */
 
     companion object {
         private const val VACANCY_ID = "VACANCY_ID"

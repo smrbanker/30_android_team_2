@@ -84,12 +84,12 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
         stateLiveData.postValue(state)
     }
 
-    private fun getDescriptionItemsList(description: String) : List<VacancyCastItem>{
+    private fun getDescriptionItemsList(description: String): List<VacancyCastItem> {
         val descriptionList = description.split("\n") as MutableList<String>
         descriptionList.removeIf { it.isEmpty() }
         val items = mutableListOf<VacancyCastItem>()
         descriptionList.forEach { item ->
-            if(item.contains(':')) {
+            if (item.contains(':')) {
                 items.add(VacancyCastItem.SmallHeaderItem(item.trim()))
             } else {
                 items.add(VacancyCastItem.Item(item.trim()))
@@ -98,15 +98,15 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
         return items
     }
 
-    private fun buildVacancyCastItemList(vacancy: Vacancy): List<VacancyCastItem>{
+    private fun buildVacancyCastItemList(vacancy: Vacancy): List<VacancyCastItem> {
         val items = buildList<VacancyCastItem>() {
             if (vacancy.name.isNotEmpty()) {
-                val salary = salaryFormatter(vacancy,context)
+                val salary = salaryFormatter(vacancy, context)
                 this += VacancyCastItem.GeneralHeaderItem(
                     vacancyTitle = vacancy.name,
                     vacancySalary = salary)
             }
-            if(vacancy.employer.isNotEmpty()
+            if (vacancy.employer.isNotEmpty()
                 && vacancy.area.isNotEmpty()
                 && vacancy.logo.isNotEmpty()) {
                 this += VacancyCastItem.CompanyItem(
@@ -114,11 +114,11 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     area = vacancy.area,
                     logo = vacancy.logo)
             }
-            if(vacancy.description.isNotEmpty()){
+            if (vacancy.description.isNotEmpty()) {
                 this += VacancyCastItem.BigHeaderItem("Описание вакансии")
                 this.addAll(getDescriptionItemsList(vacancy.description))
             }
-            if(vacancy.skills.isNotEmpty()) {
+            if (vacancy.skills.isNotEmpty()) {
                 this += VacancyCastItem.BigHeaderItem("Ключевые навыки")
                 val skillsList = vacancy.skills.split(',')
                 this += skillsList.map { VacancyCastItem.Item(it) }
@@ -126,7 +126,6 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
         }
         return items
     }
-
 
     fun changeFavourite(vacancy: Vacancy) {
         viewModelScope.launch {
@@ -136,14 +135,23 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     favouritesInteractor.deleteFavoriteVacancy(vacancy)
                 } catch (e: SQLException) {
                     Log.e(SQL_EXCEPTION, e.toString())
-                    stateLiveData.postValue(VacancyDetailsState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                    stateLiveData.postValue(
+                        VacancyDetailsState
+                        .Error(
+                            e.toString()
+                        )
+                    ) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
                 }
             } else {
                 try {
                     favouritesInteractor.insertNewFavoriteVacancy(vacancy)
                 } catch (e: SQLException) {
                     Log.e(SQL_EXCEPTION, e.toString())
-                    stateLiveData.postValue(VacancyDetailsState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                    stateLiveData.postValue(
+                        VacancyDetailsState.Error(
+                            e.toString()
+                        )
+                    ) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
                 }
             }
             renderFavorite(!favourite)
