@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.vacancy.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetailsState
@@ -22,6 +26,7 @@ class VacancyFragment : Fragment() {
     private val detailAdapter = VacancyDetailsAdapter()
     private var id: String? = null
     private var vacancyFromDB: Vacancy? = null
+    private var vacancyForFavourite: Vacancy? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
@@ -37,25 +42,20 @@ class VacancyFragment : Fragment() {
         val favour = binding.likeButton
 
         if (!id.isNullOrEmpty() && vacancyFromDB == null) {
-            // viewModel.checkFavourite(id!!) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
+            viewModel.checkFavourite(id!!) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
             viewModel.searchVacancyId(id!!)
         } else if (id.isNullOrEmpty() && vacancyFromDB != null) {
-            // viewModel.checkFavourite(vacancyFromDB!!.id) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
+            viewModel.checkFavourite(vacancyFromDB!!.id) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
             viewModel.setVacancyFromBase(vacancyFromDB!!)
         }
         // ИЗМЕНЕНИЕ СОСТОЯНИЯ КНОПКИ, КАК ОТВЕТ VIEWMODEL
-        /* viewModel.observeFavouriteInfo()
+        viewModel.observeFavouriteInfo()
             .observe(viewLifecycleOwner) {
                 when (it) {
                     true -> favour.setImageResource(R.drawable.ic_like_full)
                     false -> favour.setImageResource(R.drawable.ic_like_outlined)
                 }
-            } */
-
-        favour.setOnClickListener { // ПРИ НАЖАТИИ НА КНОПКУ МЕНЯЕМ ЕЕ СОСТОЯНИЕ И БД (ДОБАВИТЬ/УДАЛИТЬ)
-            // viewModel.changeFavourite(vacancy) // РАЗКОММЕНТИРУЙ, КОГДА БУДЕТ VACANCY ДЛЯ ДОБАВЛЕНИЯ В ИЗБРАННОЕ
         }
-        // КОНЕЦ КОДА ДЛЯ ОТРАБОТКИ НАЖАТИЯ НА КНОПКУ ИЗБРАННОГО
 
         viewModel.observeState()
             .observe(viewLifecycleOwner) {
@@ -68,6 +68,10 @@ class VacancyFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+
+        favour.setOnClickListener { // ПРИ НАЖАТИИ НА КНОПКУ МЕНЯЕМ ЕЕ СОСТОЯНИЕ И БД (ДОБАВИТЬ/УДАЛИТЬ)
+            viewModel.changeFavourite(vacancyForFavourite) // РАЗКОММЕНТИРУЙ, КОГДА БУДЕТ VACANCY ДЛЯ ДОБАВЛЕНИЯ В ИЗБРАННОЕ
+        }
     }
 
     override fun onDestroyView() {
@@ -77,7 +81,7 @@ class VacancyFragment : Fragment() {
     private fun render(state: VacancyDetailsState) {
         when (state) {
             is VacancyDetailsState.Loading -> showLoading()
-            is VacancyDetailsState.Content -> showContent(state.vacancy)
+            is VacancyDetailsState.Content -> showContent(state.vacancy, state.vacancyFull)
             is VacancyDetailsState.Error -> showError(state.errorMessage)
             is VacancyDetailsState.Empty -> showEmpty(state.emptyMessage)
         }
@@ -88,7 +92,8 @@ class VacancyFragment : Fragment() {
         binding.placeholder.isVisible = false
     }
 
-    private fun showContent(vacancy: List<VacancyCastItem>) {
+    private fun showContent(vacancy: List<VacancyCastItem>, vacancyFull: Vacancy?) {
+        vacancyForFavourite = vacancyFull
         binding.progressBar.isVisible = false
         binding.detailRecyclerView.isVisible = true
         binding.placeholder.isVisible = false

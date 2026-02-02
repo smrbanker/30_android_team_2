@@ -18,6 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyFragment
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
@@ -67,7 +68,7 @@ class FavoritesFragment : Fragment() {
         val vacancyJson: String = gson.toJson(vacancy)
         findNavController().navigate(
             R.id.action_favoritesFragment_to_vacancyFragment,
-            // VacancyFragment.createArgs(vacancyJson) - ТРЕБУЕТСЯ СОЗДАТЬ ФУНКЦИЮ В VACANCY FRAGMENT
+            VacancyFragment.createArgsVacancy(vacancyJson)
         )
     }
 

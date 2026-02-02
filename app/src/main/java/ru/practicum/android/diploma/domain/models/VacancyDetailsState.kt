@@ -6,7 +6,8 @@ sealed interface VacancyDetailsState {
     object Loading : VacancyDetailsState
 
     data class Content(
-        val vacancy: List<VacancyCastItem>
+        val vacancy: List<VacancyCastItem>,
+        val vacancyFull: Vacancy?
     ) : VacancyDetailsState
 
     data class Error(
@@ -17,4 +18,3 @@ sealed interface VacancyDetailsState {
         val emptyMessage: String
     ) : VacancyDetailsState
 }
-
