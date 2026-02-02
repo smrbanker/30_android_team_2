@@ -135,19 +135,14 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     favouritesInteractor.deleteFavoriteVacancy(vacancy)
                 } catch (e: SQLException) {
                     Log.e(SQL_EXCEPTION, e.toString())
-                    stateLiveData.postValue(
-                        VacancyDetailsState.Error(e.toString()
-                        )
-                    ) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                    stateLiveData.postValue(VacancyDetailsState.Error(e.toString()))
                 }
             } else {
                 try {
                     favouritesInteractor.insertNewFavoriteVacancy(vacancy)
                 } catch (e: SQLException) {
                     Log.e(SQL_EXCEPTION, e.toString())
-                    stateLiveData.postValue(
-                        VacancyDetailsState.Error(e.toString())
-                    ) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                    stateLiveData.postValue(VacancyDetailsState.Error(e.toString()))
                 }
             }
             renderFavorite(!favourite)

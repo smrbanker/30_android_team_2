@@ -15,17 +15,17 @@ class SearchVacancyDetailsRepositoryImpl(
 
     override suspend fun searchVacancyDetails(id: String): Resource<Vacancy> {
         val vacancyResponse = networkClient.doVacancyRequest(id)
-        when (vacancyResponse.resultCode) {
+        return when (vacancyResponse.resultCode) {
             RESULT_CODE_SUCCESS -> {
                 val vacancy = vacancyToFullFromDetailResponse(vacancyResponse as VacancyDetailResponse)
                 val requestResult = Resource.Success(vacancy)
-                return requestResult
+                requestResult
             }
             RESULT_CODE_NO_INTERNET -> {
-                return Resource.Error(Resource.CONNECTION_PROBLEM)
+                Resource.Error(Resource.CONNECTION_PROBLEM)
             }
             else -> {
-                return Resource.Error(Resource.SERVER_ERROR)
+                Resource.Error(Resource.SERVER_ERROR)
             }
         }
     }
