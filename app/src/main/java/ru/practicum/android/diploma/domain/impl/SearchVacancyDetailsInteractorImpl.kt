@@ -10,5 +10,4 @@ class SearchVacancyDetailsInteractorImpl(private val repository: SearchVacancyDe
     override suspend fun searchVacancyDetails(id: String): Resource<Vacancy> {
         return repository.searchVacancyDetails(id)
     }
-
 }

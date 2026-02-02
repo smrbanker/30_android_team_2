@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
 
-class VacancyDetailsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemsList = ArrayList<VacancyCastItem>()
 
     override fun onCreateViewHolder(
