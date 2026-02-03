@@ -28,6 +28,9 @@ class SearchFragment : Fragment() {
     private var _vacancyList: MutableList<Vacancy>? = null
     private val vacancyList get() = _vacancyList!!
 
+    private var isLoading = false
+    //private var canLoadMore = false
+
     private val viewModel by viewModel<SearchViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -52,6 +55,7 @@ class SearchFragment : Fragment() {
 
         initListeners()
         configureRecyclerView()
+        setupScrollListener()
 
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
             render(vacancyState)
@@ -93,6 +97,18 @@ class SearchFragment : Fragment() {
             false)
     }
 
+    private fun setupScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                layoutManager.findLastVisibleItemPosition()
+                layoutManager.itemCount
+            }
+        })
+    }
+
     private fun render(state: VacancyState) {
         when (state) {
             is VacancyState.Loading -> showLoading()
@@ -104,6 +120,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading() {
+        isLoading = true
         binding.apply {
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
@@ -114,6 +131,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty() {
+        isLoading = false
         binding.apply {
             placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
             placeholderText.text = requireContext()
@@ -128,6 +146,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
+        isLoading = false
         vacancyList.clear()
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
@@ -143,8 +162,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun showError(errorMessage: String) {
+        isLoading = false
         setPlaceholder(errorMessage)
         binding.apply {
+            placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
+            placeholderText.text = errorMessage
+
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
             placeholder.isVisible = true
