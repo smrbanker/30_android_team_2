@@ -50,10 +50,6 @@ class VacancyFragment : Fragment() {
         vacancyFromDB = gson.fromJson(vacancyInJson, Vacancy::class.java)
         // endregion
 
-        // region Проверка наличия вакансии в списке избранных и вывод на экран результата поиска
-        checkSourceData()
-        // endregion
-
         // region Observers (ViewModel)
         val favour = binding.likeButton
         viewModel.observeFavouriteInfo()
@@ -68,6 +64,10 @@ class VacancyFragment : Fragment() {
             .observe(viewLifecycleOwner) {
                 render(it)
             }
+        // endregion
+
+        // region Проверка наличия вакансии в списке избранных и вывод на экран результата поиска
+        checkSourceData()
         // endregion
 
         // region Настройка RecyclerView
@@ -132,7 +132,7 @@ class VacancyFragment : Fragment() {
         binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
         binding.placeholderImage.setImageResource(R.drawable.server_error)
-        binding.placeholderText.text = getString(errorMessage.toInt())
+        binding.placeholderText.text = errorMessage
     }
     private fun showErrorDB(errorMessageDB: String) {
         when (errorMessageDB) {
@@ -163,7 +163,7 @@ class VacancyFragment : Fragment() {
         binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
         binding.placeholderImage.setImageResource(R.drawable.image_vacancy_not_found)
-        binding.placeholderText.text = getString(emptyMessage.toInt())
+        binding.placeholderText.text = emptyMessage
     }
     // endregion
 
