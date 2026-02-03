@@ -139,14 +139,14 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                         favouritesInteractor.deleteFavoriteVacancy(vacancy)
                     } catch (e: SQLException) {
                         Log.e(SQL_EXCEPTION, e.toString())
-                        stateLiveData.postValue(VacancyDetailsState.Error(e.toString()))
+                        stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_DELETE))
                     }
                 } else {
                     try {
                         favouritesInteractor.insertNewFavoriteVacancy(vacancy)
                     } catch (e: SQLException) {
                         Log.e(SQL_EXCEPTION, e.toString())
-                        stateLiveData.postValue(VacancyDetailsState.Error(e.toString()))
+                        stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_INSERT))
                     }
                 }
                 renderFavorite(!favourite)
@@ -165,7 +165,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                 }
             } catch (e: SQLException) {
                 Log.e(SQL_EXCEPTION, e.toString())
-                stateLiveData.postValue(VacancyDetailsState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_CHECK)) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
             }
         }
     }
@@ -176,5 +176,8 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
 
     companion object {
         private const val SQL_EXCEPTION = "SQLException"
+        const val DB_ERROR_INSERT = "Ошибка сохранения данных в БД"
+        const val DB_ERROR_DELETE = "Ошибка удаления данных из БД"
+        const val DB_ERROR_CHECK = "Ошибка проверки данных в БД"
     }
 }

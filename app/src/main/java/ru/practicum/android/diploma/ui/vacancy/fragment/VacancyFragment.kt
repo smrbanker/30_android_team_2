@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,6 +15,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetailsState
+import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_CHECK
+import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_DELETE
+import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_INSERT
 import kotlin.getValue
 
 class VacancyFragment : Fragment() {
@@ -81,6 +85,7 @@ class VacancyFragment : Fragment() {
             is VacancyDetailsState.Content -> showContent(state.vacancy, state.vacancyFull)
             is VacancyDetailsState.Error -> showError(state.errorMessage)
             is VacancyDetailsState.Empty -> showEmpty(state.emptyMessage)
+            is VacancyDetailsState.ErrorDB -> showErrorDB(state.errorMessageDB)
         }
     }
     private fun showLoading() {
@@ -103,6 +108,27 @@ class VacancyFragment : Fragment() {
         binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
         binding.placeholderText.text = getString(errorMessage.toInt())
+    }
+    private fun showErrorDB(errorMessageDB: String) {
+        when (errorMessageDB) {
+            DB_ERROR_INSERT -> Toast.makeText(
+                requireContext(),
+                DB_ERROR_INSERT, Toast.LENGTH_SHORT
+            )
+                .show()
+
+            DB_ERROR_DELETE -> Toast.makeText(
+                requireContext(),
+                DB_ERROR_DELETE, Toast.LENGTH_SHORT
+            )
+                .show()
+
+            DB_ERROR_CHECK -> Toast.makeText(
+                requireContext(),
+                DB_ERROR_CHECK, Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
     private fun showEmpty(emptyMessage: String) {
         binding.progressBar.isVisible = false

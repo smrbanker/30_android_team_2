@@ -17,4 +17,8 @@ sealed interface VacancyDetailsState {
     data class Empty(
         val emptyMessage: String
     ) : VacancyDetailsState
+
+    data class ErrorDB(
+        val errorMessageDB: String
+    ) : VacancyDetailsState
 }
