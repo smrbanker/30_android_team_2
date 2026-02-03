@@ -36,6 +36,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
             viewModelScope.launch {
                 val result = vacancyInteractor.searchVacancyDetails(id)
                 val items = mutableListOf<VacancyCastItem>()
+                val vacancy: Vacancy? = result.data
                 if (result.data != null) {
                     items.addAll(buildVacancyCastItemList(result.data))
                 }
@@ -60,6 +61,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                         renderState(
                             VacancyDetailsState.Content(
                                 vacancy = items,
+                                vacancyFull = vacancy
                             )
                         )
                     }
@@ -76,6 +78,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
         renderState(
             VacancyDetailsState.Content(
                 vacancy = items,
+                vacancyFull = vacancy
             )
         )
     }
@@ -127,44 +130,42 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
         return items
     }
 
-    fun changeFavourite(vacancy: Vacancy) {
-        viewModelScope.launch {
-            val favourite = favouriteInfo.value ?: false
-            if (favourite) {
-                try {
-                    favouritesInteractor.deleteFavoriteVacancy(vacancy)
-                } catch (e: SQLException) {
-                    Log.e(SQL_EXCEPTION, e.toString())
-                    stateLiveData.postValue(VacancyDetailsState.Error(e.toString()))
+    fun changeFavourite(vacancy: Vacancy?) {
+        if (vacancy != null) {
+            viewModelScope.launch {
+                val favourite = favouriteInfo.value ?: false
+                if (favourite) {
+                    try {
+                        favouritesInteractor.deleteFavoriteVacancy(vacancy)
+                    } catch (e: SQLException) {
+                        Log.e(SQL_EXCEPTION, e.toString())
+                        stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_DELETE))
+                    }
+                } else {
+                    try {
+                        favouritesInteractor.insertNewFavoriteVacancy(vacancy)
+                    } catch (e: SQLException) {
+                        Log.e(SQL_EXCEPTION, e.toString())
+                        stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_INSERT))
+                    }
                 }
-            } else {
-                try {
-                    favouritesInteractor.insertNewFavoriteVacancy(vacancy)
-                } catch (e: SQLException) {
-                    Log.e(SQL_EXCEPTION, e.toString())
-                    stateLiveData.postValue(VacancyDetailsState.Error(e.toString()))
-                }
+                renderFavorite(!favourite)
             }
-            renderFavorite(!favourite)
         }
     }
 
     fun checkFavourite(vacancyId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // ВОТ ЗДЕСЬ ВАЖНЫЙ МОМЕНТ. У НАС РЕАЛИЗОВАН ПОИСК ВАКАНСИИ ПО ID. Я ПОКА НЕ МОГУ ПРОВЕРИТЬ
-                // БУДЕТ ЛИ РАБОТАТЬ КОД НИЖЕ. ЕСЛИ НЕ БУДЕТ, ТО ЕСТЬ ВАРИАНТ ЗАМЕНИТЬ ВАКАНСИЮ НА ЕЕ ID,
-                // ЭТОТ ВАРИАНТ ТОЧНО РАБОЧИЙ. ПОКА НЕ УВЕРЕН, ЧТО ПРИ ОТСУТСТВИИ ВАКАНСИИ ТАК БУДЕТ РАБОТАТЬ
-                // ДМИТРИЙ, КАК ПРОВЕРИШЬ НАПИШИ - ЕСЛИ НЕ ОК, ТО Я ЗАМЕНЮ ВСЕ НА ВОЗВРАТ ID ВМЕСТО ВСЕЙ ВАКАНСИИ
                 val vacancy = favouritesInteractor.getFavoriteVacancy(vacancyId)
-                if (vacancyId == vacancy.id) {
-                    renderFavorite(true)
-                } else {
+                if (vacancy == null) {
                     renderFavorite(false)
+                } else {
+                    renderFavorite(true)
                 }
             } catch (e: SQLException) {
                 Log.e(SQL_EXCEPTION, e.toString())
-                stateLiveData.postValue(VacancyDetailsState.Error(e.toString())) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_CHECK))
             }
         }
     }
@@ -175,5 +176,8 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
 
     companion object {
         private const val SQL_EXCEPTION = "SQLException"
+        const val DB_ERROR_INSERT = "Ошибка сохранения данных в БД"
+        const val DB_ERROR_DELETE = "Ошибка удаления данных из БД"
+        const val DB_ERROR_CHECK = "Ошибка проверки данных в БД"
     }
 }

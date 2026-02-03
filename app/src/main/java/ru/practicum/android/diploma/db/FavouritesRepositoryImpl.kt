@@ -26,9 +26,13 @@ class FavouritesRepositoryImpl(
         emit(convertFromVacancyDetailEntity(vacancies))
     }
 
-    override suspend fun getFavoriteVacancy(id: String): Vacancy {
+    override suspend fun getFavoriteVacancy(id: String): Vacancy? {
         val vacancy = database.getFavoriteVacancy(id)
-        return vacancyDbConverter.map(vacancy)
+        return if (vacancy == null) {
+            null
+        } else {
+            vacancyDbConverter.map(vacancy)
+        }
     }
 
     private fun convertFromVacancyDetailEntity(vacancies: List<VacancyDetailEntity>): List<Vacancy> {
