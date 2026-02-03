@@ -19,7 +19,7 @@ val repositoryModule = module {
         Gson()
     }
 
-    single<FavouritesRepository> {
+    factory<FavouritesRepository> {
         FavouritesRepositoryImpl(get(), get())
     }
 
