@@ -27,6 +27,9 @@ class SearchFragment : Fragment() {
     private var _vacancyList: MutableList<Vacancy>? = null
     private val vacancyList get() = _vacancyList!!
 
+    private var isLoading = false
+    private var canLoadMore = false
+
     private val viewModel by viewModel<SearchViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -51,11 +54,11 @@ class SearchFragment : Fragment() {
 
         initListeners()
         configureRecyclerView()
+        setupScrollListener()
 
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
             render(vacancyState)
         }
-
     }
 
     private fun initListeners() {
@@ -71,6 +74,11 @@ class SearchFragment : Fragment() {
 
                 if (text?.isNotEmpty() == true) {
                     viewModel.searchDebounce(text.toString())
+                } else {
+                    // Очищаем список при пустом запросе
+                    vacancyList.clear()
+                    adapter.notifyDataSetChanged()
+                    showInitialState()
                 }
             },
             afterTextChanged = { text: Editable? -> }
@@ -92,17 +100,29 @@ class SearchFragment : Fragment() {
             false)
     }
 
+    private fun setupScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+            }
+        })
+    }
+
     private fun render(state: VacancyState) {
         when (state) {
             is VacancyState.Loading -> showLoading()
             is VacancyState.Empty -> showEmpty()
-            is VacancyState.Content -> showContent(state.vacanciesList, state.itemsFound)
-            // is VacancyState.Error -> showError(state.errorMessage)
-            else -> return // Тут будет обработка ошибок от Екатерины
+            is VacancyState.Error -> showError(state.errorMessage)
+            is VacancyState.Content -> TODO()
         }
     }
 
     private fun showLoading() {
+        isLoading = true
         binding.apply {
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
@@ -112,7 +132,13 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun showLoadingNextPage() {
+        isLoading = true
+        binding.progressBar.isVisible = false
+    }
+
     private fun showEmpty() {
+        isLoading = false
         binding.apply {
             placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
             placeholderText.text = requireContext()
@@ -126,7 +152,19 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun showInitialState() {
+        isLoading = false
+        binding.apply {
+            searchResultCount.isVisible = false
+            recyclerView.isVisible = false
+            placeholder.isVisible = false
+            startImage.isVisible = true
+            progressBar.isVisible = false
+        }
+    }
+
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
+        isLoading = false
         vacancyList.clear()
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
@@ -141,9 +179,20 @@ class SearchFragment : Fragment() {
         }
     }
 
-    /*private fun showError(errorMessage: String) {
-        setPlaceholder(errorMessage)
+    private fun showNextPageLoaded(newVacancies: List<Vacancy>, canLoadMore: Boolean) {
+        isLoading = false
+        val startPosition = vacancyList.size
+        vacancyList.addAll(newVacancies)
+        adapter.notifyItemRangeInserted(startPosition, newVacancies.size)
+        this.canLoadMore = canLoadMore
+    }
+
+    private fun showError(errorMessage: String) {
+        isLoading = false
         binding.apply {
+            placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
+            placeholderText.text = errorMessage
+
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
             placeholder.isVisible = true
@@ -151,17 +200,4 @@ class SearchFragment : Fragment() {
             progressBar.isVisible = false
         }
     }
-
-    private fun setPlaceholder(errorMessage: String) {
-        when (errorMessage) {
-            Resource.CONNECTION_PROBLEM -> {
-                binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
-                binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
-            }
-            Resource.SERVER_ERROR -> {
-                binding.placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
-                binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
-            }
-        }
-    }*/
 }
