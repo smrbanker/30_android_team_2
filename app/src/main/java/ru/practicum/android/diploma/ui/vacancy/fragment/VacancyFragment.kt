@@ -113,19 +113,22 @@ class VacancyFragment : Fragment() {
         when (errorMessageDB) {
             DB_ERROR_INSERT -> Toast.makeText(
                 requireContext(),
-                DB_ERROR_INSERT, Toast.LENGTH_SHORT
+                DB_ERROR_INSERT,
+                Toast.LENGTH_SHORT
             )
                 .show()
 
             DB_ERROR_DELETE -> Toast.makeText(
                 requireContext(),
-                DB_ERROR_DELETE, Toast.LENGTH_SHORT
+                DB_ERROR_DELETE,
+                Toast.LENGTH_SHORT
             )
                 .show()
 
             DB_ERROR_CHECK -> Toast.makeText(
                 requireContext(),
-                DB_ERROR_CHECK, Toast.LENGTH_SHORT
+                DB_ERROR_CHECK,
+                Toast.LENGTH_SHORT
             )
                 .show()
         }

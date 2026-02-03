@@ -165,7 +165,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                 }
             } catch (e: SQLException) {
                 Log.e(SQL_EXCEPTION, e.toString())
-                stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_CHECK)) // РАЗКОММЕНТИРУЙ, КАК ДОБАВИШЬ STATES
+                stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_CHECK))
             }
         }
     }
