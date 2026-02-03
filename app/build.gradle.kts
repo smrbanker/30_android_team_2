@@ -81,6 +81,7 @@ dependencies {
 
     // koin
     implementation(libs.koin.android)
+    implementation("io.insert-koin:koin-androidx-viewmodel:3.3.0")
     // end koin
 
     // fragment

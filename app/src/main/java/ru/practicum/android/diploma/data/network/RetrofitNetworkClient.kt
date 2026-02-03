@@ -1,8 +1,19 @@
 package ru.practicum.android.diploma.data.network
 
 import android.content.Context
+import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.Response
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_BAD_REQUEST
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_FORBIDDEN
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_NOT_FOUND
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_SERVER_ERROR
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_SUCCESS
+import ru.practicum.android.diploma.data.dto.responses.SearchResponse
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class RetrofitNetworkClient(
     private val jobApiService: JobApiService,
@@ -45,15 +56,29 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
-
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
+        return try {
+            val response = jobApiService.searchVacancies(options)
+            SearchResponse(response).apply {
+                resultCode = RESULT_CODE_SUCCESS
+            }
+        } catch (e: HttpException) {
+            val errorCode = when (e.code()) {
+                400 -> RESULT_CODE_BAD_REQUEST
+                403 -> RESULT_CODE_FORBIDDEN
+                404 -> RESULT_CODE_NOT_FOUND
+                500 -> RESULT_CODE_SERVER_ERROR
+                else -> RESULT_CODE_SERVER_ERROR
+            }
+            Response().apply { resultCode = errorCode }
+        } catch (e: UnknownHostException) {
+            Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        } catch (e: SocketTimeoutException) {
+            Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        } catch (e: IOException) {
+            Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        } catch (e: Exception) {
+            Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+        }
     }
 
     override suspend fun doVacancyRequest(id: String): Response {
