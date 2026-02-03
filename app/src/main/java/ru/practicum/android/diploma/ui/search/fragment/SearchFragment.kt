@@ -132,11 +132,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showLoadingNextPage() {
-        isLoading = true
-        binding.progressBar.isVisible = false
-    }
-
     private fun showEmpty() {
         isLoading = false
         binding.apply {
@@ -177,14 +172,6 @@ class SearchFragment : Fragment() {
             startImage.isVisible = false
             progressBar.isVisible = false
         }
-    }
-
-    private fun showNextPageLoaded(newVacancies: List<Vacancy>, canLoadMore: Boolean) {
-        isLoading = false
-        val startPosition = vacancyList.size
-        vacancyList.addAll(newVacancies)
-        adapter.notifyItemRangeInserted(startPosition, newVacancies.size)
-        this.canLoadMore = canLoadMore
     }
 
     private fun showError(errorMessage: String) {
