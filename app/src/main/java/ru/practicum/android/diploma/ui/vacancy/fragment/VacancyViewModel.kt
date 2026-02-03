@@ -16,18 +16,22 @@ import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.util.salaryFormatter
 import java.sql.SQLException
 
-class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН НУЖЕН ДЛЯ ДОБАВЛЕНИЯ ВАКАНСИИ В ИЗБРАННОЕ
+
+class VacancyViewModel(
     private val favouritesInteractor: FavouritesInteractor,
     private val vacancyInteractor: SearchVacancyDetailsInteractor,
     private val context: Context
 ) : ViewModel() {
 
+    // region LiveData
     val favouriteInfo = MutableLiveData<Boolean>()
     fun observeFavouriteInfo(): LiveData<Boolean> = favouriteInfo
 
     private val stateLiveData = MutableLiveData<VacancyDetailsState>()
     fun observeState(): LiveData<VacancyDetailsState> = stateLiveData
+    // endregion
 
+    // region Методы получения объекта вакансии
     fun searchVacancyId(id: String) {
         if (!id.isNullOrEmpty()) {
             renderState(
@@ -44,7 +48,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     result.message != null -> {
                         renderState(
                             VacancyDetailsState.Error(
-                                errorMessage = R.string.server_error.toString(),
+                                errorMessage = context.getString(R.string.server_error),
                             )
                         )
                     }
@@ -52,7 +56,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     items.isEmpty() -> {
                         renderState(
                             VacancyDetailsState.Empty(
-                                emptyMessage = R.string.vacancy_not_found_or_deleted.toString()
+                                emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
                             )
                         )
                     }
@@ -82,11 +86,18 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
             )
         )
     }
+    // endregion
 
+    // region Rendering
     private fun renderState(state: VacancyDetailsState) {
         stateLiveData.postValue(state)
     }
+    private fun renderFavorite(favourite: Boolean) {
+        favouriteInfo.postValue(favourite)
+    }
+    // endregion
 
+    // region Методы конвертации и обработки данных объекта Vacancy
     private fun getDescriptionItemsList(description: String): List<VacancyCastItem> {
         val descriptionList = description.split("\n") as MutableList<String>
         descriptionList.removeIf { it.isEmpty() }
@@ -118,18 +129,20 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
                     logo = vacancy.logo)
             }
             if (vacancy.description.isNotEmpty()) {
-                this += VacancyCastItem.BigHeaderItem("Описание вакансии")
+                this += VacancyCastItem.BigHeaderItem(context.getString(R.string.vacancy_description))
                 this.addAll(getDescriptionItemsList(vacancy.description))
             }
             if (vacancy.skills.isNotEmpty()) {
-                this += VacancyCastItem.BigHeaderItem("Ключевые навыки")
+                this += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
                 val skillsList = vacancy.skills.split(',')
                 this += skillsList.map { VacancyCastItem.Item(it) }
             }
         }
         return items
     }
+    // endregion
 
+    // region Методы проверки состояния
     fun changeFavourite(vacancy: Vacancy?) {
         if (vacancy != null) {
             viewModelScope.launch {
@@ -169,10 +182,7 @@ class VacancyViewModel( // В ТЕЛЕ КЛАССА ВЕСЬ КОД МОЙ, ОН
             }
         }
     }
-
-    private fun renderFavorite(favourite: Boolean) {
-        favouriteInfo.postValue(favourite)
-    }
+    // endregion
 
     companion object {
         private const val SQL_EXCEPTION = "SQLException"
