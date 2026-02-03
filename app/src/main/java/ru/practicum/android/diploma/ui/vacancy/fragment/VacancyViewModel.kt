@@ -16,12 +16,11 @@ import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.util.salaryFormatter
 import java.sql.SQLException
 
-
 class VacancyViewModel(
     private val favouritesInteractor: FavouritesInteractor,
     private val vacancyInteractor: SearchVacancyDetailsInteractor,
     private val context: Context
-) : ViewModel() {
+): ViewModel() {
 
     // region LiveData
     val favouriteInfo = MutableLiveData<Boolean>()

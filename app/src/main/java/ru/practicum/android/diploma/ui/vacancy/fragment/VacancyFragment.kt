@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import kotlin.getValue
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
@@ -21,7 +22,6 @@ import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_CHECK
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_DELETE
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_INSERT
-import kotlin.getValue
 
 class VacancyFragment : Fragment() {
     private var id: String? = null
@@ -47,7 +47,7 @@ class VacancyFragment : Fragment() {
 
         // region Получение информции из экрана избранных вакансий
         val vacancyInJson = requireArguments().getString(VACANCY_OBJECT) ?: ""
-        val gson : Gson by inject()
+        val gson: Gson by inject()
         vacancyFromDB = gson.fromJson(vacancyInJson, Vacancy::class.java)
         // endregion
 
