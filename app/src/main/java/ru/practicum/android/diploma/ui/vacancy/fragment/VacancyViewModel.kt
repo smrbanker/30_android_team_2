@@ -20,7 +20,7 @@ class VacancyViewModel(
     private val favouritesInteractor: FavouritesInteractor,
     private val vacancyInteractor: SearchVacancyDetailsInteractor,
     private val context: Context
-): ViewModel() {
+) : ViewModel() {
 
     // region LiveData
     val favouriteInfo = MutableLiveData<Boolean>()
