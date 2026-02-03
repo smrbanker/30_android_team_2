@@ -120,6 +120,10 @@ class FavoritesFragment : Fragment() {
         super.onDestroyView()
         adapter = null
         favouritesList = null
+        imageView = null
+        textView = null
+        layoutView = null
+        progressBar = null
         _binding = null
     }
 }
