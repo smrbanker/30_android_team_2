@@ -143,10 +143,10 @@ class VacancyViewModel(
                     this += VacancyCastItem.MailItem(vacancy.name, "")
                 }
             }
-            if (!vacancy.phone.isNullOrEmpty()) {
-                val phones = vacancy.phone.split(',')
-                this += phones.map { VacancyCastItem.PhoneItem(it) }
-            }
+            //if (!vacancy.phone.isNullOrEmpty()) {
+            //    val phones = vacancy.phone.split(',')
+            //    this += phones.map { VacancyCastItem.PhoneItem(it) }
+            //}
         }
         return items
     }
