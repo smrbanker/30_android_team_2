@@ -18,6 +18,7 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
 
+    private var latestSearchText = ""
     private var currentPage = 1
     private var isLoading = false
     private var searchJob: Job? = null
@@ -26,6 +27,8 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
     }
 
     fun searchDebounce(text: String) {
+        if (latestSearchText == text) return
+        latestSearchText = text
         vacancySearchDebounce(text)
     }
 
