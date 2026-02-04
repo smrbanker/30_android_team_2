@@ -29,6 +29,7 @@ class SearchFragment : Fragment() {
     private val vacancyList get() = _vacancyList!!
 
     private var isLoading = false
+    private var currentPage = 1
 
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -102,10 +103,36 @@ class SearchFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                layoutManager.findLastVisibleItemPosition()
-                layoutManager.itemCount
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                if (totalItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && !isLoading) {
+                    loadMoreVacancies()
+                }
             }
         })
+    }
+
+    private fun loadMoreVacancies() {
+        if (isLoading) return
+
+        isLoading = true
+        viewModel.loadMoreVacancies().observe(viewLifecycleOwner) { vacancyState ->
+            when (vacancyState) {
+                is VacancyState.Content -> {
+                    vacancyList.addAll(vacancyState.vacanciesList)
+                    adapter.notifyDataSetChanged()
+                }
+                is VacancyState.Error -> {
+                    showError(vacancyState.errorMessage)
+                }
+                is VacancyState.Empty -> {
+                }
+                is VacancyState.Loading -> {
+                }
+            }
+            isLoading = false
+        }
     }
 
     private fun render(state: VacancyState) {

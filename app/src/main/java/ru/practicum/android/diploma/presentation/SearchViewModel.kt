@@ -15,7 +15,8 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
 
-    private val currentPage = 1
+    private var currentPage = 1
+    private var isLoading = false
     private var searchJob: Job? = null
     private val vacancySearchDebounce = debounce<String>(DEBOUNCE_DELAY, viewModelScope, true) { text ->
         search(text)
@@ -45,5 +46,48 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
 
     companion object {
         private const val DEBOUNCE_DELAY = 2000L
+    }
+
+    fun loadMoreVacancies(): LiveData<VacancyState> {
+        val resultLiveData = MutableLiveData<VacancyState>()
+
+        if (isLoading) return resultLiveData // Не загружать больше, если уже идет загрузка
+
+        isLoading = true
+        viewModelScope.launch {
+            try {
+                val filteredQuery = HashMap<String, String>()
+                filteredQuery["page"] = currentPage.toString() // Указываем текущую страницу
+
+                val state = vacancyInteractor.getVacancies(filteredQuery) // Получаем состояние вакансий
+
+                when (state) {
+                    is VacancyState.Content -> {
+                        val vacancies = state.vacanciesList
+                        if (vacancies.isNotEmpty()) {
+                            currentPage++ // Увеличиваем номер текущей страницы после успешной загрузки
+                            resultLiveData.postValue(VacancyState.Content(vacancies, vacancies.size))
+                        } else {
+                            resultLiveData.postValue(VacancyState.Empty)
+                        }
+                    }
+                    is VacancyState.Error -> {
+                        resultLiveData.postValue(VacancyState.Error(state.errorMessage))
+                    }
+                    is VacancyState.Empty -> {
+                        resultLiveData.postValue(VacancyState.Empty)
+                    }
+                    is VacancyState.Loading -> {
+                        resultLiveData.postValue(VacancyState.Loading)
+                    }
+                }
+            } catch (e: Exception) {
+                resultLiveData.postValue(VacancyState.Error(e.message ?: "Unknown error"))
+            } finally {
+                isLoading = false // Сбрасываем статус загрузки
+            }
+        }
+
+        return resultLiveData
     }
 }
