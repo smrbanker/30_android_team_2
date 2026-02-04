@@ -31,7 +31,6 @@ class VacancyFragment : Fragment() {
     private val viewModel: VacancyViewModel by viewModel()
     private val detailAdapter = VacancyDetailsAdapter()
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
         return binding.root
