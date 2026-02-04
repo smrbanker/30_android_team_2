@@ -31,7 +31,6 @@ class FavoritesFragment : Fragment() {
     private var layoutView: LinearLayout? = null
     private var progressBar: ProgressBar? = null
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root

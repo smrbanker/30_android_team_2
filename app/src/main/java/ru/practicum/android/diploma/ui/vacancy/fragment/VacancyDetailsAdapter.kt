@@ -22,7 +22,6 @@ class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         R.layout.details_mail_item -> DetailsMailViewHolder.Companion.from(parent)
         else -> error("Unknown viewType create [$viewType]")
     }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             R.layout.details_big_title_item -> {
@@ -56,10 +55,6 @@ class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             R.layout.details_phone_item -> {
                 val phoneHolder = holder as DetailsPhoneViewHolder
                 phoneHolder.bind(itemsList[position] as VacancyCastItem.PhoneItem)
-            }
-            R.layout.details_mail_item -> {
-                val mailHolder = holder as DetailsMailViewHolder
-                mailHolder.bind(itemsList[position] as VacancyCastItem.MailItem)
             }
             else -> error("Unknown viewType bind [${holder.itemViewType}]")
         }
