@@ -16,9 +16,10 @@
         <TextView
             android:id="@+id/item_text"
             style="@style/DefaultTextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             tools:text="Удаленная работа"
             app:layout_constraintStart_toEndOf="@id/separator"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

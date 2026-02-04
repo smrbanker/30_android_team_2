@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.vacancy.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -18,16 +21,16 @@ import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_CHECK
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_DELETE
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_INSERT
-import kotlin.getValue
 
 class VacancyFragment : Fragment() {
+    private var id: String? = null
+    private var vacancyFromDB: Vacancy? = null
+    private var vacancyForFavourite: Vacancy? = null
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyViewModel by viewModel()
     private val detailAdapter = VacancyDetailsAdapter()
-    private var id: String? = null
-    private var vacancyFromDB: Vacancy? = null
-    private var vacancyForFavourite: Vacancy? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
@@ -37,35 +40,43 @@ class VacancyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // region Получение информции из экрана поиска вакансий
         id = getArgsId()
-        // vacancyFromDB = getMockVacancy()
-        // НАЧАЛО КОДА ДЛЯ ОТРАБОТКИ НАЖАТИЯ НА КНОПКУ ИЗБРАННОГО
-        val favour = binding.likeButton
+        // endregion
 
-        if (!id.isNullOrEmpty() && vacancyFromDB == null) {
-            viewModel.checkFavourite(id!!) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
-            viewModel.searchVacancyId(id!!)
-        } else if (id.isNullOrEmpty() && vacancyFromDB != null) {
-            viewModel.checkFavourite(vacancyFromDB!!.id) // ПРОВЕРКА НА ИЗБРАННОСТЬ ПРИ ВХОДЕ, ЧТОБЫ УСТАНОВИТЬ СТАТУС
-            viewModel.setVacancyFromBase(vacancyFromDB!!)
-        }
-        // ИЗМЕНЕНИЕ СОСТОЯНИЯ КНОПКИ, КАК ОТВЕТ VIEWMODEL
+        // region Получение информции из экрана избранных вакансий
+        val vacancyInJson = requireArguments().getString(VACANCY_OBJECT) ?: ""
+        val gson: Gson by inject()
+        vacancyFromDB = gson.fromJson(vacancyInJson, Vacancy::class.java)
+        // endregion
+
+        // region Observers (ViewModel)
+        val favour = binding.likeButton
         viewModel.observeFavouriteInfo()
             .observe(viewLifecycleOwner) {
                 when (it) {
                     true -> favour.setImageResource(R.drawable.ic_like_full)
                     false -> favour.setImageResource(R.drawable.ic_like_outlined)
                 }
-        }
+            }
 
         viewModel.observeState()
             .observe(viewLifecycleOwner) {
                 render(it)
             }
+        // endregion
+
+        // region Проверка наличия вакансии в списке избранных и вывод на экран результата поиска
+        checkSourceData()
+        // endregion
+
+        // region Настройка RecyclerView
         binding.detailRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.detailRecyclerView.adapter = detailAdapter
+        // endregion
 
+        // region Listeners
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -73,12 +84,25 @@ class VacancyFragment : Fragment() {
         favour.setOnClickListener {
             viewModel.changeFavourite(vacancyForFavourite)
         }
+
+        binding.shareButton.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.setType("text/plain")
+            shareIntent.putExtra(Intent.EXTRA_TEXT, vacancyForFavourite?.url)
+            startActivity(shareIntent)
+        }
+        // endregion
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        id = null
+        vacancyFromDB = null
+        vacancyForFavourite = null
     }
+
+    // region Методы для отображения данных на экране
     private fun render(state: VacancyDetailsState) {
         when (state) {
             is VacancyDetailsState.Loading -> showLoading()
@@ -107,7 +131,8 @@ class VacancyFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
-        binding.placeholderText.text = getString(errorMessage.toInt())
+        binding.placeholderImage.setImageResource(R.drawable.server_error)
+        binding.placeholderText.text = errorMessage
     }
     private fun showErrorDB(errorMessageDB: String) {
         when (errorMessageDB) {
@@ -137,11 +162,24 @@ class VacancyFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
-        binding.placeholderText.text = getString(emptyMessage.toInt())
+        binding.placeholderImage.setImageResource(R.drawable.image_vacancy_not_found)
+        binding.placeholderText.text = emptyMessage
     }
-    fun getArgsId(): String? {
-        val id = arguments?.getString("VACANCY_ID")
+    // endregion
+
+    private fun getArgsId(): String? {
+        val id = arguments?.getString(VACANCY_ID)
         return id
+    }
+
+    private fun checkSourceData() {
+        if (!id.isNullOrEmpty() && vacancyFromDB == null) {
+            viewModel.checkFavourite(id!!)
+            viewModel.searchVacancyId(id!!)
+        } else if (id.isNullOrEmpty() && vacancyFromDB != null) {
+            viewModel.checkFavourite(vacancyFromDB!!.id)
+            viewModel.setVacancyFromBase(vacancyFromDB!!)
+        }
     }
 
     companion object {
