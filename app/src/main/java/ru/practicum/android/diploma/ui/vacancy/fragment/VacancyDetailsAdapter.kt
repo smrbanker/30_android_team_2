@@ -56,10 +56,6 @@ class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val phoneHolder = holder as DetailsPhoneViewHolder
                 phoneHolder.bind(itemsList[position] as VacancyCastItem.PhoneItem)
             }
-            // R.layout.details_mail_item -> {
-            //    val mailHolder = holder as DetailsMailViewHolder
-            //    mailHolder.bind(itemsList[position] as VacancyCastItem.MailItem)
-            // }
             else -> error("Unknown viewType bind [${holder.itemViewType}]")
         }
     }

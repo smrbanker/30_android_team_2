@@ -135,14 +135,6 @@ class VacancyViewModel(
                 this += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
                 this += VacancyCastItem.SkillItem(vacancy.skills)
             }
-            // if (!vacancy.name.isNullOrEmpty()) {
-            //    this += VacancyCastItem.BigHeaderItem(context.getString(R.string.contacts))
-            //    if (!vacancy.email.isNullOrEmpty()) {
-            //        this += VacancyCastItem.MailItem(vacancy.name, vacancy.email)
-            //    } else {
-            //        this += VacancyCastItem.MailItem(vacancy.name, "")
-            //    }
-            //}
             if (!vacancy.phone.isNullOrEmpty()) {
                 val phones = vacancy.phone.split(',')
                 this += phones.map { VacancyCastItem.PhoneItem(it) }
