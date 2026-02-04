@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewModel() {
     private val vacancyLiveData = MutableLiveData<VacancyState>()
@@ -51,21 +54,20 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
     fun loadMoreVacancies(): LiveData<VacancyState> {
         val resultLiveData = MutableLiveData<VacancyState>()
 
-        if (isLoading) return resultLiveData // Не загружать больше, если уже идет загрузка
-
+        if (isLoading) return resultLiveData
         isLoading = true
         viewModelScope.launch {
             try {
                 val filteredQuery = HashMap<String, String>()
-                filteredQuery["page"] = currentPage.toString() // Указываем текущую страницу
+                filteredQuery["page"] = currentPage.toString()
 
-                val state = vacancyInteractor.getVacancies(filteredQuery) // Получаем состояние вакансий
+                val state = vacancyInteractor.getVacancies(filteredQuery)
 
                 when (state) {
                     is VacancyState.Content -> {
                         val vacancies = state.vacanciesList
                         if (vacancies.isNotEmpty()) {
-                            currentPage++ // Увеличиваем номер текущей страницы после успешной загрузки
+                            currentPage++
                             resultLiveData.postValue(VacancyState.Content(vacancies, vacancies.size))
                         } else {
                             resultLiveData.postValue(VacancyState.Empty)
@@ -81,13 +83,18 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
                         resultLiveData.postValue(VacancyState.Loading)
                     }
                 }
+            } catch (e: IOException) {
+                resultLiveData.postValue(VacancyState.Error("Ошибка сети: ${e.message}"))
+            } catch (e: SocketTimeoutException) {
+                resultLiveData.postValue(VacancyState.Error("Время ожидания соединения истекло: ${e.message}"))
+            } catch (e: HttpException) {
+                resultLiveData.postValue(VacancyState.Error("Ошибка подключения: ${e.message}"))
             } catch (e: Exception) {
-                resultLiveData.postValue(VacancyState.Error(e.message ?: "Unknown error"))
+                resultLiveData.postValue(VacancyState.Error(e.message ?: "Неизвестная ошибка"))
             } finally {
-                isLoading = false // Сбрасываем статус загрузки
+                isLoading = false
             }
         }
-
         return resultLiveData
     }
 }
