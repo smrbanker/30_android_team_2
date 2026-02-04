@@ -69,9 +69,8 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
                 handleError(resultLiveData, "Время ожидания соединения истекло: ${e.message}")
             } catch (e: HttpException) {
                 handleError(resultLiveData, "Ошибка подключения: ${e.message}")
-            } catch (e: Exception) {
-                handleError(resultLiveData, e.message ?: "Неизвестная ошибка")
-            } finally {
+            }
+            finally {
                 isLoading = false
             }
         }
