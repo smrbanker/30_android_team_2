@@ -56,45 +56,59 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
 
         if (isLoading) return resultLiveData
         isLoading = true
+
         viewModelScope.launch {
+            val filteredQuery = createFilteredQuery()
+
             try {
-                val filteredQuery = HashMap<String, String>()
-                filteredQuery["page"] = currentPage.toString()
-
                 val state = vacancyInteractor.getVacancies(filteredQuery)
-
-                when (state) {
-                    is VacancyState.Content -> {
-                        val vacancies = state.vacanciesList
-                        if (vacancies.isNotEmpty()) {
-                            currentPage++
-                            resultLiveData.postValue(VacancyState.Content(vacancies, vacancies.size))
-                        } else {
-                            resultLiveData.postValue(VacancyState.Empty)
-                        }
-                    }
-                    is VacancyState.Error -> {
-                        resultLiveData.postValue(VacancyState.Error(state.errorMessage))
-                    }
-                    is VacancyState.Empty -> {
-                        resultLiveData.postValue(VacancyState.Empty)
-                    }
-                    is VacancyState.Loading -> {
-                        resultLiveData.postValue(VacancyState.Loading)
-                    }
-                }
+                handleVacancyState(state, resultLiveData)
             } catch (e: IOException) {
-                resultLiveData.postValue(VacancyState.Error("Ошибка сети: ${e.message}"))
+                handleError(resultLiveData, "Ошибка сети: ${e.message}")
             } catch (e: SocketTimeoutException) {
-                resultLiveData.postValue(VacancyState.Error("Время ожидания соединения истекло: ${e.message}"))
+                handleError(resultLiveData, "Время ожидания соединения истекло: ${e.message}")
             } catch (e: HttpException) {
-                resultLiveData.postValue(VacancyState.Error("Ошибка подключения: ${e.message}"))
+                handleError(resultLiveData, "Ошибка подключения: ${e.message}")
             } catch (e: Exception) {
-                resultLiveData.postValue(VacancyState.Error(e.message ?: "Неизвестная ошибка"))
+                handleError(resultLiveData, e.message ?: "Неизвестная ошибка")
             } finally {
                 isLoading = false
             }
         }
+
         return resultLiveData
+    }
+
+    private fun createFilteredQuery(): HashMap<String, String> {
+        val filteredQuery = HashMap<String, String>()
+        filteredQuery["page"] = currentPage.toString()
+        return filteredQuery
+    }
+
+    private fun handleVacancyState(state: VacancyState, resultLiveData: MutableLiveData<VacancyState>) {
+        when (state) {
+            is VacancyState.Content -> {
+                val vacancies = state.vacanciesList
+                if (vacancies.isNotEmpty()) {
+                    currentPage++
+                    resultLiveData.postValue(VacancyState.Content(vacancies, vacancies.size))
+                } else {
+                    resultLiveData.postValue(VacancyState.Empty)
+                }
+            }
+            is VacancyState.Error -> {
+                resultLiveData.postValue(VacancyState.Error(state.errorMessage))
+            }
+            is VacancyState.Empty -> {
+                resultLiveData.postValue(VacancyState.Empty)
+            }
+            is VacancyState.Loading -> {
+                resultLiveData.postValue(VacancyState.Loading)
+            }
+        }
+    }
+
+    private fun handleError(resultLiveData: MutableLiveData<VacancyState>, message: String) {
+        resultLiveData.postValue(VacancyState.Error(message))
     }
 }
