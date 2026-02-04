@@ -6,14 +6,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/backgroundColor">
 
+    <ImageView
+        android:id="@+id/phone_icon"
+        style="@style/PhoneStyle"
+        android:padding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
     <TextView
         android:id="@+id/item_text"
         style="@style/DefaultTextMedium"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        tools:text="Skill"
-        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Phone"
+        app:layout_constraintStart_toEndOf="@id/phone_icon"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/phone_icon"
+        app:layout_constraintBottom_toBottomOf="@id/phone_icon"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
