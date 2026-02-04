@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.domain.models.Resource
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.presentation.SearchViewModel
@@ -26,6 +27,9 @@ class SearchFragment : Fragment() {
     private val adapter get() = _adapter!!
     private var _vacancyList: MutableList<Vacancy>? = null
     private val vacancyList get() = _vacancyList!!
+
+    private var isLoading = false
+    private var currentPage = 1
 
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -51,6 +55,7 @@ class SearchFragment : Fragment() {
 
         initListeners()
         configureRecyclerView()
+        setupScrollListener()
 
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
             render(vacancyState)
@@ -92,17 +97,56 @@ class SearchFragment : Fragment() {
             false)
     }
 
+    private fun setupScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                if (totalItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && !isLoading) {
+                    loadMoreVacancies()
+                }
+            }
+        })
+    }
+
+    private fun loadMoreVacancies() {
+        if (isLoading) return
+
+        isLoading = true
+        viewModel.loadMoreVacancies().observe(viewLifecycleOwner) { vacancyState ->
+            when (vacancyState) {
+                is VacancyState.Content -> {
+                    vacancyList.addAll(vacancyState.vacanciesList)
+                    adapter.notifyDataSetChanged()
+                }
+                is VacancyState.Error -> {
+                    showError(vacancyState.errorMessage)
+                }
+                is VacancyState.Empty -> {
+                }
+                is VacancyState.Loading -> {
+                }
+            }
+            isLoading = false
+        }
+    }
+
     private fun render(state: VacancyState) {
         when (state) {
             is VacancyState.Loading -> showLoading()
             is VacancyState.Empty -> showEmpty()
             is VacancyState.Content -> showContent(state.vacanciesList, state.itemsFound)
-            // is VacancyState.Error -> showError(state.errorMessage)
-            else -> return // Тут будет обработка ошибок от Екатерины
+            is VacancyState.Error -> showError(state.errorMessage)
+            else -> return
         }
     }
 
     private fun showLoading() {
+        isLoading = true
         binding.apply {
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
@@ -113,6 +157,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty() {
+        isLoading = false
         binding.apply {
             placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
             placeholderText.text = requireContext()
@@ -127,6 +172,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
+        isLoading = false
         vacancyList.clear()
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
@@ -141,9 +187,13 @@ class SearchFragment : Fragment() {
         }
     }
 
-    /*private fun showError(errorMessage: String) {
+    private fun showError(errorMessage: String) {
+        isLoading = false
         setPlaceholder(errorMessage)
         binding.apply {
+            placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
+            placeholderText.text = errorMessage
+
             searchResultCount.isVisible = false
             recyclerView.isVisible = false
             placeholder.isVisible = true
@@ -163,5 +213,5 @@ class SearchFragment : Fragment() {
                 binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
             }
         }
-    }*/
+    }
 }
