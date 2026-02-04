@@ -29,7 +29,6 @@ class SearchFragment : Fragment() {
     private val vacancyList get() = _vacancyList!!
 
     private var isLoading = false
-    private var currentPage = 1
 
     private val viewModel by viewModel<SearchViewModel>()
 
