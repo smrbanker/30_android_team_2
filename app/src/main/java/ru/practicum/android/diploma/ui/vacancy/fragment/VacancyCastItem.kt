@@ -37,7 +37,7 @@ sealed interface VacancyCastItem {
 
     data class MailItem(
         val name: String,
-        val mail:String
+        val mail: String
     ) : VacancyCastItem
 
     data class PhoneItem(
