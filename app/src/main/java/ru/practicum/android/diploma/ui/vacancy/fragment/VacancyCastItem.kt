@@ -30,4 +30,8 @@ sealed interface VacancyCastItem {
     data class SmallHeaderItem(
         val title: String
     ) : VacancyCastItem
+
+    data class SkillItem(
+        val skills: String
+    ) : VacancyCastItem
 }

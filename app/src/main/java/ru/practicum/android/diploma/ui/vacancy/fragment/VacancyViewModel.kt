@@ -133,8 +133,7 @@ class VacancyViewModel(
             }
             if (vacancy.skills.isNotEmpty()) {
                 this += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
-                val skillsList = vacancy.skills.split(',')
-                this += skillsList.map { VacancyCastItem.Item(it) }
+                this += VacancyCastItem.SkillItem(vacancy.skills)
             }
         }
         return items
