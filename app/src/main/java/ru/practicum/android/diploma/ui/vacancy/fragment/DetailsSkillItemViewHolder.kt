@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.DetailsListSkillsItemBinding
 
-class DetailsSkillItemViewHolder (private val binding: DetailsListSkillsItemBinding) :
+class DetailsSkillItemViewHolder(private val binding: DetailsListSkillsItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     companion object {
