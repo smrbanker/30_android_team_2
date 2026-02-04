@@ -34,4 +34,13 @@ sealed interface VacancyCastItem {
     data class SkillItem(
         val skills: String
     ) : VacancyCastItem
+
+    data class MailItem(
+        val name: String,
+        val mail:String
+    ) : VacancyCastItem
+
+    data class PhoneItem(
+        val phone: String
+    ) : VacancyCastItem
 }

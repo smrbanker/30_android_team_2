@@ -18,6 +18,8 @@ class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         R.layout.details_list_item -> DetailsListItemViewHolder.Companion.from(parent)
         R.layout.details_small_title_item -> DetailsSmallTitleViewHolder.Companion.from(parent)
         R.layout.details_list_skills_item -> DetailsSkillItemViewHolder.Companion.from(parent)
+        R.layout.details_phone_item -> DetailsPhoneViewHolder.Companion.from(parent)
+        R.layout.details_mail_item -> DetailsMailViewHolder.Companion.from(parent)
         else -> error("Unknown viewType create [$viewType]")
     }
 
@@ -51,6 +53,14 @@ class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val skillHolder = holder as DetailsSkillItemViewHolder
                 skillHolder.bind(itemsList[position] as VacancyCastItem.SkillItem)
             }
+            R.layout.details_phone_item -> {
+                val phoneHolder = holder as DetailsPhoneViewHolder
+                phoneHolder.bind(itemsList[position] as VacancyCastItem.PhoneItem)
+            }
+            R.layout.details_mail_item -> {
+                val mailHolder = holder as DetailsMailViewHolder
+                mailHolder.bind(itemsList[position] as VacancyCastItem.MailItem)
+            }
             else -> error("Unknown viewType bind [${holder.itemViewType}]")
         }
     }
@@ -65,6 +75,8 @@ class VacancyDetailsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is VacancyCastItem.Item -> R.layout.details_list_item
             is VacancyCastItem.SmallHeaderItem -> R.layout.details_small_title_item
             is VacancyCastItem.SkillItem -> R.layout.details_list_skills_item
+            is VacancyCastItem.PhoneItem -> R.layout.details_phone_item
+            is VacancyCastItem.MailItem -> R.layout.details_mail_item
         }
     }
 
