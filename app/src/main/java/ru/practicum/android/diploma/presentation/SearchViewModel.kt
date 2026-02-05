@@ -8,13 +8,18 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
+import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewModel() {
+class SearchViewModel(
+    private val vacancyInteractor: VacancyInteractor,
+    private val filterInteractor: FilterSpInteractor
+) : ViewModel() {
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
 
@@ -36,7 +41,7 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
         if (text.isNotEmpty()) {
             setState(VacancyState.Loading)
 
-            val filteredQuery = HashMap<String, String>()
+            val filteredQuery = createFilteredQuery()
             filteredQuery["text"] = text
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
@@ -81,8 +86,28 @@ class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewMo
     }
 
     private fun createFilteredQuery(): HashMap<String, String> {
+        val filter: Filter = filterInteractor.output()
         val filteredQuery = HashMap<String, String>()
         filteredQuery["page"] = currentPage.toString()
+
+        if (filter.location.country != null) {
+            if (filter.location.region != null) {
+                filteredQuery["area"] = filter.location.region.id.toString()
+            } else {
+                filteredQuery["area"] = filter.location.country.id.toString()
+            }
+        }
+
+        if (filter.sector != null) {
+            filteredQuery["industry"] = filter.sector.id.toString()
+        }
+
+        if (filter.salary != null) {
+            filteredQuery["salary"] = filter.salary.toString()
+        }
+
+        filteredQuery["only_with_salary"] = filter.onlyWithSalary.toString()
+
         return filteredQuery
     }
 
