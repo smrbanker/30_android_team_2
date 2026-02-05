@@ -10,7 +10,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltrationSettingsBinding
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Location
-import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.Sector
 import kotlin.getValue
 
@@ -28,7 +27,7 @@ class FiltrationSettingsFragment : Fragment() {
 
         val f = Filter( // ТЕСТОВЫЙ РУЧНОЙ ФИЛЬТР
             location = Location(null, null),
-            sector = Sector(43, "", true),
+            sector = null,
             salary = 5000,
             onlyWithSalary = true
         )
