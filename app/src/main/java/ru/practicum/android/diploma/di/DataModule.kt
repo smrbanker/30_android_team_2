@@ -5,16 +5,13 @@ import androidx.room.Room
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.data.FilterSpRepositoryImpl
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.network.JobApiService
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.db.Database
-import ru.practicum.android.diploma.domain.api.FilterSpRepository
 
 val dataModule = module {
     single {

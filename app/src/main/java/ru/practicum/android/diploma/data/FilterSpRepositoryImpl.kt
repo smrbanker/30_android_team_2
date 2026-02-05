@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.data
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import ru.practicum.android.diploma.domain.api.FilterSpRepository
 import ru.practicum.android.diploma.domain.models.Filter
-import androidx.core.content.edit
 
 class FilterSpRepositoryImpl(
     private val sp: SharedPreferences,
