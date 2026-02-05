@@ -37,6 +37,4 @@ val dataModule = module {
         androidContext()
             .getSharedPreferences("settings_list", Context.MODE_PRIVATE)
     }
-
-
 }
