@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context
 import androidx.room.Room
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidApplication
@@ -31,4 +32,11 @@ val dataModule = module {
     single<NetworkClient> {
         RetrofitNetworkClient(get(), androidApplication())
     }
+
+    single {
+        androidContext()
+            .getSharedPreferences("settings_list", Context.MODE_PRIVATE)
+    }
+
+
 }
