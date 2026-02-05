@@ -5,7 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltrationSettingsBinding
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.Location
+import ru.practicum.android.diploma.domain.models.Sector
+import kotlin.getValue
 
 class FiltrationSettingsFragment : Fragment() {
     private var _binding: FragmentFiltrationSettingsBinding? = null
@@ -16,12 +23,31 @@ class FiltrationSettingsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val f = Filter(
+            location = Location(Country(1, "Россия"), null),
+            sector = Sector(2, "IT", true),
+            salary = 1_000_000,
+            onlyWithSalary = true
+        )
+
+        val viewModel by viewModel<FiltrationSettingsViewModel>()
+
+        viewModel.saveFilter(f)
+        viewModel.showFilter()
+
+        binding.toolbar.setOnClickListener { findNavController().popBackStack() }
+
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    companion object {
-        fun newInstance() = FiltrationSettingsFragment()
-    }
+    // companion object {
+    //      fun newInstance() = FiltrationSettingsFragment()
+    //  }
 }
