@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:title="@string/choosing_workplace"
+        app:titleTextAppearance="@style/ToolbarTitle" />
+
+    <TextView
+        android:id="@+id/country"
+        style="@style/DefaultTextMedium"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="start|center"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        app:drawableEndCompat="@drawable/ic_arrow_right"
+        android:text="@string/country"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/region"
+        style="@style/DefaultTextMedium"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="start|center"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        app:drawableEndCompat="@drawable/ic_arrow_right"
+        android:text="@string/region"
+        android:textColor="@color/gray" />
+
+</LinearLayout>
