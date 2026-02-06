@@ -21,7 +21,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 processResult(filterInteractor.output())
-            } catch (e: Exception) {
+            } catch (e: RuntimeException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_OUTPUT))
             }
@@ -32,7 +32,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 filterInteractor.input(f)
-            } catch (e: Exception) {
+            } catch (e: RuntimeException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_INPUT))
             }
@@ -43,7 +43,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 filterInteractor.clear()
-            } catch (e: Exception) {
+            } catch (e: RuntimeException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_CLEAR))
             }
@@ -62,7 +62,6 @@ class FiltrationSettingsViewModel(
         private const val SP_EXCEPTION = "SPException"
         const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
         const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
-        const val SP_ERROR_CHECK = "Ошибка проверки данных из SP"
         const val SP_ERROR_CLEAR = "Ошибка сохранения пустых данных в SP"
     }
 }

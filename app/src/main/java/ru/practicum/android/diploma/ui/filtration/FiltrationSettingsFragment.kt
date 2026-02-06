@@ -35,7 +35,6 @@ class FiltrationSettingsFragment : Fragment() {
 
         viewModel.saveFilter(f)
         viewModel.showFilter()
-        viewModel.clearFilter()
 
         binding.toolbar.setOnClickListener { findNavController().popBackStack() }
 
