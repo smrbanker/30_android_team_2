@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.models.Filter
+import java.io.IOException
 
 class FiltrationSettingsViewModel(
     private val filterInteractor: FilterSpInteractor,
@@ -21,7 +22,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 processResult(filterInteractor.output())
-            } catch (e: RuntimeException) {
+            } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_OUTPUT))
             }
@@ -32,7 +33,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 filterInteractor.input(f)
-            } catch (e: RuntimeException) {
+            } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_INPUT))
             }
@@ -43,7 +44,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 filterInteractor.clear()
-            } catch (e: RuntimeException) {
+            } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_CLEAR))
             }
