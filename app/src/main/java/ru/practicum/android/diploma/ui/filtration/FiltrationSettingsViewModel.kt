@@ -14,6 +14,10 @@ class FiltrationSettingsViewModel(
         Log.d("OUTPUT", filter.toString())
     }
 
+    fun returnFilter(): Filter {
+        return filterInteractor.output()
+    }
+
     fun saveFilter(f: Filter) {
         filterInteractor.input(f)
     }
