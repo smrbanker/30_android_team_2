@@ -17,4 +17,8 @@ class FiltrationSettingsViewModel(
     fun saveFilter(f: Filter) {
         filterInteractor.input(f)
     }
+
+    fun clearFilter() {
+        filterInteractor.clear()
+    }
 }

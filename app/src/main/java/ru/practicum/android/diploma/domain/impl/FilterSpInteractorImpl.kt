@@ -13,4 +13,8 @@ class FilterSpInteractorImpl(
 
     override fun output(): Filter =
         filterSpRepository.output()
+
+    override fun clear() {
+        filterSpRepository.clear()
+    }
 }
