@@ -18,6 +18,7 @@
         app:titleTextAppearance="@style/ToolbarTitle" />
 
     <ImageView
+        android:id="@+id/share_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="75dp"
@@ -27,6 +28,7 @@
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
     <ImageView
+        android:id="@+id/like_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="22dp"
@@ -80,167 +82,22 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <TextView
-        android:id="@+id/vacancy_title"
-        style="@style/TitleTextStyle"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/detail_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
+        android:indeterminateTint="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:text="Android-разработчик" />
-
-    <TextView
-        android:id="@+id/vacancy_salary"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/vacancy_title"
-        tools:text="От 100 000 Р." />
-
-    <LinearLayout
-        android:id="@+id/company_info_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_12dp"
-        android:backgroundTint="@color/light_gray"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/vacancy_salary">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/company_name"
-                style="@style/DefaultTextMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                tools:text="ЕДА" />
-
-            <TextView
-                android:id="@+id/company_location"
-                style="@style/DefaultTextRegular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                tools:text="Москва" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/requested_experience"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/company_info_layout"
-        tools:text="@string/requested_experience" />
-
-    <TextView
-        android:id="@+id/experience"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/requested_experience"
-        tools:text="От 1 года до 3 лет" />
-
-
-    <LinearLayout
-        android:id="@+id/schedule_and_employment_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/experience">
-
-        <TextView
-            android:id="@+id/schedule"
-            style="@style/DefaultTextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            tools:text="Полная занятость, " />
-
-        <TextView
-            android:id="@+id/employment"
-            style="@style/DefaultTextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            tools:text="Удаленная работа" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/vacancy_description"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/schedule_and_employment_layout"
-        tools:text="Описание вакансии" />
-
-    <TextView
-        android:id="@+id/responsibilities"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/vacancy_description"
-        tools:text="Обязанности" />
-
-    <TextView
-        android:id="@+id/requirements"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/responsibilities"
-        tools:text="Требования" />
-
-    <TextView
-        android:id="@+id/conditions"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/requirements"
-        tools:text="Условия" />
-
-    <TextView
-        android:id="@+id/key_skills"
-        style="@style/DefaultTextMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/conditions"
-        tools:text="Ключевые навыки" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

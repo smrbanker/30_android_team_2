@@ -15,7 +15,7 @@ loggingInterceptor = "4.10.0"
 minSdk = "26"
 compileSdk = "34"
 navigationFragmentKtx = "2.2.0"
-retrofit = "2.3.0"
+retrofit = "2.9.0"
 roomRuntime = "2.6.1"
 targetSdk = "33"
 

@@ -21,7 +21,11 @@
         android:id="@+id/favoritesFragment"
         android:name="ru.practicum.android.diploma.ui.favorites.fragment.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_vacancyFragment"
+            app:destination="@id/vacancyFragment" />
+    </fragment>
     <fragment
         android:id="@+id/teamFragment"
         android:name="ru.practicum.android.diploma.ui.team.fragment.TeamFragment"
@@ -33,6 +37,6 @@
         android:label="VacancyFragment" />
     <fragment
         android:id="@+id/filtrationSettingsFragment"
-        android:name="ru.practicum.android.diploma.ui.vacancy.fragment.FiltrationSettingsFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationSettingsFragment"
         android:label="FiltrationSettingsFragment" />
 </navigation>
