@@ -152,14 +152,7 @@ class FiltrationSettingsFragment : Fragment() {
             }
             flag = true
         }
-        if (filter.sector != null || filter.salary != null) {
-            binding.apply {
-                applyButton.isVisible = true
-                resetButton.isVisible = true
-            }
-            flag = true
-        }
-        if (filter.onlyWithSalary) {
+        if (filter.sector != null || filter.salary != null || filter.onlyWithSalary) {
             binding.apply {
                 applyButton.isVisible = true
                 resetButton.isVisible = true
