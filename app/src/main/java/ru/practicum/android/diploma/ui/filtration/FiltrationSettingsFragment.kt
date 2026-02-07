@@ -56,6 +56,7 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun showContent(filter: Filter) {
+        binding.textInputEditText.setText(filter.salary.toString())
         // ЗАГРУЗКА ДАННЫХ В СВОБОДНЫЕ ПОЛЯ
     }
 
