@@ -33,4 +33,12 @@ class FilterSpInteractorImpl(
     override fun onlyWithSalary() {
         filterSpRepository.onlyWithSalary()
     }
+
+    override fun setSalary(value: String?) {
+        filterSpRepository.setSalary(value)
+    }
+
+    override fun setStatus(status: Boolean) {
+        filterSpRepository.setStatus(status)
+    }
 }

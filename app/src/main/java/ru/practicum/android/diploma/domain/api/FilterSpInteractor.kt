@@ -10,4 +10,6 @@ interface FilterSpInteractor {
     fun clearIndustry()
     fun clearSalary()
     fun onlyWithSalary()
+    fun setSalary(value: String?)
+    fun setStatus(status: Boolean)
 }

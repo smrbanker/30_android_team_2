@@ -1,30 +1,29 @@
 package ru.practicum.android.diploma.ui.filtration
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltrationSettingsBinding
-import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Filter
-import ru.practicum.android.diploma.domain.models.Location
-import ru.practicum.android.diploma.domain.models.Sector
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_CLEAR
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_INPUT
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_OUTPUT
+import ru.practicum.android.diploma.ui.search.fragment.SearchFragment
 import kotlin.getValue
 
 class FiltrationSettingsFragment : Fragment() {
     private var _binding: FragmentFiltrationSettingsBinding? = null
     private val binding get() = _binding!!
+    val viewModel by viewModel<FiltrationSettingsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFiltrationSettingsBinding.inflate(inflater, container, false)
@@ -34,14 +33,12 @@ class FiltrationSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val f = Filter( // ТЕСТОВЫЙ РУЧНОЙ ФИЛЬТР
+        /* val f = Filter( // ТЕСТОВЫЙ РУЧНОЙ ФИЛЬТР
             location = Location(Country(1, "Россия"), null), // Region(2, "Москва", 1)),
             sector = Sector(1, "Строительство", true),
             salary = 10_000,
             onlyWithSalary = true
-        )
-
-        val viewModel by viewModel<FiltrationSettingsViewModel>()
+        ) */
 
         initListeners(viewModel)
 
@@ -49,12 +46,11 @@ class FiltrationSettingsFragment : Fragment() {
             render(it)
         }
 
-        viewModel.saveFilter(f)
+        // viewModel.saveFilter(f)
         viewModel.showFilter()
     }
 
     private fun initListeners(viewModel: FiltrationSettingsViewModel) {
-        binding.toolbar.setOnClickListener { findNavController().popBackStack() }
 
         binding.resetButton.setOnClickListener {
             viewModel.clearFilter()
@@ -65,14 +61,26 @@ class FiltrationSettingsFragment : Fragment() {
             if (!binding.workplaceEdit.text.isNullOrEmpty()) {
                 viewModel.clearRegion()
                 viewModel.showFilter()
+            } else {
+                // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР МЕСТА РАБОТЫ"
             }
+        }
+
+        binding.workplaceLayout.setOnClickListener {
+            // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР МЕСТА РАБОТЫ"
         }
 
         binding.industryArrow.setOnClickListener {
             if (!binding.industryEdit.text.isNullOrEmpty()) {
                 viewModel.clearIndustry()
                 viewModel.showFilter()
+            } else {
+                // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР ОТРАСЛИ"
             }
+        }
+
+        binding.industryLayout.setOnClickListener {
+            // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР ОТРАСЛИ"
         }
 
         binding.clear.setOnClickListener {
@@ -85,6 +93,26 @@ class FiltrationSettingsFragment : Fragment() {
         binding.checkbox.setOnClickListener {
             viewModel.onlyWithSalary()
             viewModel.showFilter()
+        }
+
+        binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                viewModel.setSalary(null)
+                binding.clear.isVisible = false
+            } else {
+                viewModel.setSalary(text.toString())
+                binding.clear.isVisible = text.isNotEmpty()
+                binding.applyButton.isVisible = true
+                binding.resetButton.isVisible = true
+            }
+        }
+
+        binding.applyButton.setOnClickListener {
+            saveAndGo(true)
+        }
+
+        binding.toolbar.setOnClickListener {
+            saveAndGo(false)
         }
     }
 
@@ -99,7 +127,6 @@ class FiltrationSettingsFragment : Fragment() {
         showIndustry(filter)
         showSalary(filter)
         binding.checkbox.isChecked = filter.onlyWithSalary
-        Log.d("SHOW-CONTENT", filter.toString())
         if (filter.location.country == null && filter.location.region == null) {
             binding.apply {
                 workplaceEdit.text?.clear()
@@ -225,12 +252,23 @@ class FiltrationSettingsFragment : Fragment() {
         }
     }
 
+    private fun saveAndGo(flag: Boolean) {
+        val value = if (binding.salaryEdit.text.isNullOrEmpty()) {
+            null
+        } else {
+            binding.salaryEdit.text.toString()
+        }
+        val status = binding.checkbox.isChecked
+        viewModel.setSalary(value)
+        viewModel.setStatus(status)
+        findNavController().navigate(
+            R.id.action_filtrationSettingsFragment_to_searchFragment,
+            SearchFragment.createArgsIsRun(flag)
+        )
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    // companion object {
-    //      fun newInstance() = FiltrationSettingsFragment()
-    //  }
 }

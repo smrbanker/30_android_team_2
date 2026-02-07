@@ -78,6 +78,29 @@ class FilterSpRepositoryImpl(
         input(f)
     }
 
+    override fun setSalary(value: String?) {
+        var f = output()
+        val amount = value?.toInt()
+        f = Filter(
+            location = f.location,
+            sector = f.sector,
+            salary = amount,
+            onlyWithSalary = f.onlyWithSalary
+        )
+        input(f)
+    }
+
+    override fun setStatus(status: Boolean) {
+        var f = output()
+        f = Filter(
+            location = f.location,
+            sector = f.sector,
+            salary = f.salary,
+            onlyWithSalary = status
+        )
+        input(f)
+    }
+
     private companion object {
         const val FILTER_SP_KEY = "filter"
     }

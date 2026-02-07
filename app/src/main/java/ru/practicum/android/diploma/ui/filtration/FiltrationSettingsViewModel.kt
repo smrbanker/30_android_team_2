@@ -22,9 +22,7 @@ class FiltrationSettingsViewModel(
     fun showFilter() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("FILTER", filterInteractor.output().toString())
-                val f = filterInteractor.output()
-                processResult(f)
+                processResult(filterInteractor.output())
             } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_OUTPUT))
@@ -47,7 +45,6 @@ class FiltrationSettingsViewModel(
         runBlocking {
             try {
                 filterInteractor.clearAll()
-                // filterInteractor.output()
             } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_CLEAR))
@@ -59,7 +56,6 @@ class FiltrationSettingsViewModel(
         runBlocking {
             try {
                 filterInteractor.clearRegion()
-                // filterInteractor.output()
             } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_CLEAR))
@@ -95,10 +91,33 @@ class FiltrationSettingsViewModel(
                 filterInteractor.onlyWithSalary()
             } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
-                stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_CLEAR))
+                stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_INPUT))
             }
         }
     }
+
+    fun setSalary(value: String?) {
+        runBlocking {
+            try {
+                filterInteractor.setSalary(value)
+            } catch (e: IOException) {
+                Log.e(SP_EXCEPTION, e.toString())
+                stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_INPUT))
+            }
+        }
+    }
+
+    fun setStatus(status: Boolean) {
+        runBlocking {
+            try {
+                filterInteractor.setStatus(status)
+            } catch (e: IOException) {
+                Log.e(SP_EXCEPTION, e.toString())
+                stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_INPUT))
+            }
+        }
+    }
+
 
     private fun processResult(filter: Filter) {
         renderState(FiltrationSettingsState.Content(filter))
