@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.ui.filtration
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,8 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltrationSettingsBinding
-import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Location
-import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.domain.models.Sector
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_CLEAR
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_INPUT
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_OUTPUT
@@ -147,34 +143,36 @@ class FiltrationSettingsFragment : Fragment() {
         }
     }
 
-    private fun showButtons(filter: Filter): Boolean {
-        if ((filter.location.country != null) || (filter.location.region != null)) {
+    private fun showButtons(filter: Filter) {
+        var flag = false
+        if (filter.location.country != null || filter.location.region != null) {
             binding.apply {
                 applyButton.isVisible = true
                 resetButton.isVisible = true
             }
-            return true
+            flag = true
         }
-        if ((filter.sector != null) || (filter.salary != null)) {
+        if (filter.sector != null || filter.salary != null) {
             binding.apply {
                 applyButton.isVisible = true
                 resetButton.isVisible = true
             }
-            return true
+            flag = true
         }
         if (filter.onlyWithSalary) {
             binding.apply {
                 applyButton.isVisible = true
                 resetButton.isVisible = true
             }
-            return true
+            flag = true
         }
 
-        binding.apply {
-            applyButton.isVisible = false
-            resetButton.isVisible = false
+        if (!flag) {
+            binding.apply {
+                applyButton.isVisible = false
+                resetButton.isVisible = false
+            }
         }
-        return false
     }
 
     private fun showError(errorMessage: String) {
