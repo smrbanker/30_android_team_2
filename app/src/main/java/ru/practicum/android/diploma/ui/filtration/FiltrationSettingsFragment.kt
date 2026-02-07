@@ -62,7 +62,6 @@ class FiltrationSettingsFragment : Fragment() {
         showIndustry(filter)
         showSalary(filter)
         binding.checkbox.isChecked = filter.onlyWithSalary
-        showButtons(filter)
 
         if (filter.location.country == null && filter.location.region == null) {
             binding.apply {
@@ -74,6 +73,13 @@ class FiltrationSettingsFragment : Fragment() {
         } else {
             showRegion(filter)
         }
+
+        binding.apply {
+            applyButton.isVisible = false
+            resetButton.isVisible = false
+        }
+
+        showButtons(filter)
     }
 
     private fun showRegion(filter: Filter) { // T
@@ -144,26 +150,16 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun showButtons(filter: Filter) {
-        var flag = false
         if (filter.location.country != null || filter.location.region != null) {
             binding.apply {
                 applyButton.isVisible = true
                 resetButton.isVisible = true
             }
-            flag = true
         }
         if (filter.sector != null || filter.salary != null || filter.onlyWithSalary) {
             binding.apply {
                 applyButton.isVisible = true
                 resetButton.isVisible = true
-            }
-            flag = true
-        }
-
-        if (!flag) {
-            binding.apply {
-                applyButton.isVisible = false
-                resetButton.isVisible = false
             }
         }
     }
