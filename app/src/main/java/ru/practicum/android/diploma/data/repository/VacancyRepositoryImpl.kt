@@ -25,9 +25,6 @@ class VacancyRepositoryImpl(private val networkClient: NetworkClient) : VacancyR
                         }
                     )
                 )
-                /*Resource.Success((response as VacancyResponse).vacancies.map {
-                    vacancyToFull(it)
-                })*/
             }
             RESULT_CODE_NO_INTERNET -> {
                 Resource.Error(Resource.CONNECTION_PROBLEM)
