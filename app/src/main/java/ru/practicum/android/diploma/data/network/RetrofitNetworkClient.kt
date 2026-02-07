@@ -16,16 +16,18 @@ class RetrofitNetworkClient(
     private val jobApiService: JobApiService,
     private val context: Context,
 ) : NetworkClient {
-    override suspend fun doCountryRequest(): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
-
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
+    override suspend fun doAreasRequest(): Response {
+        if (!isConnected()) {
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                jobApiService.getAreas().apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            }
+        }
     }
 
     override suspend fun doIndustryRequest(): Response {
