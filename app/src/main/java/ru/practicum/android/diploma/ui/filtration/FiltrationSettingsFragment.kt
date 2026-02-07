@@ -114,11 +114,11 @@ class FiltrationSettingsFragment : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher
-            .addCallback(object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                saveAndGo(false)
-            }
-        })
+            .addCallback(object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    saveAndGo(false)
+                }
+            })
     }
 
     private fun render(state: FiltrationSettingsState) {
