@@ -41,6 +41,7 @@ class FiltrationSettingsFragment : Fragment() {
         ) */
 
         initListeners(viewModel)
+        initListenersButton(viewModel)
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -51,11 +52,6 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun initListeners(viewModel: FiltrationSettingsViewModel) {
-
-        binding.resetButton.setOnClickListener {
-            viewModel.clearFilter()
-            viewModel.showFilter()
-        }
 
         binding.workplaceArrow.setOnClickListener {
             if (!binding.workplaceEdit.text.isNullOrEmpty()) {
@@ -90,11 +86,6 @@ class FiltrationSettingsFragment : Fragment() {
             }
         }
 
-        binding.checkbox.setOnClickListener {
-            viewModel.onlyWithSalary()
-            viewModel.showFilter()
-        }
-
         binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 viewModel.setSalary(null)
@@ -105,6 +96,19 @@ class FiltrationSettingsFragment : Fragment() {
                 binding.applyButton.isVisible = true
                 binding.resetButton.isVisible = true
             }
+        }
+    }
+
+    private fun initListenersButton(viewModel: FiltrationSettingsViewModel) {
+
+        binding.resetButton.setOnClickListener {
+            viewModel.clearFilter()
+            viewModel.showFilter()
+        }
+
+        binding.checkbox.setOnClickListener {
+            viewModel.onlyWithSalary()
+            viewModel.showFilter()
         }
 
         binding.applyButton.setOnClickListener {

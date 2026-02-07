@@ -118,7 +118,6 @@ class FiltrationSettingsViewModel(
         }
     }
 
-
     private fun processResult(filter: Filter) {
         renderState(FiltrationSettingsState.Content(filter))
     }
