@@ -38,6 +38,10 @@ class SearchViewModel(
         vacancySearchDebounce(text)
     }
 
+    fun searchAnyway(text: String) {
+        vacancySearchDebounce(text)
+    }
+
     private fun search(text: String) {
         if (text.isNotEmpty()) {
             setState(VacancyState.Loading)

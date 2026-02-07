@@ -5,10 +5,10 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,12 +61,6 @@ class SearchFragment : Fragment() {
             render(vacancyState)
         }
 
-        val initSearch = getArgs()
-
-        if (initSearch && binding.editText.text.isNotEmpty()) {
-            viewModel.searchDebounce(binding.editText.text.toString())
-        }
-
         if (viewModel.checkFilterButton()) {
             binding.filterButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_filter_on))
         } else {
@@ -98,6 +92,13 @@ class SearchFragment : Fragment() {
 
         binding.filterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filtrationSettingsFragment)
+        }
+
+        setFragmentResultListener(IS_RUN) { _, bundle ->
+            val filters = bundle.getBoolean(IS_RUN)
+            if (filters && binding.editText.text.isNotEmpty()) {
+                viewModel.searchAnyway(binding.editText.text.toString())
+            }
         }
     }
 
@@ -226,14 +227,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun getArgs(): Boolean {
-        val flag = arguments?.getBoolean(IS_RUN)
-        return !(flag == false || flag == null)
-    }
-
     companion object {
-        private const val IS_RUN = "IS_RUN"
-        fun createArgsIsRun(flag: Boolean): Bundle =
-            bundleOf(IS_RUN to flag)
+        const val IS_RUN = "IS_RUN"
     }
 }

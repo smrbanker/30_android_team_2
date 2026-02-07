@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -32,13 +35,6 @@ class FiltrationSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        /* val f = Filter( // ТЕСТОВЫЙ РУЧНОЙ ФИЛЬТР
-            location = Location(Country(1, "Россия"), null), // Region(2, "Москва", 1)),
-            sector = Sector(1, "Строительство", true),
-            salary = 10_000,
-            onlyWithSalary = true
-        ) */
 
         initListeners(viewModel)
         initListenersButton(viewModel)
@@ -116,6 +112,13 @@ class FiltrationSettingsFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             saveAndGo(false)
         }
+
+        requireActivity().onBackPressedDispatcher
+            .addCallback(object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                saveAndGo(false)
+            }
+        })
     }
 
     private fun render(state: FiltrationSettingsState) {
@@ -255,18 +258,8 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun saveAndGo(flag: Boolean) {
-        val value = if (binding.salaryEdit.text.isNullOrEmpty()) {
-            null
-        } else {
-            binding.salaryEdit.text.toString()
-        }
-        val status = binding.checkbox.isChecked
-        viewModel.setSalary(value)
-        viewModel.setStatus(status)
-        findNavController().navigate(
-            R.id.action_filtrationSettingsFragment_to_searchFragment,
-            SearchFragment.createArgsIsRun(flag)
-        )
+        setFragmentResult(SearchFragment.IS_RUN, bundleOf(SearchFragment.IS_RUN to flag))
+        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {
