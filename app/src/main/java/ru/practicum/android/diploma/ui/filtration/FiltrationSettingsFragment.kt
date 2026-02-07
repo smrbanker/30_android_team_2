@@ -59,15 +59,25 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun showContent(filter: Filter) {
-        showRegion(filter)
         showIndustry(filter)
         showSalary(filter)
         binding.checkbox.isChecked = filter.onlyWithSalary
         showButtons(filter)
+
+        if (filter.location.country == null && filter.location.region == null) {
+            binding.apply {
+                workplaceEdit.text?.clear()
+                workplaceLayout.defaultHintTextColor =
+                    ContextCompat.getColorStateList(requireContext(), R.color.gray)
+                workplaceArrow.setImageDrawable(requireContext().getDrawable(R.drawable.ic_arrow_right_filter))
+            }
+        } else {
+            showRegion(filter)
+        }
     }
 
     private fun showRegion(filter: Filter) { // T
-        if ((filter.location.country != null) && (filter.location.region != null)) {
+        if (filter.location.country != null && filter.location.region != null) {
             val workplace = filter.location.country.name + ", " + filter.location.region.name
             binding.apply {
                 workplaceEdit.setText(workplace)
@@ -85,23 +95,13 @@ class FiltrationSettingsFragment : Fragment() {
                     workplaceArrow.setImageDrawable(requireContext().getDrawable(R.drawable.ic_clear))
                 }
             } else {
-                if (filter.location.region != null) {
-                    val workplace = filter.location.region.name
-                    binding.apply {
-                        workplaceEdit.setText(workplace)
-                        workplaceLayout.defaultHintTextColor =
-                            ContextCompat.getColorStateList(requireContext(), R.color.black_to_white)
-                        workplaceArrow.setImageDrawable(requireContext().getDrawable(R.drawable.ic_clear))
-                    }
+                val workplace = filter.location.region?.name
+                binding.apply {
+                    workplaceEdit.setText(workplace)
+                    workplaceLayout.defaultHintTextColor =
+                        ContextCompat.getColorStateList(requireContext(), R.color.black_to_white)
+                    workplaceArrow.setImageDrawable(requireContext().getDrawable(R.drawable.ic_clear))
                 }
-            }
-        }
-        if ((filter.location.country == null) && (filter.location.region == null)) {
-            binding.apply {
-                workplaceEdit.text?.clear()
-                workplaceLayout.defaultHintTextColor =
-                    ContextCompat.getColorStateList(requireContext(), R.color.gray)
-                workplaceArrow.setImageDrawable(requireContext().getDrawable(R.drawable.ic_arrow_right_filter))
             }
         }
     }
