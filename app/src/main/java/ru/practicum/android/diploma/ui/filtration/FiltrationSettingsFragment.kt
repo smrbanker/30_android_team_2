@@ -66,7 +66,7 @@ class FiltrationSettingsFragment : Fragment() {
         showButtons(filter)
     }
 
-    private fun showRegion(filter: Filter) {
+    private fun showRegion(filter: Filter) { // T
         if ((filter.location.country != null) && (filter.location.region != null)) {
             val workplace = filter.location.country.name + ", " + filter.location.region.name
             binding.apply {
