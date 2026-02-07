@@ -14,7 +14,23 @@ class FilterSpInteractorImpl(
     override fun output(): Filter =
         filterSpRepository.output()
 
-    override fun clear() {
-        filterSpRepository.clear()
+    override fun clearAll() {
+        filterSpRepository.clearAll()
+    }
+
+    override fun clearRegion() {
+        filterSpRepository.clearRegion()
+    }
+
+    override fun clearIndustry() {
+        filterSpRepository.clearIndustry()
+    }
+
+    override fun clearSalary() {
+        filterSpRepository.clearSalary()
+    }
+
+    override fun onlyWithSalary() {
+        filterSpRepository.onlyWithSalary()
     }
 }
