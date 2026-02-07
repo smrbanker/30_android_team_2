@@ -61,6 +61,17 @@ class SearchFragment : Fragment() {
             render(vacancyState)
         }
 
+        val initSearch = getArgs()
+
+        if (initSearch && binding.editText.text.isNotEmpty()) {
+            viewModel.searchDebounce(binding.editText.text.toString())
+        }
+
+        if (viewModel.checkFilterButton()) {
+            binding.filterButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_filter_on))
+        } else {
+            binding.filterButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_filter))
+        }
     }
 
     private fun initListeners() {
@@ -213,6 +224,11 @@ class SearchFragment : Fragment() {
                 binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
             }
         }
+    }
+
+    private fun getArgs(): Boolean {
+        val flag = arguments?.getBoolean(IS_RUN)
+        return !(flag == false || flag == null)
     }
 
     companion object {
