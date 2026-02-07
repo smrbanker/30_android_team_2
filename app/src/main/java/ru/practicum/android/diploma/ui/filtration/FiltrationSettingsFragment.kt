@@ -36,8 +36,8 @@ class FiltrationSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initListeners(viewModel)
-        initListenersButton(viewModel)
+        initListeners()
+        initListenersButton()
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -47,7 +47,7 @@ class FiltrationSettingsFragment : Fragment() {
         viewModel.showFilter()
     }
 
-    private fun initListeners(viewModel: FiltrationSettingsViewModel) {
+    private fun initListeners() {
         binding.workplaceArrow.setOnClickListener {
             if (!binding.workplaceEdit.text.isNullOrEmpty()) {
                 viewModel.clearRegion()
@@ -94,7 +94,7 @@ class FiltrationSettingsFragment : Fragment() {
         }
     }
 
-    private fun initListenersButton(viewModel: FiltrationSettingsViewModel) {
+    private fun initListenersButton() {
         binding.resetButton.setOnClickListener {
             viewModel.clearFilter()
             viewModel.showFilter()
