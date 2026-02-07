@@ -52,7 +52,6 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun initListeners(viewModel: FiltrationSettingsViewModel) {
-
         binding.workplaceArrow.setOnClickListener {
             if (!binding.workplaceEdit.text.isNullOrEmpty()) {
                 viewModel.clearRegion()
@@ -100,7 +99,6 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun initListenersButton(viewModel: FiltrationSettingsViewModel) {
-
         binding.resetButton.setOnClickListener {
             viewModel.clearFilter()
             viewModel.showFilter()
