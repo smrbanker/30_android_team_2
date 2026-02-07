@@ -22,6 +22,7 @@ class FiltrationSettingsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 processResult(filterInteractor.output())
+                Log.d("FILTER", filterInteractor.output().toString())
             } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
                 stateLiveData.postValue(FiltrationSettingsState.Error(SP_ERROR_OUTPUT))
