@@ -21,7 +21,6 @@ import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Co
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_INPUT
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_OUTPUT
 import ru.practicum.android.diploma.ui.search.fragment.SearchFragment
-import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyFragment
 import kotlin.getValue
 
 class FiltrationSettingsFragment : Fragment() {
