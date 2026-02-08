@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.domain.impl
 
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.api.IndustryRepository
+import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.IndustryState
 import ru.practicum.android.diploma.domain.models.Resource
 
@@ -15,9 +16,7 @@ class IndustryInteractorImpl(private val repository: IndustryRepository) : Indus
         }
     }
 
-    private fun handleSuccess(
-        industriesList: List<ru.practicum.android.diploma.domain.models.Industry>
-    ): IndustryState {
+    private fun handleSuccess(industriesList: List<Industry>): IndustryState {
         return if (industriesList.isEmpty()) {
             IndustryState.Empty
         } else {

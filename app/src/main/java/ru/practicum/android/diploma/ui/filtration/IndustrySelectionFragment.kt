@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustrySelectionBinding
+import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.IndustryState
 
 class IndustrySelectionFragment : Fragment() {
@@ -54,7 +55,7 @@ class IndustrySelectionFragment : Fragment() {
 
     private fun configureRecyclerView() {
         _adapter = IndustryAdapter(emptyList()) { industry ->
-            // Сохранить выбранную индустрию и вернуться назад
+            // TODO: Сохранить выбранную индустрию и вернуться назад
             findNavController().popBackStack()
         }
         binding.recyclerView.adapter = adapter
@@ -96,7 +97,7 @@ class IndustrySelectionFragment : Fragment() {
         }
     }
 
-    private fun showContent(industries: List<ru.practicum.android.diploma.domain.models.Industry>) {
+    private fun showContent(industries: List<Industry>) {
         binding.apply {
             recyclerView.isVisible = true
             progressBar.isVisible = false
