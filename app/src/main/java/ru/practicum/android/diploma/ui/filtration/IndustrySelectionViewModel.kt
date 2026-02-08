@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.IndustryState
 
-class FiltrationSettingsViewModel(
+class IndustrySelectionViewModel(
     private val industryInteractor: IndustryInteractor
 ) : ViewModel() {
 

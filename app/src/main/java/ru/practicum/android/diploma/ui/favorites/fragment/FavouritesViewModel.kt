@@ -44,4 +44,65 @@ class FavouritesViewModel(
     private fun renderState(state: FavouritesState) {
         stateLiveData.postValue(state)
     }
+
+    // НИЖЕ ДВЕ ФУНКЦИИ ДЛЯ РУЧНОГО ТЕСТИРОВАНИЯ РАБОТОСПОСОБНОСТИ. ПРОСТО УДАЛИТЬ, КАК ПОЯВИТСЯ НОРМАЛЬНЫЙ ЗАПРОС
+    /* fun addSomeVacancies() {
+        val vacancy = Vacancy(
+            "1",
+            "Full Stack Developer в Microsoft",
+            "Писать код",
+            1500,
+            2500,
+            "EUR",
+            "Москва",
+            "Street",
+            "12",
+            "Address",
+            "От 1 года до 3 лет",
+            "Полная занятость",
+            "Удаленная работа",
+            null,
+            null,
+            null,
+            "Microsoft",
+            "",
+            "Москва",
+            "",
+            "",
+            ""
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            favouritesInteractor.insertNewFavoriteVacancy(vacancy)
+        }
+    }
+
+    fun deleteSomeVacancies() {
+        val vacancy = Vacancy(
+            "1",
+            "Full Stack Developer в Microsoft",
+            "Писать код",
+            1500,
+            2500,
+            "EUR",
+            "Москва",
+            "Street",
+            "12",
+            "Address",
+            "От 1 года до 3 лет",
+            "Полная занятость",
+            "Удаленная работа",
+            null,
+            null,
+            null,
+            "Microsoft",
+            "",
+            "Москва",
+            "",
+            "",
+            ""
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            favouritesInteractor.deleteFavoriteVacancy(vacancy)
+        }
+    } */
 }

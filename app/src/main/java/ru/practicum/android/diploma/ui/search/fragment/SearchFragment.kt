@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,11 +60,6 @@ class SearchFragment : Fragment() {
             render(vacancyState)
         }
 
-        if (viewModel.checkFilterButton()) {
-            binding.filterButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_filter_on))
-        } else {
-            binding.filterButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_filter))
-        }
     }
 
     private fun initListeners() {
@@ -92,13 +86,6 @@ class SearchFragment : Fragment() {
 
         binding.filterButton.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filtrationSettingsFragment)
-        }
-
-        setFragmentResultListener(IS_RUN) { _, bundle ->
-            val filters = bundle.getBoolean(IS_RUN)
-            if (filters && binding.editText.text.isNotEmpty()) {
-                viewModel.searchAnyway(binding.editText.text.toString())
-            }
         }
     }
 
@@ -225,9 +212,5 @@ class SearchFragment : Fragment() {
                 binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
             }
         }
-    }
-
-    companion object {
-        const val IS_RUN = "IS_RUN"
     }
 }

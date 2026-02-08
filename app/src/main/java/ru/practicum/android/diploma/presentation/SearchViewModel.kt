@@ -8,19 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
-import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-class SearchViewModel(
-    private val vacancyInteractor: VacancyInteractor,
-    private val filterInteractor: FilterSpInteractor
-) : ViewModel() {
+class SearchViewModel(private val vacancyInteractor: VacancyInteractor) : ViewModel() {
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
 
@@ -38,15 +32,11 @@ class SearchViewModel(
         vacancySearchDebounce(text)
     }
 
-    fun searchAnyway(text: String) {
-        vacancySearchDebounce(text)
-    }
-
     private fun search(text: String) {
         if (text.isNotEmpty()) {
             setState(VacancyState.Loading)
 
-            val filteredQuery = createFilteredQuery()
+            val filteredQuery = HashMap<String, String>()
             filteredQuery["text"] = text
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
@@ -91,28 +81,8 @@ class SearchViewModel(
     }
 
     private fun createFilteredQuery(): HashMap<String, String> {
-        val filter: Filter = filterInteractor.output()
         val filteredQuery = HashMap<String, String>()
         filteredQuery["page"] = currentPage.toString()
-
-        if (filter.location.country != null) {
-            if (filter.location.region != null) {
-                filteredQuery["area"] = filter.location.region.id.toString()
-            } else {
-                filteredQuery["area"] = filter.location.country.id.toString()
-            }
-        }
-
-        if (filter.sector != null) {
-            filteredQuery["industry"] = filter.sector.id.toString()
-        }
-
-        if (filter.salary != null) {
-            filteredQuery["salary"] = filter.salary.toString()
-        }
-
-        filteredQuery["only_with_salary"] = filter.onlyWithSalary.toString()
-
         return filteredQuery
     }
 
@@ -141,19 +111,5 @@ class SearchViewModel(
 
     private fun handleError(resultLiveData: MutableLiveData<VacancyState>, message: String) {
         resultLiveData.postValue(VacancyState.Error(message))
-    }
-
-    fun checkFilterButton(): Boolean {
-        var flag = false
-        runBlocking {
-            val filter = filterInteractor.output()
-            if (filter.location.country != null || filter.location.region != null) {
-                flag = true
-            }
-            if (filter.sector != null || filter.salary != null || filter.onlyWithSalary) {
-                flag = true
-            }
-        }
-        return flag
     }
 }

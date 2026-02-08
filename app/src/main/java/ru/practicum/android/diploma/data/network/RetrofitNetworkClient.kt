@@ -29,15 +29,17 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun doIndustryRequest(): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
-
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
+        if (!isConnected()) {
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                jobApiService.getIndustries().apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            }
+        }
     }
 
     override suspend fun doRegionRequest(id: String): Response {

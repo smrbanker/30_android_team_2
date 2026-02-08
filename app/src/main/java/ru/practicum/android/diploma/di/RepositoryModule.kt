@@ -1,16 +1,16 @@
 package ru.practicum.android.diploma.di
 
-import com.google.gson.Gson
 import org.koin.dsl.module
-import ru.practicum.android.diploma.data.FilterSpRepositoryImpl
-import ru.practicum.android.diploma.data.repository.SearchVacancyDetailsRepositoryImpl
-import ru.practicum.android.diploma.data.repository.VacancyRepositoryImpl
 import ru.practicum.android.diploma.db.FavouritesRepositoryImpl
-import ru.practicum.android.diploma.domain.api.FilterSpRepository
+import ru.practicum.android.diploma.domain.db.FavouritesRepository
+import com.google.gson.Gson
+import ru.practicum.android.diploma.data.repository.SearchVacancyDetailsRepositoryImpl
+import ru.practicum.android.diploma.util.VacancyDbConverter
+import ru.practicum.android.diploma.data.repository.VacancyRepositoryImpl
+import ru.practicum.android.diploma.data.repository.IndustryRepositoryImpl
 import ru.practicum.android.diploma.domain.api.SearchVacancyDetailsRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
-import ru.practicum.android.diploma.domain.db.FavouritesRepository
-import ru.practicum.android.diploma.util.VacancyDbConverter
+import ru.practicum.android.diploma.domain.api.IndustryRepository
 
 val repositoryModule = module {
     factory<VacancyRepository> {
@@ -31,7 +31,7 @@ val repositoryModule = module {
         SearchVacancyDetailsRepositoryImpl(get())
     }
 
-    factory<FilterSpRepository> {
-        FilterSpRepositoryImpl(get(), get())
+    factory<IndustryRepository> {
+        IndustryRepositoryImpl(get())
     }
 }
