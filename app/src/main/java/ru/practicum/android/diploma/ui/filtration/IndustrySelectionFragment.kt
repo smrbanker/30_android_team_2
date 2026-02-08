@@ -55,7 +55,7 @@ class IndustrySelectionFragment : Fragment() {
 
     private fun configureRecyclerView() {
         _adapter = IndustryAdapter(emptyList()) { industry ->
-            // TODO: Сохранить выбранную индустрию и вернуться назад
+            // Сохранить выбранную индустрию и вернуться назад
             findNavController().popBackStack()
         }
         binding.recyclerView.adapter = adapter
