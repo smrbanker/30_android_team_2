@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import ru.practicum.android.diploma.domain.api.FilterSpRepository
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Location
+import ru.practicum.android.diploma.domain.models.Sector
 
 class FilterSpRepositoryImpl(
     private val sp: SharedPreferences,
@@ -97,6 +98,17 @@ class FilterSpRepositoryImpl(
             sector = f.sector,
             salary = f.salary,
             onlyWithSalary = status
+        )
+        input(f)
+    }
+
+    override fun setIndustry(industry: Sector?) {
+        var f = output()
+        f = Filter(
+            location = f.location,
+            sector = industry,
+            salary = f.salary,
+            onlyWithSalary = f.onlyWithSalary
         )
         input(f)
     }
