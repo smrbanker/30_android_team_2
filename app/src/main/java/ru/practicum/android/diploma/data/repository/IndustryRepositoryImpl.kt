@@ -12,7 +12,6 @@ import ru.practicum.android.diploma.domain.models.Resource
 class IndustryRepositoryImpl(private val networkClient: NetworkClient) : IndustryRepository {
 
     override suspend fun getIndustries(): Resource<List<Industry>> {
-
         val response = networkClient.doIndustryRequest()
         return when (response.resultCode) {
             RESULT_CODE_SUCCESS -> {

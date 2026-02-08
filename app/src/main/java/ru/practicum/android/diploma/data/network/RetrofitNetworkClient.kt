@@ -45,13 +45,14 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val industryResponse = jobApiService.getIndustries()
+
                 industryResponse.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
-                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             } catch (e: HttpException) {
                 e.printStackTrace()
-                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }
@@ -63,14 +64,14 @@ class RetrofitNetworkClient(
 
         return withContext(Dispatchers.IO) {
             try {
-                val response = jobApiService.getRegions(id) // Предположим, у вас есть этот метод
+                val response = jobApiService.getRegions(id)
                 response.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
-                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             } catch (e: HttpException) {
                 e.printStackTrace()
-                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }
@@ -101,7 +102,10 @@ class RetrofitNetworkClient(
                 response.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
-                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }
