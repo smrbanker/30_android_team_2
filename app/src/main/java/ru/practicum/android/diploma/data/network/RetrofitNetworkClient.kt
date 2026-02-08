@@ -42,9 +42,6 @@ class RetrofitNetworkClient(
             } catch (e: HttpException) {
                 e.printStackTrace()
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }
