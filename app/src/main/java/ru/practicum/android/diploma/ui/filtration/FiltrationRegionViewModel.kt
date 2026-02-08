@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.api.AreasInteractor
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.RegionState
@@ -17,9 +16,6 @@ class FiltrationRegionViewModel(val areaInteractor: AreasInteractor) : ViewModel
 
     fun searchCountryRegions(parentId: String) {
         if (!parentId.isNullOrEmpty()) {
-            renderState(
-                RegionState.Loading
-            )
             viewModelScope.launch {
                 val result = areaInteractor.getCountryRegions(parentId.toInt())
                 regionList.clear()
@@ -31,14 +27,6 @@ class FiltrationRegionViewModel(val areaInteractor: AreasInteractor) : ViewModel
                         renderState(
                             RegionState.Error(
                                 errorMessage = result.second!!,
-                            )
-                        )
-                    }
-
-                    regionList.isEmpty() -> {
-                        renderState(
-                            RegionState.Empty(
-                                emptyMessage = R.string.region_is_not_found
                             )
                         )
                     }
@@ -57,9 +45,6 @@ class FiltrationRegionViewModel(val areaInteractor: AreasInteractor) : ViewModel
     }
 
     fun searchAllRegions() {
-        renderState(
-            RegionState.Loading
-        )
         viewModelScope.launch {
             val result = areaInteractor.getAllRegions()
             regionList.clear()
@@ -75,14 +60,6 @@ class FiltrationRegionViewModel(val areaInteractor: AreasInteractor) : ViewModel
                     )
                 }
 
-                regionList.isEmpty() -> {
-                    renderState(
-                        RegionState.Empty(
-                            emptyMessage = R.string.region_is_not_found
-                        )
-                    )
-                }
-
                 else -> {
                     renderState(
                         RegionState.Content(
@@ -93,7 +70,6 @@ class FiltrationRegionViewModel(val areaInteractor: AreasInteractor) : ViewModel
             }
 
         }
-
     }
 
     private fun renderState(state: RegionState) {

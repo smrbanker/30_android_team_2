@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:title="@string/choosing_region"
         app:titleTextAppearance="@style/ToolbarTitle"
-        app:navigationIcon="@drawable/arrow_back"
+        app:navigationIcon="@drawable/ic_arrow_left"
         app:navigationIconTint="?attr/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

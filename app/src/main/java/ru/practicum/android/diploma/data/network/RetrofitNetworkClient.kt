@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_SERVER_ERROR
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_SUCCESS
 import ru.practicum.android.diploma.data.dto.Response
+import ru.practicum.android.diploma.data.dto.responses.FilterArea
 
 class RetrofitNetworkClient(
     private val jobApiService: JobApiService,
@@ -48,7 +49,7 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             try {
-                jobApiService.getAreas().apply { resultCode = RESULT_CODE_SUCCESS }
+                FilterArea(jobApiService.getRegions()).apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }

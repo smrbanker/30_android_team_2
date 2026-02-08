@@ -36,7 +36,7 @@ class AreasRepositoryImpl(private val networkClient: NetworkClient) : AreasRepos
     }
 
     override suspend fun getCountryRegions(parentId: Int): Resource<List<Region>> {
-        val allAreasFromServer = getAreasResponse()
+        val allAreasFromServer = networkClient.doRegionRequest()
         return when (allAreasFromServer.resultCode) {
             RESULT_CODE_SUCCESS -> {
                 val areaList = (allAreasFromServer as FilterArea).areas
@@ -63,7 +63,7 @@ class AreasRepositoryImpl(private val networkClient: NetworkClient) : AreasRepos
     }
 
     override suspend fun getAllRegions(): Resource<List<Region>> {
-        val allAreasFromServer = getAreasResponse()
+        val allAreasFromServer = networkClient.doRegionRequest()
         return when (allAreasFromServer.resultCode) {
             RESULT_CODE_SUCCESS -> {
                 val areaList = (allAreasFromServer as FilterArea).areas
