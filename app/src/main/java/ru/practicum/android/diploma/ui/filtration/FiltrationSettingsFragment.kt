@@ -211,7 +211,7 @@ class FiltrationSettingsFragment : Fragment() {
             binding.apply {
                 salaryEdit.setText(filter.salary.toString())
                 salaryLayout.defaultHintTextColor =
-                   ContextCompat.getColorStateList(requireContext(), R.color.blue)
+                    ContextCompat.getColorStateList(requireContext(), R.color.blue)
                 clear.isVisible = true
             }
         }
@@ -229,7 +229,7 @@ class FiltrationSettingsFragment : Fragment() {
             binding.apply {
                 salaryEdit.text?.clear()
                 salaryLayout.defaultHintTextColor =
-                   ContextCompat.getColorStateList(requireContext(), R.color.gray)
+                    ContextCompat.getColorStateList(requireContext(), R.color.gray)
                 clear.isVisible = false
             }
         }
