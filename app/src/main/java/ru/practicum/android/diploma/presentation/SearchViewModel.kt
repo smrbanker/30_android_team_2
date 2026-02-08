@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.Filter
@@ -34,6 +35,10 @@ class SearchViewModel(
     fun searchDebounce(text: String) {
         if (latestSearchText == text) return
         latestSearchText = text
+        vacancySearchDebounce(text)
+    }
+
+    fun searchAnyway(text: String) {
         vacancySearchDebounce(text)
     }
 
@@ -136,5 +141,19 @@ class SearchViewModel(
 
     private fun handleError(resultLiveData: MutableLiveData<VacancyState>, message: String) {
         resultLiveData.postValue(VacancyState.Error(message))
+    }
+
+    fun checkFilterButton(): Boolean {
+        var flag = false
+        runBlocking {
+            val filter = filterInteractor.output()
+            if (filter.location.country != null || filter.location.region != null) {
+                flag = true
+            }
+            if (filter.sector != null || filter.salary != null || filter.onlyWithSalary) {
+                flag = true
+            }
+        }
+        return flag
     }
 }

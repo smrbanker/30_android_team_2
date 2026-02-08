@@ -24,12 +24,79 @@ class FilterSpRepositoryImpl(
         return gson.fromJson(json, Filter::class.java)
     }
 
-    override fun clear() {
+    override fun clearAll() {
         val f = Filter(
             location = Location(null, null),
             sector = null,
             salary = null,
             onlyWithSalary = false
+        )
+        input(f)
+    }
+
+    override fun clearRegion() {
+        var f = output()
+        f = Filter(
+            location = Location(null, null),
+            sector = f.sector,
+            salary = f.salary,
+            onlyWithSalary = f.onlyWithSalary
+        )
+        input(f)
+    }
+
+    override fun clearIndustry() {
+        var f = output()
+        f = Filter(
+            location = f.location,
+            sector = null,
+            salary = f.salary,
+            onlyWithSalary = f.onlyWithSalary
+        )
+        input(f)
+    }
+
+    override fun clearSalary() {
+        var f = output()
+        f = Filter(
+            location = f.location,
+            sector = f.sector,
+            salary = null,
+            onlyWithSalary = f.onlyWithSalary
+        )
+        input(f)
+    }
+
+    override fun onlyWithSalary() {
+        var f = output()
+        f = Filter(
+            location = f.location,
+            sector = f.sector,
+            salary = f.salary,
+            onlyWithSalary = !f.onlyWithSalary
+        )
+        input(f)
+    }
+
+    override fun setSalary(value: String?) {
+        var f = output()
+        val amount = value?.toInt()
+        f = Filter(
+            location = f.location,
+            sector = f.sector,
+            salary = amount,
+            onlyWithSalary = f.onlyWithSalary
+        )
+        input(f)
+    }
+
+    override fun setStatus(status: Boolean) {
+        var f = output()
+        f = Filter(
+            location = f.location,
+            sector = f.sector,
+            salary = f.salary,
+            onlyWithSalary = status
         )
         input(f)
     }
