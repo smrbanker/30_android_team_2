@@ -83,10 +83,14 @@ class RetrofitNetworkClient(
 
         return withContext(Dispatchers.IO) {
             try {
-                jobApiService.searchVacancies(options).apply { resultCode = RESULT_CODE_SUCCESS }
+                val vacancyResponse = jobApiService.searchVacancies(options)
+                vacancyResponse.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
-                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }
