@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.IOException
+import retrofit2.HttpException
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_SERVER_ERROR
@@ -36,6 +37,12 @@ class RetrofitNetworkClient(
             try {
                 jobApiService.getIndustries().apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            } catch (e: Exception) {
                 e.printStackTrace()
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }

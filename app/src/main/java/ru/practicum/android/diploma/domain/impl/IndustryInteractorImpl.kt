@@ -15,9 +15,7 @@ class IndustryInteractorImpl(private val repository: IndustryRepository) : Indus
         }
     }
 
-    private fun handleSuccess(
-        industriesList: List<ru.practicum.android.diploma.domain.models.Industry>
-    ): IndustryState {
+    private fun handleSuccess(industriesList: List<ru.practicum.android.diploma.domain.models.Industry>): IndustryState {
         return if (industriesList.isEmpty()) {
             IndustryState.Empty
         } else {
