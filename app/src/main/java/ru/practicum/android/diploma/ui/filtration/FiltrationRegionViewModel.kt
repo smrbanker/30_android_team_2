@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.domain.api.AreasInteractor
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.RegionState
 
-class FiltrationRegionViewModel(val areaInteractor: AreasInteractor): ViewModel(){
+class FiltrationRegionViewModel(val areaInteractor: AreasInteractor) : ViewModel() {
     val regionStateLiveData = MutableLiveData<RegionState>()
     fun observeFavouriteInfo(): LiveData<RegionState> = regionStateLiveData
     val regionList = mutableListOf<Region>()

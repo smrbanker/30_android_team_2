@@ -43,7 +43,6 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun doRegionRequest(): Response {
-
         if (!isConnected()) {
             return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         }
@@ -55,8 +54,6 @@ class RetrofitNetworkClient(
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
-
-        return Response().apply { resultCode }
     }
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {

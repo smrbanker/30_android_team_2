@@ -42,7 +42,7 @@ class AreasRepositoryImpl(private val networkClient: NetworkClient) : AreasRepos
                 val areaList = (allAreasFromServer as FilterArea).areas
                 val regionList = mutableListOf<AreasDto>()
                 areaList.forEach { country ->
-                    if(country.id == parentId){
+                    if (country.id == parentId) {
                         regionList.addAll(country.areas)
                     }
                 }
