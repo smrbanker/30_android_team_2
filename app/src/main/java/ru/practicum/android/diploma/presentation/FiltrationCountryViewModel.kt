@@ -16,7 +16,7 @@ import ru.practicum.android.diploma.domain.models.Location
 class FiltrationCountryViewModel(
     private val areasInteractor: AreasInteractor,
     private val prefsInteractor: FilterSpInteractor
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val countriesLiveData = MutableLiveData<Pair<List<Country>?, String?>>()
     fun observeCountries(): LiveData<Pair<List<Country>?, String?>> = countriesLiveData
@@ -30,12 +30,14 @@ class FiltrationCountryViewModel(
     fun saveCountry(country: Country) {
         runBlocking(Dispatchers.IO) {
             val filter = prefsInteractor.output()
-            prefsInteractor.input(Filter(
-                location = Location(country = country, region = null),
-                sector = filter.sector,
-                salary = filter.salary,
-                onlyWithSalary = filter.onlyWithSalary
-            ))
+            prefsInteractor.input(
+                Filter(
+                    location = Location(country = country, region = null),
+                    sector = filter.sector,
+                    salary = filter.salary,
+                    onlyWithSalary = filter.onlyWithSalary
+                )
+            )
         }
     }
 }

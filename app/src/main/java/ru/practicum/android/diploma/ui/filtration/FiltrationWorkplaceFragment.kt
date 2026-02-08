@@ -35,10 +35,10 @@ class FiltrationWorkplaceFragment : Fragment() {
         setupUi()
         initListeners()
 
-        viewModel.observeCountry().observe(viewLifecycleOwner) { country->
+        viewModel.observeCountry().observe(viewLifecycleOwner) { country ->
             binding.countryEditText.setText(country)
         }
-        viewModel.observeRegion().observe(viewLifecycleOwner) { region->
+        viewModel.observeRegion().observe(viewLifecycleOwner) { region ->
             binding.regionEditText.setText(region)
         }
     }
