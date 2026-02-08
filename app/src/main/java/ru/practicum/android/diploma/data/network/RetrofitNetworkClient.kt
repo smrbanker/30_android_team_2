@@ -17,25 +17,16 @@ class RetrofitNetworkClient(
     private val jobApiService: JobApiService,
     private val context: Context,
 ) : NetworkClient {
+
     override suspend fun doCountryRequest(): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
-
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
-    }
-
-    override suspend fun doIndustryRequest(): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         }
+
         return withContext(Dispatchers.IO) {
             try {
-                jobApiService.getIndustries().apply { resultCode = RESULT_CODE_SUCCESS }
+                val response = jobApiService.getCountries()
+                response.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
@@ -46,28 +37,55 @@ class RetrofitNetworkClient(
         }
     }
 
+    override suspend fun doIndustryRequest(): Response {
+        if (!isConnected()) {
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val industryResponse = jobApiService.getIndustries()
+                industryResponse.apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            }
+        }
+    }
+
     override suspend fun doRegionRequest(id: String): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
+        if (!isConnected()) {
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        }
 
-        // TO DO
-
-        // val response = // TO DO
-
-        return Response().apply { resultCode }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = jobApiService.getRegions(id) // Предположим, у вас есть этот метод
+                response.apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            }
+        }
     }
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         }
+
         return withContext(Dispatchers.IO) {
             try {
                 jobApiService.searchVacancies(options).apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
     }
@@ -75,33 +93,28 @@ class RetrofitNetworkClient(
     override suspend fun doVacancyRequest(id: String): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        } else {
-            return withContext(Dispatchers.IO) {
-                try {
-                    val response = jobApiService.getVacancy(id)
-                    response.apply { resultCode = RESULT_CODE_SUCCESS }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-                }
-            }
         }
 
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = jobApiService.getVacancy(id)
+                response.apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                return@withContext Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            }
+        }
     }
 
-    // ЭТА ФУНКЦИЯ БЕЗ НАСТРОЙКИ ANDROID_MANIFEST НЕ РАБОТАЕТ. ПРОВЕРИЛ, ВСЕ ОК, НО ПОКА ЗАКОММЕНТИРОВАЛ
     private fun isConnected(): Boolean {
-        val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
-            }
-        }
-        return false
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        return capabilities != null && (
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+            )
     }
 }

@@ -28,7 +28,7 @@ interface JobApiService {
     suspend fun getCountries(): FilterArea
 
     @GET("areas/{a_id}")
-    suspend fun getRegions(@Path("a_id") areaId: Int): FilterArea
+    suspend fun getRegions(@Path("a_id") areaId: String): FilterArea
 
     @GET("industries")
     suspend fun getIndustries(): FilterIndustry
