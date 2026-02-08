@@ -100,6 +100,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_12dp"
                 android:backgroundTint="@color/light_gray_to_gray"
+                android:textColor="@color/black"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 

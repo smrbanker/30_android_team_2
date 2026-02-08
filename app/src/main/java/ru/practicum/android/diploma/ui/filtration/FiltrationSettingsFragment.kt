@@ -82,6 +82,8 @@ class FiltrationSettingsFragment : Fragment() {
         }
 
         binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
+            binding.salaryLayout.defaultHintTextColor =
+                ContextCompat.getColorStateList(requireContext(), R.color.blue)
             if (text.isNullOrEmpty()) {
                 viewModel.setSalary(null)
                 binding.clear.isVisible = false
@@ -111,6 +113,11 @@ class FiltrationSettingsFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             saveAndGo(false)
+        }
+
+        if (binding.salaryEdit.hasFocus()) {
+            binding.salaryLayout.defaultHintTextColor =
+                ContextCompat.getColorStateList(requireContext(), R.color.blue)
         }
 
         requireActivity().onBackPressedDispatcher
@@ -200,18 +207,29 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun showSalary(filter: Filter) {
-        if (filter.salary != null) {
+        if (filter.salary != null && binding.salaryEdit.hasFocus()) {
             binding.apply {
                 salaryEdit.setText(filter.salary.toString())
                 salaryLayout.defaultHintTextColor =
-                    ContextCompat.getColorStateList(requireContext(), R.color.blue)
+                   ContextCompat.getColorStateList(requireContext(), R.color.blue)
                 clear.isVisible = true
             }
-        } else {
+        }
+
+        if (filter.salary != null && !binding.salaryEdit.hasFocus()) {
+            binding.apply {
+                salaryEdit.setText(filter.salary.toString())
+                salaryLayout.defaultHintTextColor =
+                    ContextCompat.getColorStateList(requireContext(), R.color.black)
+                clear.isVisible = true
+            }
+        }
+
+        if (filter.salary == null) {
             binding.apply {
                 salaryEdit.text?.clear()
                 salaryLayout.defaultHintTextColor =
-                    ContextCompat.getColorStateList(requireContext(), R.color.gray)
+                   ContextCompat.getColorStateList(requireContext(), R.color.gray)
                 clear.isVisible = false
             }
         }
