@@ -36,6 +36,7 @@
         <item quantity="other">Найдено %d вакансий</item>
     </plurals>
     <string name="choosing_workplace">Выбор места работы</string>
+    <string name="choosing_country">Выбор страны</string>
     <string name="country">Страна</string>
     <string name="region">Регион</string>
 </resources>
