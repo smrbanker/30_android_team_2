@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentIndustryBinding
 import ru.practicum.android.diploma.domain.models.Sector
-import ru.practicum.android.diploma.ui.industry.IndustryState
-import ru.practicum.android.diploma.ui.industry.IndustryViewModel
 
 class IndustryFragment : Fragment() {
     private var _binding: FragmentIndustryBinding? = null
@@ -90,9 +87,6 @@ class IndustryFragment : Fragment() {
 
     private fun showContent(industries: List<Sector>, flag: Boolean) {
         binding.progressBar?.isVisible = false
-
-        Log.d("SHOW", flag.toString())
-        //binding.industryApply.isVisible = flag
 
         industryList.clear()
         industryList.addAll(industries)

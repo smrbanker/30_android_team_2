@@ -8,7 +8,6 @@ import ru.practicum.android.diploma.domain.models.Sector
 class IndustryViewHolder(private val binding: ItemIndustryBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: Sector) = with(binding) {
-
         itemIndustryName.text = model.name
         if (model.isChecked) {
             viewIndustryName.setImageResource(R.drawable.ic_radio_button_on)

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemIndustryBinding
 import ru.practicum.android.diploma.domain.models.Sector
-import ru.practicum.android.diploma.ui.industry.IndustryViewHolder
 
 class IndustryAdapter(private val industries: List<Sector>, private val onIndustryClick: (Sector) -> Unit) :
     RecyclerView.Adapter<IndustryViewHolder>() {

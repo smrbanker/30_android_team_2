@@ -5,7 +5,8 @@ import ru.practicum.android.diploma.domain.models.Sector
 sealed interface IndustryState {
 
     data class Content(
-        val industries: List<Sector>, val flag: Boolean
+        val industries: List<Sector>,
+        val flag: Boolean
     ) : IndustryState
 
     data class Error(

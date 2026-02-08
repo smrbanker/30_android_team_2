@@ -29,6 +29,7 @@ class IndustryViewModel(
     var filter: Filter? = null
 
     fun fillData() {
+        var i = 1
         originalList.add(Sector(1, "IT", false))
         originalList.add(Sector(2, "MED", false))
         originalList.add(Sector(3, "TV", false))
@@ -41,7 +42,7 @@ class IndustryViewModel(
     }
 
     fun setIndustry() {
-        var industry : Sector? = null
+        var industry: Sector? = null
 
         for (i in 0..<filteredList.size) {
             if (filteredList[i].isChecked) {
@@ -81,7 +82,7 @@ class IndustryViewModel(
         return list
     }
 
-    fun getInitFilter() : Filter? {
+    fun getInitFilter(): Filter? {
         runBlocking { // viewModelScope.launch(Dispatchers.IO) {
             try {
                 filter = filterInteractor.output()
@@ -119,7 +120,6 @@ class IndustryViewModel(
         sector?.let { sector ->
             val indexChecked = filteredList.indexOfFirst { it.id == sector.id }
             if (indexChecked >= 0) {
-
                 for (i in 0..<filteredList.size)
                     if (i == indexChecked) {
                         val item = filteredList[i]
@@ -132,14 +132,14 @@ class IndustryViewModel(
         }
 
         var flag = false
-        for (i in 0..<filteredList.size)
+        for (i in 0..<filteredList.size) {
             if (filteredList[i].isChecked) {
                 flag = true
             }
+        }
 
         processResult(filteredList.sortedBy { it.name }, flag)
     }
-
 
     private fun processResult(industries: List<Sector>, flag: Boolean) {
         renderState(IndustryState.Content(industries, flag))
