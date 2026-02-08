@@ -42,14 +42,19 @@ class RetrofitNetworkClient(
         return Response().apply { resultCode }
     }
 
-    override suspend fun doRegionRequest(id: String): Response {
-        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
-        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        // }
+    override suspend fun doRegionRequest(): Response {
 
-        // TO DO
-
-        // val response = // TO DO
+        if (!isConnected()) {
+            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        }
+        return withContext(Dispatchers.IO) {
+            try {
+                jobApiService.getAreas().apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
+            }
+        }
 
         return Response().apply { resultCode }
     }
