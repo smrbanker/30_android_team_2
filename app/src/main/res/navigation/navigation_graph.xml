@@ -38,5 +38,13 @@
     <fragment
         android:id="@+id/filtrationSettingsFragment"
         android:name="ru.practicum.android.diploma.ui.filtration.FiltrationSettingsFragment"
-        android:label="FiltrationSettingsFragment" />
+        android:label="FiltrationSettingsFragment">
+        <action
+            android:id="@+id/action_filtrationSettingsFragment_to_industrySelectionFragment"
+            app:destination="@id/industrySelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/industrySelectionFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.IndustrySelectionFragment"
+        android:label="IndustrySelectionFragment" />
 </navigation>

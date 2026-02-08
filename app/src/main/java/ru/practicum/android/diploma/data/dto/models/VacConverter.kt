@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.dto.models
 
 import ru.practicum.android.diploma.data.dto.responses.VacancyDetailResponse
+import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.Vacancy
 
 fun vacancyToFull(vacancyDetail: VacancyDetail): Vacancy = with(vacancyDetail) {
@@ -73,4 +74,11 @@ fun skillsToString(skills: List<String>): String {
         result.append("• ${skill}\n")
     }
     return result.toString()
+}
+
+fun industryDtoToDomain(industryDto: IndustryDto): Industry = with(industryDto) {
+    Industry(
+        id = id,
+        name = name
+    )
 }

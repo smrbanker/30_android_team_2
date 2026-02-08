@@ -7,8 +7,10 @@ import com.google.gson.Gson
 import ru.practicum.android.diploma.data.repository.SearchVacancyDetailsRepositoryImpl
 import ru.practicum.android.diploma.util.VacancyDbConverter
 import ru.practicum.android.diploma.data.repository.VacancyRepositoryImpl
+import ru.practicum.android.diploma.data.repository.IndustryRepositoryImpl
 import ru.practicum.android.diploma.domain.api.SearchVacancyDetailsRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
+import ru.practicum.android.diploma.domain.api.IndustryRepository
 
 val repositoryModule = module {
     factory<VacancyRepository> {
@@ -27,5 +29,9 @@ val repositoryModule = module {
 
     single<SearchVacancyDetailsRepository> {
         SearchVacancyDetailsRepositoryImpl(get())
+    }
+
+    factory<IndustryRepository> {
+        IndustryRepositoryImpl(get())
     }
 }
