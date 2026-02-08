@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltrationCountryBinding
 import ru.practicum.android.diploma.domain.models.Country
@@ -22,7 +21,7 @@ class FiltrationCountryFragment : Fragment() {
 
     private val viewModel by viewModel<FiltrationCountryViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFiltrationCountryBinding.inflate(inflater, container, false)
         _adapter = AreaAdapter { area ->
             viewModel.saveCountry(area as Country)

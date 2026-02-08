@@ -38,5 +38,21 @@
     <fragment
         android:id="@+id/filtrationSettingsFragment"
         android:name="ru.practicum.android.diploma.ui.filtration.FiltrationSettingsFragment"
-        android:label="FiltrationSettingsFragment" />
+        android:label="FiltrationSettingsFragment" >
+        <action
+            android:id="@+id/action_filtrationSettingsFragment_to_filtrationWorkplaceFragment"
+            app:destination="@id/filtrationWorkplaceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filtrationWorkplaceFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationWorkplaceFragment"
+        android:label="FiltrationWorkplaceFragment" >
+        <action
+            android:id="@+id/action_filtrationWorkplaceFragment_to_filtrationCountryFragment"
+            app:destination="@id/filtrationCountryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filtrationCountryFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationCountryFragment"
+        android:label="FiltrationCountryFragment" />
 </navigation>
