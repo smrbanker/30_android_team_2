@@ -31,10 +31,10 @@ class IndustryViewModel(
     fun fillData() {
         val i = 2
         originalList.add(Sector(i, "IT", false))
-        originalList.add(Sector(i*i, "MED", false))
-        originalList.add(Sector(i*i*i, "TV", false))
-        originalList.add(Sector(i*i*i*i, "FIN", false))
-        originalList.add(Sector(i/i, "SERVICE", false))
+        originalList.add(Sector(i * i, "MED", false))
+        originalList.add(Sector(i * i * i, "TV", false))
+        originalList.add(Sector(i * i * i * i, "FIN", false))
+        originalList.add(Sector(i / i, "SERVICE", false))
 
         originalList = initOriginalList(originalList)
 
@@ -129,7 +129,7 @@ class IndustryViewModel(
         processResult(filteredList.sortedBy { it.name }, flag)
     }
 
-    private fun sectorWork () {
+    private fun sectorWork() {
         sector?.let { sector ->
             val indexChecked = filteredList.indexOfFirst { it.id == sector.id }
             if (indexChecked >= 0) {
