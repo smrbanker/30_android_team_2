@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.filtration
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.xmlpull.v1.XmlPullParserFactory
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltrationWorkplaceBinding
 import ru.practicum.android.diploma.presentation.FiltrationWorkplaceViewModel
