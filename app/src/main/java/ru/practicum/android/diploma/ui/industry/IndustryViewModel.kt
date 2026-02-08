@@ -29,12 +29,12 @@ class IndustryViewModel(
     var filter: Filter? = null
 
     fun fillData() {
-        var i = 1
-        originalList.add(Sector(1, "IT", false))
-        originalList.add(Sector(2, "MED", false))
-        originalList.add(Sector(3, "TV", false))
-        originalList.add(Sector(4, "FIN", false))
-        originalList.add(Sector(5, "SERVICE", false))
+        val i = 2
+        originalList.add(Sector(i, "IT", false))
+        originalList.add(Sector(i*i, "MED", false))
+        originalList.add(Sector(i*i*i, "TV", false))
+        originalList.add(Sector(i*i*i*i, "FIN", false))
+        originalList.add(Sector(i/i, "SERVICE", false))
 
         originalList = initOriginalList(originalList)
 
