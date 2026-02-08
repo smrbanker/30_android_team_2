@@ -117,19 +117,7 @@ class IndustryViewModel(
             }
         }
 
-        sector?.let { sector ->
-            val indexChecked = filteredList.indexOfFirst { it.id == sector.id }
-            if (indexChecked >= 0) {
-                for (i in 0..<filteredList.size)
-                    if (i == indexChecked) {
-                        val item = filteredList[i]
-                        filteredList[i] = item.copy(isChecked = true)
-                    } else {
-                        val item = filteredList[i]
-                        filteredList[i] = item.copy(isChecked = false)
-                    }
-            }
-        }
+        sectorWork()
 
         var flag = false
         for (i in 0..<filteredList.size) {
@@ -139,6 +127,23 @@ class IndustryViewModel(
         }
 
         processResult(filteredList.sortedBy { it.name }, flag)
+    }
+
+    private fun sectorWork () {
+        sector?.let { sector ->
+            val indexChecked = filteredList.indexOfFirst { it.id == sector.id }
+            if (indexChecked >= 0) {
+                for (i in 0..<filteredList.size) {
+                    if (i == indexChecked) {
+                        val item = filteredList[i]
+                        filteredList[i] = item.copy(isChecked = true)
+                    } else {
+                        val item = filteredList[i]
+                        filteredList[i] = item.copy(isChecked = false)
+                    }
+                }
+            }
+        }
     }
 
     private fun processResult(industries: List<Sector>, flag: Boolean) {
