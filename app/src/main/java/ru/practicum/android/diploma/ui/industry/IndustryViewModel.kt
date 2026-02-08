@@ -55,7 +55,7 @@ class IndustryViewModel(
                 filterInteractor.setIndustry(industry)
             } catch (e: IOException) {
                 Log.e(SP_EXCEPTION, e.toString())
-                stateLiveData.postValue(IndustryState.Error(SP_ERROR_OUTPUT))
+                stateLiveData.postValue(IndustryState.Error(SP_ERROR_INPUT))
             }
         }
     }
@@ -132,15 +132,19 @@ class IndustryViewModel(
     private fun sectorWork() {
         sector?.let { sector ->
             val indexChecked = filteredList.indexOfFirst { it.id == sector.id }
-            if (indexChecked >= 0) {
-                for (i in 0..<filteredList.size) {
-                    if (i == indexChecked) {
-                        val item = filteredList[i]
-                        filteredList[i] = item.copy(isChecked = true)
-                    } else {
-                        val item = filteredList[i]
-                        filteredList[i] = item.copy(isChecked = false)
-                    }
+            indexChecked(indexChecked)
+        }
+    }
+
+    private fun indexChecked(index: Int) {
+        if (index >= 0) {
+            for (i in 0..<filteredList.size) {
+                if (i == index) {
+                    val item = filteredList[i]
+                    filteredList[i] = item.copy(isChecked = true)
+                } else {
+                    val item = filteredList[i]
+                    filteredList[i] = item.copy(isChecked = false)
                 }
             }
         }
@@ -158,6 +162,5 @@ class IndustryViewModel(
         private const val SP_EXCEPTION = "SPException"
         const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
         const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
-        const val SP_ERROR_CLEAR = "Ошибка сохранения пустых данных в SP"
     }
 }

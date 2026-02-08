@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentIndustryBinding
 import ru.practicum.android.diploma.domain.models.Sector
+import ru.practicum.android.diploma.ui.industry.IndustryViewModel.Companion.SP_ERROR_INPUT
+import ru.practicum.android.diploma.ui.industry.IndustryViewModel.Companion.SP_ERROR_OUTPUT
 
 class IndustryFragment : Fragment() {
     private var _binding: FragmentIndustryBinding? = null
@@ -71,7 +74,7 @@ class IndustryFragment : Fragment() {
         when (state) {
             is IndustryState.Content -> showContent(state.industries, state.flag)
             is IndustryState.Empty -> showEmpty()
-            is IndustryState.Error -> showError()
+            is IndustryState.Error -> showError(state.message)
             is IndustryState.Loading -> showLoading()
         }
     }
@@ -80,8 +83,24 @@ class IndustryFragment : Fragment() {
         binding.progressBar?.isVisible = false
     }
 
-    private fun showError() {
+    private fun showError(errorMessage: String) {
         binding.progressBar?.isVisible = false
+
+        when (errorMessage) {
+            SP_ERROR_INPUT -> Toast.makeText(
+                requireContext(),
+                SP_ERROR_INPUT,
+                Toast.LENGTH_SHORT
+            )
+                .show()
+
+            SP_ERROR_OUTPUT -> Toast.makeText(
+                requireContext(),
+                SP_ERROR_OUTPUT,
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     private fun showContent(industries: List<Sector>, flag: Boolean) {
