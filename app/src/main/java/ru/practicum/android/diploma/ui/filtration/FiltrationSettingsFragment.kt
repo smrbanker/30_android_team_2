@@ -21,6 +21,7 @@ import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Co
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_INPUT
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel.Companion.SP_ERROR_OUTPUT
 import ru.practicum.android.diploma.ui.search.fragment.SearchFragment
+import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyFragment
 import kotlin.getValue
 
 class FiltrationSettingsFragment : Fragment() {
@@ -57,7 +58,7 @@ class FiltrationSettingsFragment : Fragment() {
             }
         }
 
-        binding.workplaceLayout.setOnClickListener {
+        binding.workplaceEdit.setOnClickListener {
             // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР МЕСТА РАБОТЫ"
         }
 
@@ -66,12 +67,16 @@ class FiltrationSettingsFragment : Fragment() {
                 viewModel.clearIndustry()
                 viewModel.showFilter()
             } else {
-                // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР ОТРАСЛИ"
+                findNavController().navigate(
+                    R.id.action_filtrationSettingsFragment_to_industryFragment
+                )
             }
         }
 
-        binding.industryLayout.setOnClickListener {
-            // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР ОТРАСЛИ"
+        binding.industryEdit.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_filtrationSettingsFragment_to_industryFragment
+            )
         }
 
         binding.clear.setOnClickListener {
