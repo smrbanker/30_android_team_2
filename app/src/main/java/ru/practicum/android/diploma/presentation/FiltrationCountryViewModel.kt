@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.AreasInteractor
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.models.Country
@@ -15,25 +17,25 @@ class FiltrationCountryViewModel(
     private val areasInteractor: AreasInteractor,
     private val prefsInteractor: FilterSpInteractor
     ) : ViewModel() {
-    init {
-        setupUi()
-    }
+
     private val countriesLiveData = MutableLiveData<Pair<List<Country>?, String?>>()
     fun observeCountries(): LiveData<Pair<List<Country>?, String?>> = countriesLiveData
 
-    private fun setupUi() {
+    fun setupUi() {
         viewModelScope.launch {
             countriesLiveData.postValue(areasInteractor.getCountries())
         }
     }
 
     fun saveCountry(country: Country) {
-        val filter = prefsInteractor.output()
-        prefsInteractor.input(Filter(
-            location = Location(country = country, region = null),
-            sector = filter.sector,
-            salary = filter.salary,
-            onlyWithSalary = filter.onlyWithSalary
-        ))
+        runBlocking(Dispatchers.IO) {
+            val filter = prefsInteractor.output()
+            prefsInteractor.input(Filter(
+                location = Location(country = country, region = null),
+                sector = filter.sector,
+                salary = filter.salary,
+                onlyWithSalary = filter.onlyWithSalary
+            ))
+        }
     }
 }

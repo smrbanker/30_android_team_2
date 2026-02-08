@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltrationCountryBinding
@@ -25,6 +26,7 @@ class FiltrationCountryFragment : Fragment() {
         _binding = FragmentFiltrationCountryBinding.inflate(inflater, container, false)
         _adapter = AreaAdapter { area ->
             viewModel.saveCountry(area as Country)
+            findNavController().navigateUp()
         }
         return binding.root
     }
@@ -38,8 +40,7 @@ class FiltrationCountryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.recyclerView.adapter = adapter
+        setupUi()
 
         viewModel.observeCountries().observe(viewLifecycleOwner) {
             if (it.first != null) {
@@ -47,6 +48,17 @@ class FiltrationCountryFragment : Fragment() {
             } else {
                 showError(it.second!!)
             }
+        }
+    }
+
+    private fun setupUi() {
+        viewModel.setupUi()
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.recyclerView.adapter = adapter
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
         }
     }
 
@@ -60,9 +72,5 @@ class FiltrationCountryFragment : Fragment() {
             placeholderText.text = errorMessage
             placeholder.isVisible = true
         }
-    }
-
-    companion object {
-        fun newInstance() = FiltrationCountryFragment()
     }
 }
