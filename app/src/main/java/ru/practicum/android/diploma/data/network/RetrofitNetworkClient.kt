@@ -56,7 +56,6 @@ class RetrofitNetworkClient(
         }
     }
 
-
     override suspend fun doRegionRequest(id: String): Response {
         // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
         //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
@@ -68,7 +67,6 @@ class RetrofitNetworkClient(
 
         return Response().apply { resultCode }
     }
-
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {
         if (!isConnected()) {
