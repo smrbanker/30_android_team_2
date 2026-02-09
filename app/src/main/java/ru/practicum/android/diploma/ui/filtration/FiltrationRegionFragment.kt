@@ -170,7 +170,6 @@ class FiltrationRegionFragment : Fragment() {
 
     companion object {
         const val COUNTRY_KEY = "COUNTRY_KEY"
-        fun createArgsCountry (country: String): Bundle =
-            bundleOf (COUNTRY_KEY to country)
+        fun createArgsCountry(country: String): Bundle = bundleOf(COUNTRY_KEY to country)
     }
 }
