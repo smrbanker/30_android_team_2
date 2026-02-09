@@ -54,16 +54,16 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 jobApiService.getIndustries().apply { RESULT_CODE_SUCCESS }
-                FilterIndustry(jobApiService.getIndustries()).apply {resultCode = RESULT_CODE_SUCCESS}
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-                }
+                FilterIndustry(jobApiService.getIndustries()).apply { resultCode = RESULT_CODE_SUCCESS }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
+    }
 
 
-        override suspend fun doRegionRequest(id: String): Response {
+    override suspend fun doRegionRequest(id: String): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
         }
