@@ -37,7 +37,6 @@ class IndustryViewModel(
 
             if (ind.second != null) {
                 noConnection = true
-                return@runBlocking
             } else {
                 originalList = ind.first?.map { Sector(it.id, it.name, false) }!!.toMutableList()
             }
