@@ -34,4 +34,8 @@ val repositoryModule = module {
     factory<FilterSpRepository> {
         FilterSpRepositoryImpl(get(), get())
     }
+
+    factory<IndustryRepository> {
+        IndustryRepositoryImpl(get())
+    }
 }

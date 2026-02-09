@@ -26,4 +26,8 @@ val interactorModule = module {
     factory<FilterSpInteractor> {
         FilterSpInteractorImpl(get())
     }
+
+    factory<IndustryInteractor> {
+        IndustryInteractorImpl(get())
+    }
 }

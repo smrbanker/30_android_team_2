@@ -5,6 +5,8 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.data.dto.models.AreasDto
+import ru.practicum.android.diploma.data.dto.models.IndustryDto
 import ru.practicum.android.diploma.data.dto.responses.FilterArea
 import ru.practicum.android.diploma.data.dto.responses.FilterIndustry
 import ru.practicum.android.diploma.data.dto.responses.VacancyDetailResponse
@@ -24,12 +26,14 @@ interface JobApiService {
     @GET("vacancies/{v_id}")
     suspend fun getVacancy(@Path("v_id") id: String): VacancyDetailResponse
 
+    @Headers("Authorization: Bearer $TOKEN")
     @GET("areas")
-    suspend fun getCountries(): FilterArea
+    suspend fun getAreas(): List<AreasDto>
 
     @GET("areas/{a_id}")
     suspend fun getRegions(@Path("a_id") areaId: Int): FilterArea
 
+    @Headers("Authorization: Bearer $TOKEN")
     @GET("industries")
-    suspend fun getIndustries(): FilterIndustry
+    suspend fun getIndustries(): List<IndustryDto>
 }
