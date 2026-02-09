@@ -30,18 +30,36 @@ class IndustrySelectionViewModel(
     fun loadIndustries() {
         viewModelScope.launch {
             industryLiveData.postValue(IndustryState.Loading)
-            Log.d(IndustryConstants.TAG_VIEW_MODEL, IndustryConstants.MESSAGE_LOADING_STARTED)
+            Log.d(
+                IndustryConstants.TAG_VIEW_MODEL,
+                IndustryConstants.MESSAGE_LOADING_STARTED
+            )
 
             try {
                 val result = industryInteractor.getIndustries()
-                Log.d(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_SUCCESS}$result")
+                Log.d(
+                    IndustryConstants.TAG_VIEW_MODEL,
+                    "${IndustryConstants.MESSAGE_SUCCESS}$result"
+                )
                 industryLiveData.postValue(result)
             } catch (e: IOException) {
-                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR_NETWORK}${e.message}", e)
-                industryLiveData.postValue(IndustryState.Error("${IndustryConstants.MESSAGE_ERROR_NETWORK}${e.message}"))
+                Log.e(
+                    IndustryConstants.TAG_VIEW_MODEL,
+                    "${IndustryConstants.MESSAGE_ERROR_NETWORK}${e.message}",
+                    e
+                )
+                industryLiveData.postValue(
+                    IndustryState.Error("${IndustryConstants.MESSAGE_ERROR_NETWORK}${e.message}")
+                )
             } catch (e: HttpException) {
-                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR_HTTP}${e.message}", e)
-                industryLiveData.postValue(IndustryState.Error("${IndustryConstants.MESSAGE_ERROR_HTTP}${e.message}"))
+                Log.e(
+                    IndustryConstants.TAG_VIEW_MODEL,
+                    "${IndustryConstants.MESSAGE_ERROR_HTTP}${e.message}",
+                    e
+                )
+                industryLiveData.postValue(
+                    IndustryState.Error("${IndustryConstants.MESSAGE_ERROR_HTTP}${e.message}")
+                )
             }
         }
     }
