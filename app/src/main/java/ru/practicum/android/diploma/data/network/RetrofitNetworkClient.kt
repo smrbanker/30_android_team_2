@@ -38,6 +38,13 @@ class RetrofitNetworkClient(
         }
     }
 
+    object NetworkConstants {
+        const val TAG_NETWORK_REQUEST = "NetworkRequest"
+        const val MESSAGE_SUCCESS = "Успешно получен ответ по индустриям: "
+        const val MESSAGE_ERROR_NETWORK = "Ошибка сети: "
+        const val MESSAGE_ERROR_HTTP = "Ошибка HTTP: "
+    }
+
     override suspend fun doIndustryRequest(): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
@@ -46,13 +53,13 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val industryResponse = jobApiService.getIndustries()
-                Log.d("NetworkRequest", "Успешно получен ответ по индустриям: $industryResponse")
+                Log.d(NetworkConstants.TAG_NETWORK_REQUEST, "${NetworkConstants.MESSAGE_SUCCESS}$industryResponse")
                 industryResponse.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
-                Log.e("NetworkRequest", "Ошибка сети: ${e.message}", e)
+                Log.e(NetworkConstants.TAG_NETWORK_REQUEST, "${NetworkConstants.MESSAGE_ERROR_NETWORK}${e.message}", e)
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             } catch (e: HttpException) {
-                Log.e("NetworkRequest", "Ошибка HTTP: ${e.message}", e)
+                Log.e(NetworkConstants.TAG_NETWORK_REQUEST, "${NetworkConstants.MESSAGE_ERROR_HTTP}${e.message}", e)
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
