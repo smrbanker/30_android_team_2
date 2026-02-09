@@ -76,9 +76,9 @@ fun skillsToString(skills: List<String>): String {
     return result.toString()
 }
 
-fun industryDtoToDomain(industryDto: IndustryDto): Industry = with(industryDto) {
-    Industry(
-        id = id,
-        name = name
+fun industryDtoToDomain(dto: IndustryDto): Industry {
+    return Industry(
+        id = dto.id,
+        name = dto.name
     )
 }

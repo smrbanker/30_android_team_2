@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.IOException
@@ -45,13 +46,13 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val industryResponse = jobApiService.getIndustries()
-
+                Log.d("NetworkRequest", "Успешно получен ответ по индустриям: $industryResponse")
                 industryResponse.apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
-                e.printStackTrace()
+                Log.e("NetworkRequest", "Ошибка сети: ${e.message}", e)
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             } catch (e: HttpException) {
-                e.printStackTrace()
+                Log.e("NetworkRequest", "Ошибка HTTP: ${e.message}", e)
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
             }
         }
@@ -116,13 +117,19 @@ class RetrofitNetworkClient(
 
     private fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.activeNetwork ?: run {
+            Log.e("NetworkCheck", "Нет активной сети")
+            return false
+        }
 
         val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-        return capabilities != null && (
+        val isConnected = capabilities != null && (
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
             )
+
+        Log.d("NetworkCheck", "Состояние подключения: $isConnected")
+        return isConnected
     }
 }
