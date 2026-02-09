@@ -13,7 +13,7 @@ class IndustryRepositoryImpl(
     private val networkClient: NetworkClient
 ) : IndustryRepository {
 
-    private suspend fun getIndustryResponse(): Response {
+    private suspend fun getIndustryResponse(): ru.practicum.android.diploma.data.dto.Response {
         return networkClient.doIndustryRequest()
     }
 

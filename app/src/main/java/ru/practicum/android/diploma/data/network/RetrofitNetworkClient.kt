@@ -21,23 +21,17 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun doCountryRequest(): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        }
+        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
+        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        // }
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = jobApiService.getCountries()
-                response.apply { resultCode = RESULT_CODE_SUCCESS }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-            } catch (e: HttpException) {
-                e.printStackTrace()
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-            }
-        }
+        // TO DO
+
+        // val response = // TO DO
+
+        return Response().apply { resultCode }
     }
+
 
     object NetworkConstants {
         const val TAG_NETWORK_REQUEST = "NetworkRequest"
@@ -64,23 +58,17 @@ class RetrofitNetworkClient(
 
 
     override suspend fun doRegionRequest(id: String): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-        }
+        // if (!isConnected()) { // ПОКА ЗАКРЫЛ ИЗ-ЗА ANDROID_MANIFEST (СМ КОММЕНТАРИЙ НИЖЕ)
+        //    return Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
+        // }
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = jobApiService.getRegions(id)
-                response.apply { resultCode = RESULT_CODE_SUCCESS }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-            } catch (e: HttpException) {
-                e.printStackTrace()
-                Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
-            }
-        }
+        // TO DO
+
+        // val response = // TO DO
+
+        return Response().apply { resultCode }
     }
+
 
     override suspend fun doSearchRequest(options: Map<String, String>): Response {
         if (!isConnected()) {
