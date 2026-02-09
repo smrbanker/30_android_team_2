@@ -21,10 +21,10 @@ data class Sector(
 data class Country(
     val id: Int,
     val name: String
-)
+) : Area
 
 data class Region(
     val id: Int,
     val name: String,
     val parentId: Int
-)
+) : Area
