@@ -54,8 +54,10 @@ class FiltrationWorkplaceFragment : Fragment() {
         }
 
         binding.regionEditText.setOnClickListener {
-            findNavController().navigate(R.id.action_filtrationWorkplaceFragment_to_filtrationRegionFragment,
-                FiltrationRegionFragment.createArgsCountry(binding.countryEditText.text.toString()))
+            findNavController().navigate(
+                R.id.action_filtrationWorkplaceFragment_to_filtrationRegionFragment,
+                FiltrationRegionFragment.createArgsCountry(binding.countryEditText.text.toString())
+            )
         }
 
         binding.toolbar.setNavigationOnClickListener {

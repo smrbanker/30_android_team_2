@@ -19,7 +19,8 @@ import ru.practicum.android.diploma.util.debounce
 
 class FiltrationRegionViewModel(
     private val areaInteractor: AreasInteractor,
-    private val prefsInteractor: FilterSpInteractor) : ViewModel() {
+    private val prefsInteractor: FilterSpInteractor
+) : ViewModel() {
     val regionStateLiveData = MutableLiveData<RegionState>()
     fun observeRegions(): LiveData<RegionState> = regionStateLiveData
     val regionList = mutableListOf<Region>()
@@ -40,23 +41,16 @@ class FiltrationRegionViewModel(
         searchJob = viewModelScope.launch {
             val result = mutableListOf<Region>()
             regionList.forEach { region ->
-                if(region.name.contains(text)) {
+                if (region.name.contains(text)) {
                     result.add(region)
                 }
             }
             when {
                 result.isEmpty() -> {
-                    renderState(
-                        RegionState.Empty
-                    )
+                    renderState(RegionState.Empty)
                 }
-
                 else -> {
-                    renderState(
-                        RegionState.Content(
-                            result
-                        )
-                    )
+                    renderState(RegionState.Content(result))
                 }
             }
         }
@@ -75,17 +69,13 @@ class FiltrationRegionViewModel(
                 when {
                     result.second != null -> {
                         renderState(
-                            RegionState.Error(
-                                errorMessage = result.second!!,
-                            )
+                            RegionState.Error(errorMessage = result.second!!)
                         )
                     }
 
                     else -> {
                         renderState(
-                            RegionState.Content(
-                                regionList
-                            )
+                            RegionState.Content(regionList)
                         )
                     }
                 }
@@ -105,19 +95,11 @@ class FiltrationRegionViewModel(
             }
             when {
                 result.second != null -> {
-                    renderState(
-                        RegionState.Error(
-                            errorMessage = result.second!!,
-                        )
-                    )
+                    renderState(RegionState.Error(errorMessage = result.second!!))
                 }
 
                 else -> {
-                    renderState(
-                        RegionState.Content(
-                            regionList
-                        )
-                    )
+                    renderState(RegionState.Content(regionList))
                 }
             }
         }

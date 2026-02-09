@@ -161,7 +161,7 @@ class FiltrationRegionFragment : Fragment() {
     }
 
     private fun checkCountryState(): Boolean {
-        return if(country.isNullOrEmpty()) {
+        return if (country.isNullOrEmpty()) {
             false
         } else {
             true
@@ -171,6 +171,6 @@ class FiltrationRegionFragment : Fragment() {
     companion object {
         const val COUNTRY_KEY = "COUNTRY_KEY"
         fun createArgsCountry (country: String): Bundle =
-            bundleOf(COUNTRY_KEY to country)
+            bundleOf (COUNTRY_KEY to country)
     }
 }
