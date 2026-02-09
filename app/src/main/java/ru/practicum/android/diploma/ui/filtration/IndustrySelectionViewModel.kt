@@ -22,7 +22,9 @@ class IndustrySelectionViewModel(
         const val TAG_VIEW_MODEL = "IndustrySelectionViewModel"
         const val MESSAGE_LOADING_STARTED = "Загрузка отраслей начата"
         const val MESSAGE_SUCCESS = "Получены отрасли: "
-        const val MESSAGE_ERROR = "Ошибка при загрузке отраслей: "
+        const val MESSAGE_ERROR_NETWORK = "Ошибка сети: "
+        const val MESSAGE_ERROR_HTTP = "Ошибка HTTP: "
+        const val MESSAGE_UNKNOWN_ERROR = "Неизвестная ошибка"
     }
 
     fun loadIndustries() {
@@ -32,17 +34,14 @@ class IndustrySelectionViewModel(
 
             try {
                 val result = industryInteractor.getIndustries()
-                Log.d(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_SUCCESS} $result")
+                Log.d(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_SUCCESS}$result")
                 industryLiveData.postValue(result)
             } catch (e: IOException) {
-                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR}${e.message}", e)
-                industryLiveData.postValue(IndustryState.Error("Ошибка сети: ${e.message}"))
+                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR_NETWORK}${e.message}", e)
+                industryLiveData.postValue(IndustryState.Error("${IndustryConstants.MESSAGE_ERROR_NETWORK}${e.message}"))
             } catch (e: HttpException) {
-                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR}${e.message}", e)
-                industryLiveData.postValue(IndustryState.Error("Ошибка HTTP: ${e.message}"))
-            } catch (e: Exception) {
-                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR}${e.message}", e)
-                industryLiveData.postValue(IndustryState.Error(e.message ?: "Неизвестная ошибка"))
+                Log.e(IndustryConstants.TAG_VIEW_MODEL, "${IndustryConstants.MESSAGE_ERROR_HTTP}${e.message}", e)
+                industryLiveData.postValue(IndustryState.Error("${IndustryConstants.MESSAGE_ERROR_HTTP}${e.message}"))
             }
         }
     }
