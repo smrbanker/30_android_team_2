@@ -31,18 +31,23 @@ class IndustryViewModel(
     var filter: Filter? = null
 
     fun fillData() {
-        stateLiveData.postValue(IndustryState.Loading)
-        runBlocking { // }viewModelScope.launch {
+        var noConnection = false
+        runBlocking {
             val ind = industryInteractor.getIndustries()
 
             if (ind.second != null) {
-                stateLiveData.postValue(IndustryState.Error(API_ERROR_OUTPUT))
+                noConnection = true
+                return@runBlocking
             } else {
                 originalList = ind.first?.map { Sector(it.id, it.name, false) }!!.toMutableList()
             }
         }
-        originalList = initOriginalList(originalList)
-        postSectorsList()
+        if (noConnection) {
+            renderState(IndustryState.Error(API_ERROR_OUTPUT))
+        } else {
+            originalList = initOriginalList(originalList)
+            postSectorsList()
+        }
     }
 
     fun setIndustry() {
@@ -82,7 +87,6 @@ class IndustryViewModel(
                 }
             }
         }
-
         return list
     }
 

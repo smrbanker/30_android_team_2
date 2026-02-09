@@ -12,8 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustryBinding
 import ru.practicum.android.diploma.domain.models.Sector
+import ru.practicum.android.diploma.ui.industry.IndustryViewModel.Companion.API_ERROR_OUTPUT
 import ru.practicum.android.diploma.ui.industry.IndustryViewModel.Companion.SP_ERROR_INPUT
 import ru.practicum.android.diploma.ui.industry.IndustryViewModel.Companion.SP_ERROR_OUTPUT
 
@@ -80,31 +82,59 @@ class IndustryFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        binding.progressBar?.isVisible = false
+        binding.apply {
+            progressBar.isVisible = false
+            placeholder.isVisible = false
+            recyclerView.isVisible = false
+        }
     }
 
     private fun showError(errorMessage: String) {
-        binding.progressBar?.isVisible = false
+        binding.apply {
+            progressBar.isVisible = false
+            placeholder.isVisible = false
+            recyclerView.isVisible = false
+        }
 
         when (errorMessage) {
-            SP_ERROR_INPUT -> Toast.makeText(
-                requireContext(),
-                SP_ERROR_INPUT,
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            SP_ERROR_INPUT ->
+                Toast.makeText(
+                    requireContext(),
+                    SP_ERROR_INPUT,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
 
-            SP_ERROR_OUTPUT -> Toast.makeText(
-                requireContext(),
-                SP_ERROR_OUTPUT,
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            SP_ERROR_OUTPUT ->
+                Toast.makeText(
+                    requireContext(),
+                    SP_ERROR_OUTPUT,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+
+            API_ERROR_OUTPUT ->
+                binding.apply {
+                    placeholder.isVisible = true
+                    placeholderImage.isVisible = true
+                    placeholderImage.setImageDrawable(
+                        requireContext()
+                            .getDrawable(R.drawable.image_wrong_query_placeholder)
+                    )
+                    placeholderText.isVisible = true
+                    placeholderText.text = getString(R.string.cannot_get_industry_list)
+                    recyclerView.isVisible = false
+                    industryApply.isVisible = false
+                }
         }
     }
 
     private fun showContent(industries: List<Sector>, flag: Boolean) {
-        binding.progressBar?.isVisible = false
+        binding.apply {
+            progressBar.isVisible = false
+            placeholder.isVisible = false
+            recyclerView.isVisible = true
+        }
 
         industryList.clear()
         industryList.addAll(industries)
@@ -114,7 +144,11 @@ class IndustryFragment : Fragment() {
     }
 
     private fun showLoading() {
-        binding.progressBar?.isVisible = true
+        binding.apply {
+            progressBar.isVisible = true
+            placeholder.isVisible = false
+            recyclerView.isVisible = false
+        }
     }
 
     private fun changeItem(industry: Sector) {
