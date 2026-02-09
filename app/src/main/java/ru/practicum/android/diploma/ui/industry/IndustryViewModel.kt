@@ -167,6 +167,5 @@ class IndustryViewModel(
         const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
         const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
         const val API_ERROR_OUTPUT = "Ошибка чтения данных из API"
-        }
     }
 }
