@@ -45,13 +45,6 @@ class IndustryViewModel(
         postSectorsList()
     }
 
-    companion object {
-        private const val SP_EXCEPTION = "SPException"
-        const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
-        const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
-        const val API_ERROR_OUTPUT = "Ошибка чтения данных из API"
-    }
-
     fun setIndustry() {
         var industry: Sector? = null
 
@@ -173,5 +166,7 @@ class IndustryViewModel(
         private const val SP_EXCEPTION = "SPException"
         const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
         const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
+        const val API_ERROR_OUTPUT = "Ошибка чтения данных из API"
+        }
     }
 }
