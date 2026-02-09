@@ -25,8 +25,9 @@ interface JobApiService {
     @GET("vacancies/{v_id}")
     suspend fun getVacancy(@Path("v_id") id: String): VacancyDetailResponse
 
+    @Headers("Authorization: Bearer $TOKEN")
     @GET("areas")
-    suspend fun getAreas(): FilterArea
+    suspend fun getAreas(): List<AreasDto>
 
     @Headers("Authorization: Bearer $TOKEN")
     @GET("areas")

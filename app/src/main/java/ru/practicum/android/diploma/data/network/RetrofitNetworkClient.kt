@@ -23,7 +23,7 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             try {
-                jobApiService.getAreas().apply { resultCode = RESULT_CODE_SUCCESS }
+                FilterArea(jobApiService.getAreas()).apply { resultCode = RESULT_CODE_SUCCESS }
             } catch (e: IOException) {
                 e.printStackTrace()
                 Response().apply { resultCode = RESULT_CODE_SERVER_ERROR }
