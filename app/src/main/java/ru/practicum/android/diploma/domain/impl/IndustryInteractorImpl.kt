@@ -11,7 +11,7 @@ class IndustryInteractorImpl (
     override suspend fun getIndustries(): Pair<List<Industry>?, String?> {
         return when (val resource = industryRepository.getIndustries()) {
             is Resource.Success -> Pair (
-                first = resource.data
+                first = resource.data,
 
                 second = null
             )
