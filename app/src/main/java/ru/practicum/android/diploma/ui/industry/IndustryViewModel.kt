@@ -9,12 +9,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
+import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Sector
 import java.io.IOException
 
 class IndustryViewModel(
     private val filterInteractor: FilterSpInteractor,
+    private val industryInteractor: IndustryInteractor
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<IndustryState>(IndustryState.Loading)
