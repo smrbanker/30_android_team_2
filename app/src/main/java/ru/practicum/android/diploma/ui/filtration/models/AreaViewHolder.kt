@@ -10,7 +10,7 @@ class AreaViewHolder(private val binding: AreaListItemBinding) : RecyclerView.Vi
     fun bind(model: Area) {
         when (model) {
             is Country -> binding.areaName.text = model.name
-            is Region -> return // Димас, всё для тебя :)
+            is Region -> binding.areaName.text = model.name
         }
     }
 }

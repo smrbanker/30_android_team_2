@@ -53,8 +53,9 @@ class FiltrationWorkplaceFragment : Fragment() {
             findNavController().navigate(R.id.action_filtrationWorkplaceFragment_to_filtrationCountryFragment)
         }
 
-        binding.regionLayout.setOnClickListener {
-            // Переход на экран с выбором региона
+        binding.regionEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_filtrationWorkplaceFragment_to_filtrationRegionFragment,
+                FiltrationRegionFragment.createArgsCountry(binding.countryEditText.text.toString()))
         }
 
         binding.toolbar.setNavigationOnClickListener {
