@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.domain.impl
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.FilterSpRepository
 import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.Sector
 
 class FilterSpInteractorImpl(
     private val filterSpRepository: FilterSpRepository,
@@ -40,5 +41,9 @@ class FilterSpInteractorImpl(
 
     override fun setStatus(status: Boolean) {
         filterSpRepository.setStatus(status)
+    }
+
+    override fun setIndustry(industry: Sector?) {
+        filterSpRepository.setIndustry(industry)
     }
 }

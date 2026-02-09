@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.domain.api
 
 import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.Sector
 
 interface FilterSpInteractor {
     fun input(filter: Filter)
@@ -12,4 +13,5 @@ interface FilterSpInteractor {
     fun onlyWithSalary()
     fun setSalary(value: String?)
     fun setStatus(status: Boolean)
+    fun setIndustry(industry: Sector?)
 }
