@@ -9,12 +9,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
+import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Sector
 import java.io.IOException
 
 class IndustryViewModel(
     private val filterInteractor: FilterSpInteractor,
+    private val industryInteractor: IndustryInteractor
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<IndustryState>(IndustryState.Loading)
@@ -29,15 +31,17 @@ class IndustryViewModel(
     var filter: Filter? = null
 
     fun fillData() {
-        val i = 2
-        originalList.add(Sector(i, "IT", false))
-        originalList.add(Sector(i * i, "MED", false))
-        originalList.add(Sector(i * i * i, "TV", false))
-        originalList.add(Sector(i * i * i * i, "FIN", false))
-        originalList.add(Sector(i / i, "SERVICE", false))
+        stateLiveData.postValue(IndustryState.Loading)
+        runBlocking { // }viewModelScope.launch {
+            val ind = industryInteractor.getIndustries()
 
+            if (ind.second != null) {
+                stateLiveData.postValue(IndustryState.Error(API_ERROR_OUTPUT))
+            } else {
+                originalList = ind.first?.map { Sector(it.id, it.name, false) }!!.toMutableList()
+            }
+        }
         originalList = initOriginalList(originalList)
-
         postSectorsList()
     }
 
@@ -162,5 +166,6 @@ class IndustryViewModel(
         private const val SP_EXCEPTION = "SPException"
         const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
         const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
+        const val API_ERROR_OUTPUT = "Ошибка чтения данных из API"
     }
 }

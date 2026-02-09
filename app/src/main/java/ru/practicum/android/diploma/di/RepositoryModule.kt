@@ -7,9 +7,11 @@ import ru.practicum.android.diploma.data.repository.SearchVacancyDetailsReposito
 import ru.practicum.android.diploma.data.repository.VacancyRepositoryImpl
 import ru.practicum.android.diploma.db.FavouritesRepositoryImpl
 import ru.practicum.android.diploma.domain.api.FilterSpRepository
+import ru.practicum.android.diploma.domain.api.IndustryRepository
 import ru.practicum.android.diploma.domain.api.SearchVacancyDetailsRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
 import ru.practicum.android.diploma.domain.db.FavouritesRepository
+import ru.practicum.android.diploma.domain.impl.IndustryRepositoryImpl
 import ru.practicum.android.diploma.util.VacancyDbConverter
 
 val repositoryModule = module {
@@ -33,5 +35,9 @@ val repositoryModule = module {
 
     factory<FilterSpRepository> {
         FilterSpRepositoryImpl(get(), get())
+    }
+
+    factory<IndustryRepository> {
+        IndustryRepositoryImpl(get())
     }
 }
