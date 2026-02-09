@@ -31,16 +31,25 @@ class IndustryViewModel(
     var filter: Filter? = null
 
     fun fillData() {
-        val i = 2
-        originalList.add(Sector(i, "IT", false))
-        originalList.add(Sector(i * i, "MED", false))
-        originalList.add(Sector(i * i * i, "TV", false))
-        originalList.add(Sector(i * i * i * i, "FIN", false))
-        originalList.add(Sector(i / i, "SERVICE", false))
+        stateLiveData.postValue(IndustryState.Loading)
+        runBlocking { // }viewModelScope.launch {
+            val ind = industryInteractor.getIndustries()
 
+            if (ind.second != null) {
+                stateLiveData.postValue(IndustryState.Error(API_ERROR_OUTPUT))
+            } else {
+                originalList = ind.first?.map { Sector(it.id, it.name, false) }!!.toMutableList()
+            }
+        }
         originalList = initOriginalList(originalList)
-
         postSectorsList()
+    }
+
+    companion object {
+        private const val SP_EXCEPTION = "SPException"
+        const val SP_ERROR_INPUT = "Ошибка сохранения данных в SP"
+        const val SP_ERROR_OUTPUT = "Ошибка чтения данных из SP"
+        const val API_ERROR_OUTPUT = "Ошибка чтения данных из API"
     }
 
     fun setIndustry() {
