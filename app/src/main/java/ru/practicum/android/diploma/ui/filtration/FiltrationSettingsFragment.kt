@@ -73,9 +73,7 @@ class FiltrationSettingsFragment : Fragment() {
         }
 
         binding.industryEdit.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_filtrationSettingsFragment_to_industryFragment
-            )
+            findNavController().navigate(R.id.action_filtrationSettingsFragment_to_industryFragment)
         }
 
         binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
