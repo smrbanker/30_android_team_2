@@ -48,9 +48,10 @@ class FiltrationWorkplaceFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(
             getViewLifecycleOwner(),
-            object: OnBackPressedCallback(true) {
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     viewModel.clearCountryAndRegion()
+
                     findNavController().navigateUp()
                 }
             })
@@ -104,9 +105,11 @@ class FiltrationWorkplaceFragment : Fragment() {
             viewModel.clearRegion()
         }
     }
+
     private fun saveButtonEnableState(country: String?) {
         binding.chooseButton.isVisible = if (country.isNullOrEmpty()) false else true
     }
+
     private fun clearCountryButtonState(country: String?) {
        if (country.isNullOrEmpty()) {
            binding.stateCountryButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_arrow_right))
@@ -116,6 +119,7 @@ class FiltrationWorkplaceFragment : Fragment() {
            binding.stateCountryButton.isEnabled = true
        }
     }
+
     private fun clearRegionButtonState(country: String?) {
         if (country.isNullOrEmpty()) {
             binding.stateRegionButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_arrow_right))
