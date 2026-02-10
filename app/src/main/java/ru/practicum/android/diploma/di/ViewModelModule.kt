@@ -21,6 +21,7 @@ val viewModelModule = module {
     viewModel {
         SearchViewModel(get(), get())
     }
+
     viewModel {
         VacancyViewModel(
             get(),
@@ -44,7 +45,7 @@ val viewModelModule = module {
     viewModel {
         FiltrationRegionViewModel(get(), get())
     }
-    
+
     viewModel {
         IndustryViewModel(get(), get())
     }

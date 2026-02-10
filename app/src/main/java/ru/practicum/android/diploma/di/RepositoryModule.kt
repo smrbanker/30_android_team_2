@@ -42,7 +42,7 @@ val repositoryModule = module {
     factory<AreasRepository> {
         AreasRepositoryImpl(get())
     }
-    
+
     factory<IndustryRepository> {
         IndustryRepositoryImpl(get())
     }
