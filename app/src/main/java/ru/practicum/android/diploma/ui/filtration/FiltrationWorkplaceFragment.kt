@@ -54,7 +54,7 @@ class FiltrationWorkplaceFragment : Fragment() {
                     viewModel.clearCountryAndRegion()
                     findNavController().navigateUp()
                 }
-            })
+            } )
     }
 
     private fun setupUi() {
