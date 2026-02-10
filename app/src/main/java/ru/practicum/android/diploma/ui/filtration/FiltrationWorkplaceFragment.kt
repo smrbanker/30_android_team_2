@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.filtration
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +54,7 @@ class FiltrationWorkplaceFragment : Fragment() {
                     viewModel.clearCountryAndRegion()
                     findNavController().navigateUp()
                 }
-            } )
+            })
     }
 
     private fun setupUi() {
@@ -102,6 +103,7 @@ class FiltrationWorkplaceFragment : Fragment() {
         binding.chooseButton.isVisible = if (country.isNullOrEmpty()) false else true
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun clearCountryButtonState(country: String?) {
         if (country.isNullOrEmpty()) {
             binding.stateCountryButton.setImageDrawable(
@@ -116,6 +118,7 @@ class FiltrationWorkplaceFragment : Fragment() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun clearRegionButtonState(country: String?) {
         if (country.isNullOrEmpty()) {
             binding.stateRegionButton.setImageDrawable(
