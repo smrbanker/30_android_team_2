@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.presentation.FiltrationWorkplaceViewModel
 import ru.practicum.android.diploma.presentation.SearchViewModel
 import ru.practicum.android.diploma.ui.favorites.fragment.FavouritesViewModel
 import ru.practicum.android.diploma.ui.filtration.FiltrationSettingsViewModel
+import ru.practicum.android.diploma.ui.industry.IndustryViewModel
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel
 
 val viewModelModule = module {
@@ -42,5 +43,9 @@ val viewModelModule = module {
 
     viewModel {
         FiltrationRegionViewModel(get(), get())
+    }
+    
+    viewModel {
+        IndustryViewModel(get(), get())
     }
 }

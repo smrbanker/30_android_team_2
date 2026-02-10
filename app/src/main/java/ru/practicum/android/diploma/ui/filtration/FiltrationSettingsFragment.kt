@@ -66,12 +66,16 @@ class FiltrationSettingsFragment : Fragment() {
                 viewModel.clearIndustry()
                 viewModel.showFilter()
             } else {
-                // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР ОТРАСЛИ"
+                findNavController().navigate(
+                    R.id.action_filtrationSettingsFragment_to_industryFragment
+                )
             }
         }
 
-        binding.industryLayout.setOnClickListener {
-            // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР ОТРАСЛИ"
+        binding.industryEdit.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_filtrationSettingsFragment_to_industryFragment
+            )
         }
 
         binding.clear.setOnClickListener {
@@ -82,6 +86,8 @@ class FiltrationSettingsFragment : Fragment() {
         }
 
         binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
+            binding.salaryLayout.defaultHintTextColor =
+                ContextCompat.getColorStateList(requireContext(), R.color.blue)
             if (text.isNullOrEmpty()) {
                 viewModel.setSalary(null)
                 binding.clear.isVisible = false
@@ -111,6 +117,11 @@ class FiltrationSettingsFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             saveAndGo(false)
+        }
+
+        if (binding.salaryEdit.hasFocus()) {
+            binding.salaryLayout.defaultHintTextColor =
+                ContextCompat.getColorStateList(requireContext(), R.color.blue)
         }
 
         requireActivity().onBackPressedDispatcher
@@ -200,14 +211,25 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun showSalary(filter: Filter) {
-        if (filter.salary != null) {
+        if (filter.salary != null && binding.salaryEdit.hasFocus()) {
             binding.apply {
                 salaryEdit.setText(filter.salary.toString())
                 salaryLayout.defaultHintTextColor =
                     ContextCompat.getColorStateList(requireContext(), R.color.blue)
                 clear.isVisible = true
             }
-        } else {
+        }
+
+        if (filter.salary != null && !binding.salaryEdit.hasFocus()) {
+            binding.apply {
+                salaryEdit.setText(filter.salary.toString())
+                salaryLayout.defaultHintTextColor =
+                    ContextCompat.getColorStateList(requireContext(), R.color.black)
+                clear.isVisible = true
+            }
+        }
+
+        if (filter.salary == null) {
             binding.apply {
                 salaryEdit.text?.clear()
                 salaryLayout.defaultHintTextColor =

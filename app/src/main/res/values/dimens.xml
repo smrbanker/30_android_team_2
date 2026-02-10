@@ -5,7 +5,9 @@
     <dimen name="spacing_8">8dp</dimen>
     <dimen name="spacing_9">9dp</dimen>
     <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_14">14dp</dimen>
     <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_17">17dp</dimen>
     <dimen name="spacing_20">20dp</dimen>
     <dimen name="spacing_22">22dp</dimen>
     <dimen name="spacing_24">24dp</dimen>
@@ -16,6 +18,7 @@
     <dimen name="spacing_50">50dp</dimen>
     <dimen name="spacing_51">51dp</dimen>
     <dimen name="spacing_60">60dp</dimen>
+    <dimen name="spacing_72">72dp</dimen>
     <dimen name="spacing_76">76dp</dimen>
     
     <!-- Text sizes -->
