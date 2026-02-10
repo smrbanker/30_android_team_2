@@ -78,13 +78,6 @@ class FiltrationSettingsFragment : Fragment() {
             )
         }
 
-        binding.clear.setOnClickListener {
-            if (!binding.salaryEdit.text.isNullOrEmpty()) {
-                viewModel.clearSalary()
-                viewModel.showFilter()
-            }
-        }
-
         binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
             binding.salaryLayout.defaultHintTextColor =
                 ContextCompat.getColorStateList(requireContext(), R.color.blue)
@@ -101,6 +94,13 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun initListenersButton() {
+        binding.clear.setOnClickListener {
+            if (!binding.salaryEdit.text.isNullOrEmpty()) {
+                viewModel.clearSalary()
+                viewModel.showFilter()
+            }
+        }
+
         binding.resetButton.setOnClickListener {
             viewModel.clearFilter()
             viewModel.showFilter()
