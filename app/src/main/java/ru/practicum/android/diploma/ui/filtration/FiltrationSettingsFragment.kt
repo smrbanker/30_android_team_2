@@ -57,7 +57,7 @@ class FiltrationSettingsFragment : Fragment() {
             }
         }
 
-        binding.workplaceLayout.setOnClickListener {
+        binding.workplaceEdit.setOnClickListener {
             findNavController().navigate(R.id.action_filtrationSettingsFragment_to_filtrationWorkplaceFragment)
         }
 
@@ -73,16 +73,7 @@ class FiltrationSettingsFragment : Fragment() {
         }
 
         binding.industryEdit.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_filtrationSettingsFragment_to_industryFragment
-            )
-        }
-
-        binding.clear.setOnClickListener {
-            if (!binding.salaryEdit.text.isNullOrEmpty()) {
-                viewModel.clearSalary()
-                viewModel.showFilter()
-            }
+            findNavController().navigate(R.id.action_filtrationSettingsFragment_to_industryFragment)
         }
 
         binding.salaryEdit.doOnTextChanged { text, _, _, _ ->
@@ -101,6 +92,13 @@ class FiltrationSettingsFragment : Fragment() {
     }
 
     private fun initListenersButton() {
+        binding.clear.setOnClickListener {
+            if (!binding.salaryEdit.text.isNullOrEmpty()) {
+                viewModel.clearSalary()
+                viewModel.showFilter()
+            }
+        }
+
         binding.resetButton.setOnClickListener {
             viewModel.clearFilter()
             viewModel.showFilter()
