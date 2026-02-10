@@ -31,7 +31,7 @@ val interactorModule = module {
         FilterSpInteractorImpl(get())
     }
 
-    factory <AreasInteractor> {
+    factory<AreasInteractor> {
         AreasInteractorImpl(get())
     }
 
