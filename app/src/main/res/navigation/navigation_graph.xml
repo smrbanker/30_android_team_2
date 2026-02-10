@@ -50,9 +50,17 @@
         <action
             android:id="@+id/action_filtrationWorkplaceFragment_to_filtrationCountryFragment"
             app:destination="@id/filtrationCountryFragment" />
+        <action
+            android:id="@+id/action_filtrationWorkplaceFragment_to_filtrationRegionFragment"
+            app:destination="@id/filtrationRegionFragment" />
     </fragment>
     <fragment
         android:id="@+id/filtrationCountryFragment"
         android:name="ru.practicum.android.diploma.ui.filtration.FiltrationCountryFragment"
         android:label="FiltrationCountryFragment" />
+    <fragment
+        android:id="@+id/filtrationRegionFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationRegionFragment"
+        android:label="fragment_filtration_region"
+        tools:layout="@layout/fragment_filtration_region" />
 </navigation>

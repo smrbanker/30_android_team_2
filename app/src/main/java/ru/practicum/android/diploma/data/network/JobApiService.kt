@@ -29,9 +29,6 @@ interface JobApiService {
     @GET("areas")
     suspend fun getAreas(): List<AreasDto>
 
-    @GET("areas/{a_id}")
-    suspend fun getRegions(@Path("a_id") areaId: Int): FilterArea
-
     @GET("industries")
     suspend fun getIndustries(): FilterIndustry
 }

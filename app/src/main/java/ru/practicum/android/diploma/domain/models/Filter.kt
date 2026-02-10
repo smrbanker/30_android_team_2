@@ -26,5 +26,6 @@ data class Country(
 data class Region(
     val id: Int,
     val name: String,
+    val parentName: String,
     val parentId: Int
 ) : Area
