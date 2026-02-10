@@ -53,6 +53,7 @@ class FiltrationWorkplaceFragment : Fragment() {
                     viewModel.clearCountryAndRegion()
 
                     findNavController().navigateUp()
+
                 }
             })
     }
@@ -66,41 +67,34 @@ class FiltrationWorkplaceFragment : Fragment() {
         binding.countryEditText.setOnClickListener {
             findNavController().navigate(R.id.action_filtrationWorkplaceFragment_to_filtrationCountryFragment)
         }
-
         binding.regionEditText.setOnClickListener {
             findNavController().navigate(
                 R.id.action_filtrationWorkplaceFragment_to_filtrationRegionFragment,
                 FiltrationRegionFragment.createArgsCountry(binding.countryEditText.text.toString())
             )
         }
-
         binding.toolbar.setNavigationOnClickListener {
             viewModel.clearCountryAndRegion()
             findNavController().navigateUp()
         }
-
         binding.countryEditText.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
                 binding.countryLayout.defaultHintTextColor =
                     ContextCompat.getColorStateList(requireContext(), R.color.black_to_white)
             }
         }
-
         binding.regionEditText.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
                 binding.countryLayout.defaultHintTextColor =
                     ContextCompat.getColorStateList(requireContext(), R.color.black_to_white)
             }
         }
-
         binding.chooseButton.setOnClickListener {
             findNavController().navigateUp()
         }
-
         binding.stateCountryButton.setOnClickListener {
             viewModel.clearCountryAndRegion()
         }
-
         binding.stateRegionButton.setOnClickListener {
             viewModel.clearRegion()
         }
