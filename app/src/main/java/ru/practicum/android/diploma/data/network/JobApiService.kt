@@ -30,9 +30,6 @@ interface JobApiService {
     @GET("areas")
     suspend fun getAreas(): List<AreasDto>
 
-    @GET("areas/{a_id}")
-    suspend fun getRegions(@Path("a_id") areaId: Int): FilterArea
-
     @Headers("Authorization: Bearer $TOKEN")
     @GET("industries")
     suspend fun getIndustries(): List<IndustryDto>

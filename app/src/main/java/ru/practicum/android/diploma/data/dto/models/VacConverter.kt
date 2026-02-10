@@ -20,7 +20,7 @@ fun vacancyToFull(vacancyDetail: VacancyDetail): Vacancy = with(vacancyDetail) {
         employment = employment?.name,
         contact = contacts?.name,
         email = contacts?.email,
-        phone = phoneToString(contacts?.phone),
+        phone = phoneToString(contacts?.phones),
         employer = employer.name,
         logo = employer.logo,
         area = area.name,
@@ -46,7 +46,7 @@ fun vacancyToFullFromDetailResponse(vacancyDetail: VacancyDetailResponse): Vacan
         employment = employment?.name,
         contact = contacts?.name,
         email = contacts?.email,
-        phone = phoneToString(contacts?.phone),
+        phone = phoneToString(contacts?.phones),
         employer = employer.name,
         logo = employer.logo,
         area = area.name,
@@ -56,13 +56,13 @@ fun vacancyToFullFromDetailResponse(vacancyDetail: VacancyDetailResponse): Vacan
     )
 }
 
-fun phoneToString(phones: List<String>?): String {
-    if (phones == null) {
+fun phoneToString(phones: List<Phones>?): String {
+    if (phones.isNullOrEmpty()) {
         return ""
     }
     val result = StringBuilder()
     phones.forEach { phone ->
-        result.append("- ${phone}\n")
+        result.append("${phone.formatted}\n")
     }
     return result.toString()
 }

@@ -53,12 +53,12 @@ class FiltrationSettingsFragment : Fragment() {
                 viewModel.clearRegion()
                 viewModel.showFilter()
             } else {
-                // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР МЕСТА РАБОТЫ"
+                findNavController().navigate(R.id.action_filtrationSettingsFragment_to_filtrationWorkplaceFragment)
             }
         }
 
-        binding.workplaceEdit.setOnClickListener {
-            // ЗДЕСЬ findNavController().navigate НА ЭКРАН "ВЫБОР МЕСТА РАБОТЫ"
+        binding.workplaceLayout.setOnClickListener {
+            findNavController().navigate(R.id.action_filtrationSettingsFragment_to_filtrationWorkplaceFragment)
         }
 
         binding.industryArrow.setOnClickListener {

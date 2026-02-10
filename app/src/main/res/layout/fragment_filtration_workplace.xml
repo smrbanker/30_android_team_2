@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor"
+    tools:context=".ui.filtration.FiltrationWorkplaceFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:title="@string/choosing_workplace"
+        app:titleTextAppearance="@style/ToolbarTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/country_layout"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_60"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:hint="@string/country"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/country_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:lines="1"
+            android:editable="false"
+            tools:ignore="Deprecated" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/state_country_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_right"
+        android:layout_marginEnd="@dimen/spacing_16"
+        app:layout_constraintTop_toTopOf="@id/country_layout"
+        app:layout_constraintBottom_toBottomOf="@id/country_layout"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/region_layout"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_60"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:hint="@string/region"
+        app:layout_constraintTop_toBottomOf="@id/country_layout"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/region_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:lines="1"
+            android:editable="false"
+            tools:ignore="Deprecated" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/state_region_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_right"
+        android:layout_marginEnd="@dimen/spacing_16"
+        app:layout_constraintTop_toTopOf="@id/region_layout"
+        app:layout_constraintBottom_toBottomOf="@id/region_layout"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/choose_button"
+        style="@style/Filter_Button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        android:layout_marginBottom="@dimen/spacing_24"
+        android:backgroundTint="@color/blue"
+        android:text="@string/choose"
+        android:textColor="@color/white"
+        app:cornerRadius="@dimen/spacing_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,14 @@
     </plurals>
     <string name="apply">Применить</string>
     <string name="reset">Сбросить</string>
+    <string name="choosing_workplace">Выбор места работы</string>
+    <string name="choosing_country">Выбор страны</string>
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
+    <string name="choosing_region">Выбор региона</string>
+    <string name="enter_region">Введите регион</string>
+    <string name="failed_getting_list">Не удалось получить список</string>
+    <string name="region_is_not_found">Такого региона нет</string>
     <string name="industry_toolbar">Выбор отрасли</string>
     <string name="industry_hint">Введите отрасль</string>
     <string name="cannot_get_industry_list">Не удалось получить список отраслей</string>
