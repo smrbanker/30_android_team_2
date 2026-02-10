@@ -7,8 +7,6 @@ import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.models.AreasDto
 import ru.practicum.android.diploma.data.dto.models.IndustryDto
-import ru.practicum.android.diploma.data.dto.responses.FilterArea
-import ru.practicum.android.diploma.data.dto.responses.FilterIndustry
 import ru.practicum.android.diploma.data.dto.responses.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 

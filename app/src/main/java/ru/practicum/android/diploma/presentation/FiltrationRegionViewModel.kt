@@ -26,7 +26,10 @@ class FiltrationRegionViewModel(
     val regionList = mutableListOf<Region>()
     private var latestSearchText = ""
     private var searchJob: Job? = null
-    private val regionSearchDebounce = debounce<String>(DEBOUNCE_DELAY, viewModelScope, true) { text ->
+    private val regionSearchDebounce = debounce<String>(
+        DEBOUNCE_DELAY, viewModelScope,
+        true
+    ) { text ->
         searchInList()
     }
 

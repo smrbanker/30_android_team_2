@@ -57,7 +57,7 @@ class FiltrationSettingsFragment : Fragment() {
             }
         }
 
-        binding.workplaceLayout.setOnClickListener {
+        binding.workplaceEdit.setOnClickListener {
             findNavController().navigate(R.id.action_filtrationSettingsFragment_to_filtrationWorkplaceFragment)
         }
 

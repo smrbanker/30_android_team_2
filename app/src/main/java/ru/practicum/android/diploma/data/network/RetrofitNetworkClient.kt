@@ -34,7 +34,6 @@ class RetrofitNetworkClient(
         }
     }
 
-
     object NetworkConstants {
         const val TAG_NETWORK_REQUEST = "NetworkRequest"
         const val MESSAGE_SUCCESS = "Успешно получен ответ по индустриям: "
