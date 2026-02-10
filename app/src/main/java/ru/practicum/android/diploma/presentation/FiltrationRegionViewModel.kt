@@ -27,7 +27,7 @@ class FiltrationRegionViewModel(
     private var latestSearchText = ""
     private var searchJob: Job? = null
     private val regionSearchDebounce = debounce<String>(DEBOUNCE_DELAY, viewModelScope, true) { text ->
-        searchInList(text)
+        searchInList()
     }
 
     fun searchDebounce(text: String) {
@@ -36,31 +36,34 @@ class FiltrationRegionViewModel(
         regionSearchDebounce(text)
     }
 
-    private fun searchInList(text: String) {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            val result = mutableListOf<Region>()
-            regionList.forEach { region ->
-                if (region.name.contains(text)) {
-                    result.add(region)
+    private fun searchInList() {
+        if (latestSearchText.isNotEmpty()) {
+            searchJob?.cancel()
+            searchJob = viewModelScope.launch {
+                val result = mutableListOf<Region>()
+                regionList.forEach { region ->
+                    if (region.name.contains(latestSearchText)) {
+                        result.add(region)
+                    }
                 }
-            }
-            when {
-                result.isEmpty() -> {
-                    renderState(RegionState.Empty)
-                }
-                else -> {
-                    renderState(RegionState.Content(result))
+                when {
+                    result.isEmpty() -> {
+                        renderState(RegionState.Empty)
+                    }
+                    else -> {
+                        renderState(RegionState.Content(result))
+                    }
                 }
             }
         }
     }
     fun searchCountryRegions(parentName: String) {
+        searchJob?.cancel()
         if (!parentName.isNullOrEmpty()) {
             renderState(
                 RegionState.Loading
             )
-            viewModelScope.launch {
+            searchJob = viewModelScope.launch {
                 val result = areaInteractor.getCountryRegions(parentName)
                 regionList.clear()
                 if (result.first != null) {
@@ -84,10 +87,11 @@ class FiltrationRegionViewModel(
     }
 
     fun searchAllRegions() {
+        searchJob?.cancel()
         renderState(
             RegionState.Loading
         )
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             val result = areaInteractor.getAllRegions()
             regionList.clear()
             if (result.first != null) {
@@ -131,6 +135,19 @@ class FiltrationRegionViewModel(
     }
     private fun renderState(state: RegionState) {
         regionStateLiveData.postValue(state)
+    }
+    fun getSavedRegionList() {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            when {
+                regionList.isEmpty() -> {
+                    renderState(RegionState.Empty)
+                }
+                else -> {
+                    renderState(RegionState.Content(regionList))
+                }
+            }
+        }
     }
     companion object {
         private const val DEBOUNCE_DELAY = 2000L

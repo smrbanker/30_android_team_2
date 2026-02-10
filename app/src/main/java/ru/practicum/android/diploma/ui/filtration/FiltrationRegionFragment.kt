@@ -69,6 +69,8 @@ class FiltrationRegionFragment : Fragment() {
 
                 if (text?.isNotEmpty() == true) {
                     viewModel.searchDebounce(text.toString())
+                } else {
+                    viewModel.getSavedRegionList()
                 }
             },
             afterTextChanged = { text: Editable? -> }
@@ -76,6 +78,7 @@ class FiltrationRegionFragment : Fragment() {
 
         binding.clearTextButton.setOnClickListener {
             binding.editText.text.clear()
+            viewModel.getSavedRegionList()
         }
 
         binding.toolbar.setNavigationOnClickListener {
