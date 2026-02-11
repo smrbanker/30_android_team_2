@@ -22,6 +22,7 @@ class SearchViewModel(
 ) : ViewModel() {
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
+
     private var latestSearchText = ""
     private var currentPage = 1
     private var searchJob: Job? = null
