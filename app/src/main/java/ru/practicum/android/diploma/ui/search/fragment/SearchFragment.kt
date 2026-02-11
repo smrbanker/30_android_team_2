@@ -137,7 +137,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading(flag: Boolean) {
-
         if (!flag) {
             isLoading = true
             binding.apply {
