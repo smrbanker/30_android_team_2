@@ -158,7 +158,7 @@ class VacancyViewModel(
     }
 
     private fun addContacts(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
-        if(!vacancy.contact.isNullOrEmpty() || !vacancy.phone.isNullOrEmpty() || !vacancy.email.isNullOrEmpty()) {
+        if (!vacancy.contact.isNullOrEmpty() || !vacancy.phone.isNullOrEmpty() || !vacancy.email.isNullOrEmpty()) {
             list += VacancyCastItem.BigHeaderItem(context.getString(R.string.contacts))
             if (!vacancy.contact.isNullOrEmpty()) {
                 list += VacancyCastItem.SmallHeaderItem(vacancy.contact)

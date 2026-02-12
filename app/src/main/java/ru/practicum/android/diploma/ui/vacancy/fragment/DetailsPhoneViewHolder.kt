@@ -18,7 +18,7 @@ class DetailsPhoneViewHolder(private val binding: DetailsPhoneItemBinding) :
     }
 
     fun bind(item: VacancyCastItem.PhoneItem) {
-        if(!item.phone.comment.isNullOrEmpty() || !item.phone.formatted.isNullOrEmpty()) {
+        if (!item.phone.comment.isNullOrEmpty() || !item.phone.formatted.isNullOrEmpty()) {
             if (item.phone.comment.isNullOrEmpty()) {
                 binding.comment.isVisible = false
                 binding.itemText.isVisible = true
