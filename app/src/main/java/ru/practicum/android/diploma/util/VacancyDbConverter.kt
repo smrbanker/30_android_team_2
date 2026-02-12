@@ -1,7 +1,12 @@
 package ru.practicum.android.diploma.util
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.db.entity.VacancyDetailEntity
+import ru.practicum.android.diploma.domain.models.Phone
 import ru.practicum.android.diploma.domain.models.Vacancy
+import kotlin.getValue
 
 class VacancyDbConverter {
 
@@ -22,7 +27,7 @@ class VacancyDbConverter {
             vacancy.employment,
             vacancy.contact,
             vacancy.email,
-            vacancy.phone,
+            phoneListToJson(vacancy.phone),
             vacancy.employer,
             vacancy.logo,
             vacancy.area,
@@ -49,7 +54,7 @@ class VacancyDbConverter {
             vacancy.employment,
             vacancy.contactsName,
             vacancy.contactsEmail,
-            vacancy.contactsPhone,
+            phoneListToJson(vacancy.contactsPhone),
             vacancy.employerName,
             vacancy.employerLogo,
             vacancy.area,
@@ -57,5 +62,22 @@ class VacancyDbConverter {
             vacancy.url,
             vacancy.industry
         )
+    }
+
+    private fun phoneListToJson(phones: List<Phone>): String {
+        val gson = Gson()
+        val vacancyJson: String = gson.toJson(phones)
+        return vacancyJson
+    }
+
+    private fun phoneListToJson(phones: String?): List<Phone> {
+        val result = mutableListOf<Phone>()
+        if (!phones.isNullOrEmpty()) {
+            val gson = Gson()
+            val listType = object : TypeToken<List<Phone>>() {}.type
+            val list : List<Phone> = gson.fromJson(phones, listType)
+            result.addAll(list)
+        }
+        return result
     }
 }

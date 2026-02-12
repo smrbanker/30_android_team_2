@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.dto.models
 
 import ru.practicum.android.diploma.data.dto.responses.VacancyDetailResponse
+import ru.practicum.android.diploma.domain.models.Phone
 import ru.practicum.android.diploma.domain.models.Vacancy
 
 fun vacancyToFull(vacancyDetail: VacancyDetail): Vacancy = with(vacancyDetail) {
@@ -20,7 +21,7 @@ fun vacancyToFull(vacancyDetail: VacancyDetail): Vacancy = with(vacancyDetail) {
         employment = employment?.name,
         contact = contacts?.name,
         email = contacts?.email,
-        phone = phoneToString(contacts?.phones),
+        phone = phonesToList(contacts?.phones),
         employer = employer.name,
         logo = employer.logo,
         area = area.name,
@@ -46,7 +47,7 @@ fun vacancyToFullFromDetailResponse(vacancyDetail: VacancyDetailResponse): Vacan
         employment = employment?.name,
         contact = contacts?.name,
         email = contacts?.email,
-        phone = phoneToString(contacts?.phones),
+        phone = phonesToList(contacts?.phones),
         employer = employer.name,
         logo = employer.logo,
         area = area.name,
@@ -56,15 +57,14 @@ fun vacancyToFullFromDetailResponse(vacancyDetail: VacancyDetailResponse): Vacan
     )
 }
 
-fun phoneToString(phones: List<Phones>?): String {
-    if (phones.isNullOrEmpty()) {
-        return ""
+fun phonesToList(phones: List<Phones>?): List<Phone> {
+    val phoneList = mutableListOf<Phone>()
+    if (!phones.isNullOrEmpty()) {
+        phones.forEach { phone ->
+            phoneList.add(Phone(phone.comment, phone.formatted))
+        }
     }
-    val result = StringBuilder()
-    phones.forEach { phone ->
-        result.append("${phone.formatted}\n")
-    }
-    return result.toString()
+    return phoneList
 }
 
 fun skillsToString(skills: List<String>): String {

@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.util.salaryFormatter
 import java.sql.SQLException
+import kotlin.collections.plusAssign
 
 class VacancyViewModel(
     private val favouritesInteractor: FavouritesInteractor,
@@ -113,34 +114,62 @@ class VacancyViewModel(
 
     private fun buildVacancyCastItemList(vacancy: Vacancy): List<VacancyCastItem> {
         val items = buildList<VacancyCastItem>() {
-            if (vacancy.name.isNotEmpty()) {
-                val salary = salaryFormatter(vacancy, context)
-                this += VacancyCastItem.GeneralHeaderItem(
-                    vacancyTitle = vacancy.name,
-                    vacancySalary = salary)
-            }
-            if (vacancy.employer.isNotEmpty()
-                && vacancy.area.isNotEmpty()
-                && vacancy.logo.isNotEmpty()) {
-                this += VacancyCastItem.CompanyItem(
-                    employer = vacancy.employer,
-                    area = vacancy.area,
-                    logo = vacancy.logo)
-            }
-            if (vacancy.description.isNotEmpty()) {
-                this += VacancyCastItem.BigHeaderItem(context.getString(R.string.vacancy_description))
-                this.addAll(getDescriptionItemsList(vacancy.description))
-            }
-            if (vacancy.skills.isNotEmpty()) {
-                this += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
-                this += VacancyCastItem.SkillItem(vacancy.skills)
-            }
-            if (!vacancy.phone.isNullOrEmpty()) {
-                val phones = vacancy.phone.split(',')
-                this += phones.map { VacancyCastItem.PhoneItem(it) }
-            }
+            addGeneralTitle(vacancy, this)
+            addEmployer(vacancy, this)
+            addDescription(vacancy, this)
+            addSkills(vacancy, this)
+            addContacts(vacancy, this)
         }
         return items
+    }
+
+    private fun addGeneralTitle(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.name.isNotEmpty()) {
+            val salary = salaryFormatter(vacancy, context)
+            list += VacancyCastItem.GeneralHeaderItem(
+                vacancyTitle = vacancy.name,
+                vacancySalary = salary)
+        }
+    }
+
+    private fun addEmployer(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.employer.isNotEmpty()
+            && vacancy.area.isNotEmpty()
+            && vacancy.logo.isNotEmpty()) {
+            list += VacancyCastItem.CompanyItem(
+                employer = vacancy.employer,
+                area = vacancy.area,
+                logo = vacancy.logo)
+        }
+    }
+
+    private fun addDescription(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.description.isNotEmpty()) {
+            list += VacancyCastItem.BigHeaderItem(context.getString(R.string.vacancy_description))
+            list.addAll(getDescriptionItemsList(vacancy.description))
+        }
+    }
+
+    private fun addSkills(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.skills.isNotEmpty()) {
+            list += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
+            list += VacancyCastItem.SkillItem(vacancy.skills)
+        }
+    }
+
+    private fun addContacts(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if(!vacancy.contact.isNullOrEmpty() || !vacancy.phone.isNullOrEmpty() || !vacancy.email.isNullOrEmpty()) {
+            list += VacancyCastItem.BigHeaderItem(context.getString(R.string.contacts))
+            if (!vacancy.contact.isNullOrEmpty()) {
+                list += VacancyCastItem.SmallHeaderItem(vacancy.contact)
+            }
+            if (!vacancy.email.isNullOrEmpty()) {
+                list += VacancyCastItem.MailItem(vacancy.email)
+            }
+            if (!vacancy.phone.isNullOrEmpty()) {
+                list += vacancy.phone.map { VacancyCastItem.PhoneItem(it) }
+            }
+        }
     }
     // endregion
 

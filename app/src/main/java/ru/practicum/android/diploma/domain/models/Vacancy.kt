@@ -16,11 +16,16 @@ data class Vacancy(
     val employment: String?,
     val contact: String?,
     val email: String?,
-    val phone: String?,
+    val phone: List<Phone>,
     val employer: String,
     val logo: String,
     val area: String,
     val skills: String,
     val url: String,
     val industry: String
+)
+
+data class Phone(
+    val comment: String?,
+    val formatted: String?
 )
