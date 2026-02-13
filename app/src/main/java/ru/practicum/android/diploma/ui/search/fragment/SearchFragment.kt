@@ -142,7 +142,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading(flag: Boolean) {
-        Log.d("RENDER", "showLoading")
         if (!flag) {
             isLoading = true
             binding.apply {
@@ -169,7 +168,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        Log.d("RENDER", "showEmpty")
         if (vacancyList.isEmpty()) {
             isLoading = false
             binding.apply {
@@ -200,7 +198,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
-        Log.d("RENDER", "showContent")
         found = itemsFound
         isLoading = false
         vacancyList.addAll(vacanciesList)
@@ -220,7 +217,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showError(errorMessage: String) {
-        Log.d("RENDER", "showError")
         if (vacancyList.isEmpty()) {
             isLoading = false
             setPlaceholder(errorMessage)
