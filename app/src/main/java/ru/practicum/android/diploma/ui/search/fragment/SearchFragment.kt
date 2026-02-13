@@ -162,20 +162,32 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        isLoading = false
-        binding.apply {
-            placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
-            placeholderText.text = requireContext()
-                .resources.getString(R.string.cannot_get_vacancies_list)
+        if (vacancyList.isEmpty()) {
+            isLoading = false
+            binding.apply {
+                placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
+                placeholderText.text = requireContext()
+                    .resources.getString(R.string.cannot_get_vacancies_list)
 
-            searchResultCount.isVisible = false
-            recyclerView.isVisible = false
-            placeholder.isVisible = true
-            startImage.isVisible = false
-            progressBar.isVisible = false
-            progressBarAdd.isVisible = false
-            placeholderAdd.isVisible = false
-            placeholderImageAdd.isVisible = false
+                searchResultCount.isVisible = false
+                recyclerView.isVisible = false
+                placeholder.isVisible = true
+                startImage.isVisible = false
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+                // vacancyList.clear()
+            }
+        } else {
+            binding.apply {
+                placeholder.isVisible = true
+                startImage.isVisible = false
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+            }
         }
     }
 
@@ -225,18 +237,24 @@ class SearchFragment : Fragment() {
                 Toast.LENGTH_SHORT
             )
                 .show()
+            viewModel.delayToast()
         }
     }
 
     private fun setPlaceholder(errorMessage: String) {
         when (errorMessage) {
             Resource.CONNECTION_PROBLEM -> {
-                binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
-                binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
+                if (vacancyList.isEmpty()) {
+                    binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
+                    binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
+                }
             }
+
             Resource.SERVER_ERROR -> {
-                binding.placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
-                binding.placeholderText.text = requireContext().resources.getString(R.string.server_error)
+                if (vacancyList.isEmpty()) {
+                    binding.placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
+                    binding.placeholderText.text = requireContext().resources.getString(R.string.server_error)
+                }
             }
         }
     }

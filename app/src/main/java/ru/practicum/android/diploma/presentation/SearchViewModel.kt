@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
@@ -13,8 +13,6 @@ import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
-import java.io.IOException
-import java.net.SocketTimeoutException
 
 class SearchViewModel(
     private val vacancyInteractor: VacancyInteractor,
@@ -40,6 +38,12 @@ class SearchViewModel(
         vacancySearchDebounce(text)
     }
 
+    fun delayToast() {
+        runBlocking {
+            delay(TOAST_DELAY)
+        }
+    }
+
     private fun search(text: String) {
         if (text.isNotEmpty()) {
             var state: VacancyState = VacancyState.Loading(false)
@@ -48,16 +52,8 @@ class SearchViewModel(
             val filteredQuery = createFilteredQuery(text)
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
-                try {
-                    state = vacancyInteractor.getVacancies(filteredQuery)
-                    vacancyLiveData.postValue(state)
-                } catch (_: IOException) {
-                    vacancyLiveData.postValue(state)
-                } catch (_: SocketTimeoutException) {
-                    vacancyLiveData.postValue(state)
-                } catch (_: HttpException) {
-                    vacancyLiveData.postValue(state)
-                }
+                state = vacancyInteractor.getVacancies(filteredQuery)
+                vacancyLiveData.postValue(state)
             }
         }
     }
@@ -69,22 +65,14 @@ class SearchViewModel(
         val filteredQuery = createFilteredQuery(text)
 
         viewModelScope.launch {
-            try {
-                state = vacancyInteractor.getVacancies(filteredQuery)
-                vacancyLiveData.postValue(state)
+            state = vacancyInteractor.getVacancies(filteredQuery)
+            vacancyLiveData.postValue(state)
 
-                if (state is VacancyState.Content) {
-                    val vacancies = (state as VacancyState.Content).vacanciesList
-                    if (vacancies.isNotEmpty()) {
-                        currentPage++
-                    }
+            if (state is VacancyState.Content) {
+                val vacancies = (state as VacancyState.Content).vacanciesList
+                if (vacancies.isNotEmpty()) {
+                    currentPage++
                 }
-            } catch (_: IOException) {
-                vacancyLiveData.postValue(state)
-            } catch (_: SocketTimeoutException) {
-                vacancyLiveData.postValue(state)
-            } catch (_: HttpException) {
-                vacancyLiveData.postValue(state)
             }
         }
     }
@@ -132,5 +120,6 @@ class SearchViewModel(
 
     companion object {
         private const val DEBOUNCE_DELAY = 2000L
+        private const val TOAST_DELAY = 1000L
     }
 }
