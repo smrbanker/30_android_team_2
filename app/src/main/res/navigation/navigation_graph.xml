@@ -38,5 +38,40 @@
     <fragment
         android:id="@+id/filtrationSettingsFragment"
         android:name="ru.practicum.android.diploma.ui.filtration.FiltrationSettingsFragment"
-        android:label="FiltrationSettingsFragment" />
+        android:label="FiltrationSettingsFragment" >
+        <action
+            android:id="@+id/action_filtrationSettingsFragment_to_filtrationWorkplaceFragment"
+            app:destination="@id/filtrationWorkplaceFragment" />
+        <action
+            android:id="@+id/action_filtrationSettingsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_filtrationSettingsFragment_to_industryFragment"
+            app:destination="@id/industryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filtrationWorkplaceFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationWorkplaceFragment"
+        android:label="FiltrationWorkplaceFragment" >
+        <action
+            android:id="@+id/action_filtrationWorkplaceFragment_to_filtrationCountryFragment"
+            app:destination="@id/filtrationCountryFragment" />
+        <action
+            android:id="@+id/action_filtrationWorkplaceFragment_to_filtrationRegionFragment"
+            app:destination="@id/filtrationRegionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filtrationCountryFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationCountryFragment"
+        android:label="FiltrationCountryFragment" />
+    <fragment
+        android:id="@+id/filtrationRegionFragment"
+        android:name="ru.practicum.android.diploma.ui.filtration.FiltrationRegionFragment"
+        android:label="fragment_filtration_region"
+        tools:layout="@layout/fragment_filtration_region" />
+    <fragment
+        android:id="@+id/industryFragment"
+        android:name="ru.practicum.android.diploma.ui.industry.IndustryFragment"
+        android:label="fragment_industry"
+        tools:layout="@layout/fragment_industry" />
 </navigation>

@@ -49,11 +49,16 @@ data class Contacts(
     val id: String,
     val name: String,
     val email: String,
-    val phone: List<String>
+    val phones: List<Phones>
 )
 
 data class Employer(
     val id: String,
     val name: String,
     val logo: String
+)
+
+data class Phones(
+    val comment: String,
+    val formatted: String
 )
