@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.ui.search.fragment
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,8 @@ class SearchFragment : Fragment() {
     private val adapter get() = _adapter!!
     private var _vacancyList: MutableList<Vacancy>? = null
     private val vacancyList get() = _vacancyList!!
+    private var filters = false
+    private var found = 0
 
     private var isLoading = false
 
@@ -96,9 +99,11 @@ class SearchFragment : Fragment() {
         }
 
         setFragmentResultListener(IS_RUN) { _, bundle ->
-            val filters = bundle.getBoolean(IS_RUN)
+            filters = bundle.getBoolean(IS_RUN)
             if (filters && binding.editText.text.isNotEmpty()) {
                 viewModel.searchAnyway(binding.editText.text.toString())
+            } else {
+                showContent(vacancyList, found)
             }
         }
     }
@@ -137,6 +142,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading(flag: Boolean) {
+        Log.d("RENDER", "showLoading")
         if (!flag) {
             isLoading = true
             binding.apply {
@@ -148,6 +154,7 @@ class SearchFragment : Fragment() {
                 progressBarAdd.isVisible = false
                 placeholderAdd.isVisible = false
                 placeholderImageAdd.isVisible = false
+                vacancyList.clear()
             }
         } else {
             isLoading = true
@@ -162,13 +169,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty() {
+        Log.d("RENDER", "showEmpty")
         if (vacancyList.isEmpty()) {
             isLoading = false
             binding.apply {
                 placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
                 placeholderText.text = requireContext()
                     .resources.getString(R.string.cannot_get_vacancies_list)
-
                 searchResultCount.isVisible = false
                 recyclerView.isVisible = false
                 placeholder.isVisible = true
@@ -177,11 +184,12 @@ class SearchFragment : Fragment() {
                 progressBarAdd.isVisible = false
                 placeholderAdd.isVisible = false
                 placeholderImageAdd.isVisible = false
-                // vacancyList.clear()
             }
         } else {
             binding.apply {
-                placeholder.isVisible = true
+                // recyclerView.isVisible = true
+                // adapter.notifyDataSetChanged()
+                placeholder.isVisible = false // true
                 startImage.isVisible = false
                 progressBar.isVisible = false
                 progressBarAdd.isVisible = false
@@ -192,6 +200,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
+        Log.d("RENDER", "showContent")
+        found = itemsFound
         isLoading = false
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
@@ -210,6 +220,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showError(errorMessage: String) {
+        Log.d("RENDER", "showError")
         if (vacancyList.isEmpty()) {
             isLoading = false
             setPlaceholder(errorMessage)

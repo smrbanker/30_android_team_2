@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,10 +46,12 @@ class SearchViewModel(
     }
 
     private fun search(text: String) {
+        Log.d("RENDER", "search")
         if (text.isNotEmpty()) {
             var state: VacancyState = VacancyState.Loading(false)
             vacancyLiveData.postValue(state)
 
+            currentPage = 1
             val filteredQuery = createFilteredQuery(text)
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
@@ -59,21 +62,16 @@ class SearchViewModel(
     }
 
     fun loadMoreVacancies(text: String) {
+        Log.d("RENDER", "loadMoreVacancies")
         var state: VacancyState = VacancyState.Loading(true)
         vacancyLiveData.postValue(state)
 
+        currentPage++
         val filteredQuery = createFilteredQuery(text)
 
         viewModelScope.launch {
             state = vacancyInteractor.getVacancies(filteredQuery)
             vacancyLiveData.postValue(state)
-
-            if (state is VacancyState.Content) {
-                val vacancies = (state as VacancyState.Content).vacanciesList
-                if (vacancies.isNotEmpty()) {
-                    currentPage++
-                }
-            }
         }
     }
 
