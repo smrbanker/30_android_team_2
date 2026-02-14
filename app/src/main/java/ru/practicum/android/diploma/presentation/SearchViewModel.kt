@@ -12,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
 
@@ -19,11 +20,18 @@ class SearchViewModel(
     private val vacancyInteractor: VacancyInteractor,
     private val filterInteractor: FilterSpInteractor
 ) : ViewModel() {
+    // Это "кусочек" поискового запроса, который отдает нам АПИ
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
 
     private val inputLiveData = MutableLiveData<String>()
     fun observeInput(): LiveData<String> = inputLiveData
+
+    // Эти три строки отвечают за состояние экрана поиска по возврату на него
+    // vacancyState - это "склад", где мы храним все вакансии по запросу
+    private val vacancyState = mutableListOf<Vacancy>()
+    private val vacancyStateLiveData = MutableLiveData<Pair<List<Vacancy>, Int>>()
+    fun observeState(): LiveData<Pair<List<Vacancy>, Int>> = vacancyStateLiveData
 
     private var latestSearchText = ""
     private var currentPage = 1
@@ -55,12 +63,17 @@ class SearchViewModel(
             var state: VacancyState = VacancyState.Loading(false)
             vacancyLiveData.postValue(state)
 
+            vacancyState.clear()
             currentPage = 1
             val filteredQuery = createFilteredQuery(text)
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
                 state = vacancyInteractor.getVacancies(filteredQuery)
                 vacancyLiveData.postValue(state)
+                if (state is VacancyState.Content) {
+                    val stateContent = state as VacancyState.Content
+                    updateState(stateContent.vacanciesList, stateContent.itemsFound)
+                }
             }
         }
     }
@@ -75,8 +88,18 @@ class SearchViewModel(
 
         viewModelScope.launch {
             state = vacancyInteractor.getVacancies(filteredQuery)
+            if (state is VacancyState.Content) {
+                val stateContent = state as VacancyState.Content
+                updateState(stateContent.vacanciesList, stateContent.itemsFound)
+            }
             vacancyLiveData.postValue(state)
         }
+    }
+
+
+    private fun updateState(vacancyList: List<Vacancy>, itemsFound: Int) {
+        vacancyState.addAll(vacancyList)
+        vacancyStateLiveData.postValue(vacancyState to itemsFound)
     }
 
     private fun createFilteredQuery(text: String): HashMap<String, String> {
