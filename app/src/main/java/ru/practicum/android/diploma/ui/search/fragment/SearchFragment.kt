@@ -63,6 +63,11 @@ class SearchFragment : Fragment() {
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
             render(vacancyState)
         }
+        viewModel.observeInput().observe(viewLifecycleOwner) {
+            if (binding.editText.text.toString() != it) {
+                binding.editText.setText(it)
+            }
+        }
 
         if (viewModel.checkFilterButton()) {
             binding.filterButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_filter_on))

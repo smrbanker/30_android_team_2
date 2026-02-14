@@ -22,6 +22,9 @@ class SearchViewModel(
     private val vacancyLiveData = MutableLiveData<VacancyState>()
     fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
 
+    private val inputLiveData = MutableLiveData<String>()
+    fun observeInput(): LiveData<String> = inputLiveData
+
     private var latestSearchText = ""
     private var currentPage = 1
     private var searchJob: Job? = null
@@ -32,6 +35,7 @@ class SearchViewModel(
     fun searchDebounce(text: String) {
         if (latestSearchText == text) return
         latestSearchText = text
+        inputLiveData.postValue(text)
         vacancySearchDebounce(text)
     }
 
