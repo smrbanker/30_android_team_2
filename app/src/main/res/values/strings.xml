@@ -49,4 +49,5 @@
     <string name="industry_hint">Введите отрасль</string>
     <string name="cannot_get_industry_list">Не удалось получить список отраслей</string>
     <string name="choose">Выбрать</string>
+    <string name="check_net">Проверьте подключение к интернету</string>
 </resources>

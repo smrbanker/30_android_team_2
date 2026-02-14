@@ -5,13 +5,14 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.Resource
@@ -28,10 +29,11 @@ class SearchFragment : Fragment() {
     private val adapter get() = _adapter!!
     private var _vacancyList: MutableList<Vacancy>? = null
     private val vacancyList get() = _vacancyList!!
+    private var filters = false
 
     private var isLoading = false
 
-    private val viewModel by viewModel<SearchViewModel>()
+    private val viewModel by activityViewModel<SearchViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -59,6 +61,11 @@ class SearchFragment : Fragment() {
 
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
             render(vacancyState)
+        }
+        viewModel.observeInput().observe(viewLifecycleOwner) {
+            if (binding.editText.text.toString() != it) {
+                binding.editText.setText(it)
+            }
         }
 
         if (viewModel.checkFilterButton()) {
@@ -95,7 +102,7 @@ class SearchFragment : Fragment() {
         }
 
         setFragmentResultListener(IS_RUN) { _, bundle ->
-            val filters = bundle.getBoolean(IS_RUN)
+            filters = bundle.getBoolean(IS_RUN)
             if (filters && binding.editText.text.isNotEmpty()) {
                 viewModel.searchAnyway(binding.editText.text.toString())
             }
@@ -119,73 +126,80 @@ class SearchFragment : Fragment() {
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                 if (totalItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && !isLoading) {
-                    loadMoreVacancies()
+                    isLoading = true
+                    viewModel.loadMoreVacancies(binding.editText.text.toString())
                 }
             }
         })
     }
 
-    private fun loadMoreVacancies() {
-        if (isLoading) return
-
-        isLoading = true
-        viewModel.loadMoreVacancies().observe(viewLifecycleOwner) { vacancyState ->
-            when (vacancyState) {
-                is VacancyState.Content -> {
-                    vacancyList.addAll(vacancyState.vacanciesList)
-                    adapter.notifyDataSetChanged()
-                }
-                is VacancyState.Error -> {
-                    showError(vacancyState.errorMessage)
-                }
-                is VacancyState.Empty -> {
-                }
-                is VacancyState.Loading -> {
-                }
-            }
-            isLoading = false
-        }
-    }
-
     private fun render(state: VacancyState) {
         when (state) {
-            is VacancyState.Loading -> showLoading()
+            is VacancyState.Loading -> showLoading(state.flag)
             is VacancyState.Empty -> showEmpty()
             is VacancyState.Content -> showContent(state.vacanciesList, state.itemsFound)
             is VacancyState.Error -> showError(state.errorMessage)
-            else -> return
         }
     }
 
-    private fun showLoading() {
-        isLoading = true
-        binding.apply {
-            searchResultCount.isVisible = false
-            recyclerView.isVisible = false
-            placeholder.isVisible = false
-            startImage.isVisible = false
-            progressBar.isVisible = true
+    private fun showLoading(flag: Boolean) {
+        if (!flag) {
+            isLoading = true
+            binding.apply {
+                searchResultCount.isVisible = false
+                recyclerView.isVisible = false
+                placeholder.isVisible = false
+                startImage.isVisible = false
+                progressBar.isVisible = true
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+                vacancyList.clear()
+            }
+        } else {
+            isLoading = true
+            binding.apply {
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = true
+                placeholderAdd.isVisible = true
+                placeholderImageAdd.isVisible = true
+                placeholderImageAdd.setImageDrawable(requireContext().getDrawable(R.drawable.color_white))
+            }
         }
     }
 
     private fun showEmpty() {
-        isLoading = false
-        binding.apply {
-            placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
-            placeholderText.text = requireContext()
-                .resources.getString(R.string.cannot_get_vacancies_list)
-
-            searchResultCount.isVisible = false
-            recyclerView.isVisible = false
-            placeholder.isVisible = true
-            startImage.isVisible = false
-            progressBar.isVisible = false
+        if (vacancyList.isEmpty()) {
+            isLoading = false
+            binding.apply {
+                placeholderImage.setImageResource(R.drawable.image_wrong_query_placeholder)
+                placeholderText.text = requireContext()
+                    .resources.getString(R.string.cannot_get_vacancies_list)
+                searchResultCount.isVisible = false
+                recyclerView.isVisible = false
+                placeholder.isVisible = true
+                startImage.isVisible = false
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+            }
+        } else {
+            binding.apply {
+                // recyclerView.isVisible = true
+                // adapter.notifyDataSetChanged()
+                placeholder.isVisible = false // true
+                startImage.isVisible = false
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+            }
         }
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
         isLoading = false
-        vacancyList.clear()
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
         binding.apply {
@@ -196,33 +210,58 @@ class SearchFragment : Fragment() {
             placeholder.isVisible = false
             startImage.isVisible = false
             progressBar.isVisible = false
+            progressBarAdd.isVisible = false
+            placeholderAdd.isVisible = false
+            placeholderImageAdd.isVisible = false
         }
     }
 
     private fun showError(errorMessage: String) {
-        isLoading = false
-        setPlaceholder(errorMessage)
-        binding.apply {
-            placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
-            placeholderText.text = errorMessage
-
-            searchResultCount.isVisible = false
-            recyclerView.isVisible = false
-            placeholder.isVisible = true
-            startImage.isVisible = false
-            progressBar.isVisible = false
+        if (vacancyList.isEmpty()) {
+            isLoading = false
+            setPlaceholder(errorMessage)
+            binding.apply {
+                searchResultCount.isVisible = false
+                recyclerView.isVisible = false
+                placeholder.isVisible = true
+                startImage.isVisible = false
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+            }
+        } else {
+            isLoading = false
+            binding.apply {
+                progressBar.isVisible = false
+                progressBarAdd.isVisible = false
+                placeholderAdd.isVisible = false
+                placeholderImageAdd.isVisible = false
+            }
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.check_net),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            viewModel.delayToast()
         }
     }
 
     private fun setPlaceholder(errorMessage: String) {
         when (errorMessage) {
             Resource.CONNECTION_PROBLEM -> {
-                binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
-                binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
+                if (vacancyList.isEmpty()) {
+                    binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
+                    binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
+                }
             }
+
             Resource.SERVER_ERROR -> {
-                binding.placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
-                binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
+                if (vacancyList.isEmpty()) {
+                    binding.placeholderImage.setImageResource(R.drawable.image_server_error_placeholder)
+                    binding.placeholderText.text = requireContext().resources.getString(R.string.server_error)
+                }
             }
         }
     }
