@@ -30,7 +30,6 @@ class SearchFragment : Fragment() {
     private var _vacancyList: MutableList<Vacancy>? = null
     private val vacancyList get() = _vacancyList!!
     private var filters = false
-    private var found = 0
 
     private var isLoading = false
 
@@ -106,8 +105,6 @@ class SearchFragment : Fragment() {
             filters = bundle.getBoolean(IS_RUN)
             if (filters && binding.editText.text.isNotEmpty()) {
                 viewModel.searchAnyway(binding.editText.text.toString())
-            } else {
-                showContent(vacancyList, found)
             }
         }
     }
@@ -202,7 +199,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
-        found = itemsFound
         isLoading = false
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
