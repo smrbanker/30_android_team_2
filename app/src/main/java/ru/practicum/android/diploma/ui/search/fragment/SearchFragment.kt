@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.ui.search.fragment
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -38,10 +33,9 @@ class SearchFragment : Fragment() {
     private var filters = false
 
     private var isLoading = false
+    private var isToastShown = false
 
     private val viewModel by activityViewModel<SearchViewModel>()
-
-    private var toastJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -66,27 +60,15 @@ class SearchFragment : Fragment() {
         initListeners()
         configureRecyclerView()
         setupScrollListener()
+        isToastShown = false
 
-        // Эта штука предназначена для показа поисковой выдачи после возвращения на экран поиска
-        // с экрана избранного и ему подобных.
-        // Так как эта штука стоит первой в обзёрверах, то сначала покажутся все вакансии со "склада"
-        // а потом добавятся вакансии из "кусочка".
-        // Я не знаю как это обойти. Если передвинуть обзервер в конец всех обзерверов, то
-        // тогда мы вернемся к старой реализации, а именно - по возвращении на экран поиска
-        // нам будут показан только последний кусочек.
-        // То есть, если мы проскроллили 10 страниц, то будет отображаться
-        // только 10-я страница, а не все 10 страниц
         viewModel.observeState().observe(viewLifecycleOwner) {
             if (vacancyList.isEmpty()) {
                 viewModel.clearLastSearchResult()
                 showContent(it.first, it.second)
             }
         }
-
-        // Здесь мы получаем "кусочек" поискового запроса, он всегда состоит из 20 вакансий,
-        // несмотря на то, какой это запрос - основной или после скролла
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
-            Log.d("ASD", "vacancy observer, state: ${vacancyState?.javaClass}")
             if (vacancyState != null) render(vacancyState)
         }
         viewModel.observeInput().observe(viewLifecycleOwner) {
@@ -161,7 +143,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun render(state: VacancyState) {
-        Log.d("ASD", "render block")
         when (state) {
             is VacancyState.Loading -> showLoading(state.flag)
             is VacancyState.Empty -> showEmpty()
@@ -214,9 +195,7 @@ class SearchFragment : Fragment() {
             }
         } else {
             binding.apply {
-                // recyclerView.isVisible = true
-                // adapter.notifyDataSetChanged()
-                placeholder.isVisible = false // true
+                placeholder.isVisible = false
                 startImage.isVisible = false
                 progressBar.isVisible = false
                 progressBarAdd.isVisible = false
@@ -227,11 +206,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(vacanciesList: List<Vacancy>, itemsFound: Int) {
-        Log.d("ASD", "vacanciesList size: ${vacanciesList.size}")
         isLoading = false
         vacancyList.addAll(vacanciesList)
         adapter.notifyDataSetChanged()
-        Log.d("ASD", "fragmentList size: ${vacancyList.size}")
         binding.apply {
             searchResultCount.text = requireContext()
                 .resources.getQuantityString(R.plurals.vacancies_found, itemsFound, itemsFound)
@@ -268,7 +245,10 @@ class SearchFragment : Fragment() {
                 placeholderAdd.isVisible = false
                 placeholderImageAdd.isVisible = false
             }
-            showToast()
+            if (!isToastShown) {
+                isToastShown = true
+                showToast()
+            }
         }
     }
 
@@ -291,20 +271,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun showToast() {
-        toastJob?.cancel()
-        toastJob = viewLifecycleOwner.lifecycleScope.launch {
-            delay(TOAST_DELAY)
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.check_net),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-        }
+        Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.check_net),
+            Toast.LENGTH_SHORT
+        )
+            .show()
     }
 
     companion object {
         const val IS_RUN = "IS_RUN"
-        private const val TOAST_DELAY = 1000L
     }
 }

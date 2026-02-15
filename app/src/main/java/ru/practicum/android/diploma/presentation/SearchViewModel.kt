@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,15 +18,12 @@ class SearchViewModel(
     private val vacancyInteractor: VacancyInteractor,
     private val filterInteractor: FilterSpInteractor
 ) : ViewModel() {
-    // Это "кусочек" поискового запроса, который отдает нам АПИ
     private val vacancyLiveData = MutableLiveData<VacancyState?>()
     fun observeVacancy(): LiveData<VacancyState?> = vacancyLiveData
 
     private val inputLiveData = MutableLiveData<String>()
     fun observeInput(): LiveData<String> = inputLiveData
 
-    // Эти три строки отвечают за состояние экрана поиска по возврату на него
-    // vacancyState - это "склад", где мы храним все вакансии по запросу
     private val vacancyState = mutableListOf<Vacancy>()
     private val vacancyStateLiveData = MutableLiveData<Pair<List<Vacancy>, Int>>()
     fun observeState(): LiveData<Pair<List<Vacancy>, Int>> = vacancyStateLiveData
@@ -51,7 +47,6 @@ class SearchViewModel(
     }
 
     private fun search(text: String) {
-        Log.d("RENDER", "search")
         if (text.isNotEmpty()) {
             var state: VacancyState = VacancyState.Loading(false)
             vacancyLiveData.postValue(state)
@@ -72,7 +67,6 @@ class SearchViewModel(
     }
 
     fun loadMoreVacancies(text: String) {
-        Log.d("RENDER", "loadMoreVacancies")
         var state: VacancyState = VacancyState.Loading(true)
         vacancyLiveData.postValue(state)
 
