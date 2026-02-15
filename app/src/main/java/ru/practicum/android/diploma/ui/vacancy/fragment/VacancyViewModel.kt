@@ -96,8 +96,8 @@ class VacancyViewModel(
             }
             items.isEmpty() -> {
                 renderState(
-                        VacancyDetailsState.Empty(
-                            emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
+                    VacancyDetailsState.Empty(
+                        emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
                     )
                 )
             }
