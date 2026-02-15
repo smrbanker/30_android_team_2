@@ -1,9 +1,14 @@
 package ru.practicum.android.diploma.ui.vacancy.fragment
 
+import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.DetailsCompanyItemBinding
 
@@ -21,10 +26,19 @@ class DetailsCompanyItemViewHolder(private val binding: DetailsCompanyItemBindin
     fun bind(item: VacancyCastItem.CompanyItem) {
         binding.companyName.text = item.employer
         binding.companyLocation.text = item.area
+
+        fun dpToPx (dp: Float, context: Context): Int{
+            return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                context.resources.displayMetrics).toInt()
+        }
+        val cornerRadius = dpToPx(2f, itemView.context)
+
         Glide.with(binding.logo)
             .load(item.logo)
             .placeholder(R.drawable.placeholder_32px)
-            .centerCrop()
+            .transform(CenterInside(), RoundedCorners(cornerRadius))
             .into(binding.logo)
     }
 }

@@ -20,6 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         tools:text="Phone"
+        android:autoLink="phone"
         app:layout_constraintStart_toEndOf="@id/phone_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/phone_icon"
