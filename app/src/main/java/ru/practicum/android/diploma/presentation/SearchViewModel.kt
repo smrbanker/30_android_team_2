@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
@@ -21,8 +20,8 @@ class SearchViewModel(
     private val filterInteractor: FilterSpInteractor
 ) : ViewModel() {
     // Это "кусочек" поискового запроса, который отдает нам АПИ
-    private val vacancyLiveData = MutableLiveData<VacancyState>()
-    fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
+    private val vacancyLiveData = MutableLiveData<VacancyState?>()
+    fun observeVacancy(): LiveData<VacancyState?> = vacancyLiveData
 
     private val inputLiveData = MutableLiveData<String>()
     fun observeInput(): LiveData<String> = inputLiveData
@@ -49,12 +48,6 @@ class SearchViewModel(
 
     fun searchAnyway(text: String) {
         vacancySearchDebounce(text)
-    }
-
-    fun delayToast() {
-        runBlocking {
-            delay(TOAST_DELAY)
-        }
     }
 
     private fun search(text: String) {
@@ -101,6 +94,10 @@ class SearchViewModel(
         vacancyStateLiveData.postValue(vacancyState to itemsFound)
     }
 
+    fun clearLastSearchResult() {
+        vacancyLiveData.value = null
+    }
+
     private fun createFilteredQuery(text: String): HashMap<String, String> {
         val filter: Filter = filterInteractor.output()
         val filteredQuery = HashMap<String, String>()
@@ -144,6 +141,5 @@ class SearchViewModel(
 
     companion object {
         private const val DEBOUNCE_DELAY = 2000L
-        private const val TOAST_DELAY = 1000L
     }
 }

@@ -11,8 +11,13 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -35,6 +40,8 @@ class SearchFragment : Fragment() {
     private var isLoading = false
 
     private val viewModel by activityViewModel<SearchViewModel>()
+
+    private var toastJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -71,6 +78,7 @@ class SearchFragment : Fragment() {
         // только 10-я страница, а не все 10 страниц
         viewModel.observeState().observe(viewLifecycleOwner) {
             if (vacancyList.isEmpty()) {
+                viewModel.clearLastSearchResult()
                 showContent(it.first, it.second)
             }
         }
@@ -78,8 +86,8 @@ class SearchFragment : Fragment() {
         // Здесь мы получаем "кусочек" поискового запроса, он всегда состоит из 20 вакансий,
         // несмотря на то, какой это запрос - основной или после скролла
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
-            Log.d("ASD", "vacancy observer, state: ${vacancyState.javaClass}")
-            render(vacancyState)
+            Log.d("ASD", "vacancy observer, state: ${vacancyState?.javaClass}")
+            if (vacancyState != null) render(vacancyState)
         }
         viewModel.observeInput().observe(viewLifecycleOwner) {
             if (binding.editText.text.toString() != it) {
@@ -136,8 +144,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupScrollListener() {
-        binding.recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -260,13 +268,7 @@ class SearchFragment : Fragment() {
                 placeholderAdd.isVisible = false
                 placeholderImageAdd.isVisible = false
             }
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.check_net),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-            viewModel.delayToast()
+            showToast()
         }
     }
 
@@ -288,7 +290,21 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun showToast() {
+        toastJob?.cancel()
+        toastJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(TOAST_DELAY)
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.check_net),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+    }
+
     companion object {
         const val IS_RUN = "IS_RUN"
+        private const val TOAST_DELAY = 1000L
     }
 }
