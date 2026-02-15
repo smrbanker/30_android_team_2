@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
@@ -27,11 +26,12 @@ class DetailsCompanyItemViewHolder(private val binding: DetailsCompanyItemBindin
         binding.companyName.text = item.employer
         binding.companyLocation.text = item.area
 
-        fun dpToPx (dp: Float, context: Context): Int{
+        fun dpToPx(dp: Float, context: Context): Int {
             return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 dp,
-                context.resources.displayMetrics).toInt()
+                context.resources.displayMetrics
+            ).toInt()
         }
         val cornerRadius = dpToPx(2f, itemView.context)
 

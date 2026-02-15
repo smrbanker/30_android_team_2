@@ -33,8 +33,7 @@ class VacancyViewModel(
     // endregion
 
     private var vacancyFromBase: Vacancy? = null
-
-
+    
     // region Методы получения объекта вакансии
     fun checkStateAndSearchVacancy(id: String) {
         if (!id.isNullOrEmpty()) {
@@ -85,36 +84,17 @@ class VacancyViewModel(
             result.message != null -> {
                 if (vacancyFromBase != null) {
                     items.addAll(buildVacancyCastItemList(vacancyFromBase!!))
-                    renderState(
-                        VacancyDetailsState.Content(
-                            vacancy = items,
-                            vacancyFull = vacancyFromBase
-                        )
-                    )
+                    renderState(VacancyDetailsState.Content(vacancy = items, vacancyFull = vacancyFromBase))
                 } else {
-                    renderState(
-                        VacancyDetailsState.Error(
-                            errorMessage = result.message,
-                        )
-                    )
+                    renderState(VacancyDetailsState.Error(errorMessage = result.message))
                 }
             }
-
             items.isEmpty() -> {
-                renderState(
-                    VacancyDetailsState.Empty(
-                        emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
-                    )
-                )
+                renderState(VacancyDetailsState.Empty(emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)))
             }
-
             else -> {
                 renderState(
-                    VacancyDetailsState.Content(
-                        vacancy = items,
-                        vacancyFull = vacancy
-                    )
-                )
+                    VacancyDetailsState.Content(vacancy = items, vacancyFull = vacancy))
             }
         }
     }

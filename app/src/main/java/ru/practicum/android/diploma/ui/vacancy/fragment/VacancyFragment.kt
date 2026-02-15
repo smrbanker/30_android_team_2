@@ -90,7 +90,8 @@ class VacancyFragment : Fragment() {
                 Toast.makeText(
                     requireActivity(),
                     requireContext().getString(R.string.url_unavailable),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 val message = requireContext().getString(R.string.vacancy_link) + ":\n" + vacancyForFavourite?.url
                 val shareIntent = Intent(Intent.ACTION_SEND)
