@@ -82,8 +82,9 @@ class VacancyViewModel(
                     items.addAll(buildVacancyCastItemList(vacancyFromBase!!))
                     renderState(
                         VacancyDetailsState.Content(
-                        vacancy = items,
-                        vacancyFull = vacancyFromBase)
+                            vacancy = items,
+                            vacancyFull = vacancyFromBase
+                        )
                     )
                 } else {
                     renderState(
@@ -96,7 +97,7 @@ class VacancyViewModel(
             items.isEmpty() -> {
                 renderState(
                         VacancyDetailsState.Empty(
-                        emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
+                            emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
                     )
                 )
             }
