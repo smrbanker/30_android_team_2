@@ -75,9 +75,7 @@ class VacancyViewModel(
     fun searchVacancy(result: Resource<Vacancy>) {
         val items = mutableListOf<VacancyCastItem>()
         val vacancy: Vacancy? = result.data
-        if (result.data != null) {
-            items.addAll(buildVacancyCastItemList(result.data))
-        }
+        if (result.data != null) items.addAll(buildVacancyCastItemList(result.data))
         when {
             result.message != null -> {
                 if (vacancyFromBase != null) {
@@ -90,15 +88,15 @@ class VacancyViewModel(
                 } else {
                     renderState(
                         VacancyDetailsState.Error(
-                                errorMessage = result.message
+                            errorMessage = result.message
                         )
                     )
                 }
             }
             items.isEmpty() -> {
                 renderState(
-                    VacancyDetailsState.Empty(
-                    emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
+                        VacancyDetailsState.Empty(
+                        emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
                     )
                 )
             }
@@ -106,7 +104,7 @@ class VacancyViewModel(
                 renderState(
                     VacancyDetailsState.Content(
                         vacancy = items,
-                        vacancyFull = vacancy
+                        vacancyFull = vacancy,
                     )
                 )
             }
