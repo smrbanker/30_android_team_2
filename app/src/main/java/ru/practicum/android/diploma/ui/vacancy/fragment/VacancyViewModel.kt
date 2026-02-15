@@ -82,28 +82,32 @@ class VacancyViewModel(
             result.message != null -> {
                 if (vacancyFromBase != null) {
                     items.addAll(buildVacancyCastItemList(vacancyFromBase!!))
-                    renderState(VacancyDetailsState.Content(
+                    renderState(
+                        VacancyDetailsState.Content(
                         vacancy = items,
                         vacancyFull = vacancyFromBase)
                     )
                 } else {
                     renderState(
                         VacancyDetailsState.Error(
-                                errorMessage = result.message)
+                                errorMessage = result.message
+                        )
                     )
                 }
             }
             items.isEmpty() -> {
-                renderState(VacancyDetailsState.Empty(
+                renderState(
+                    VacancyDetailsState.Empty(
                     emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
-                )
+                    )
                 )
             }
             else -> {
                 renderState(
                     VacancyDetailsState.Content(
                         vacancy = items,
-                        vacancyFull = vacancy)
+                        vacancyFull = vacancy
+                    )
                 )
             }
         }
