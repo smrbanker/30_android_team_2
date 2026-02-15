@@ -1,32 +1,35 @@
 package ru.practicum.android.diploma.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.load.HttpException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
-import java.io.IOException
-import java.net.SocketTimeoutException
 
 class SearchViewModel(
     private val vacancyInteractor: VacancyInteractor,
     private val filterInteractor: FilterSpInteractor
 ) : ViewModel() {
-    private val vacancyLiveData = MutableLiveData<VacancyState>()
-    fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
+    private val vacancyLiveData = MutableLiveData<VacancyState?>()
+    fun observeVacancy(): LiveData<VacancyState?> = vacancyLiveData
+
+    private val inputLiveData = MutableLiveData<String>()
+    fun observeInput(): LiveData<String> = inputLiveData
+
+    private val vacancyState = mutableListOf<Vacancy>()
+    private val vacancyStateLiveData = MutableLiveData<Pair<List<Vacancy>, Int>>()
+    fun observeState(): LiveData<Pair<List<Vacancy>, Int>> = vacancyStateLiveData
 
     private var latestSearchText = ""
     private var currentPage = 1
-    private var isLoading = false
     private var searchJob: Job? = null
     private val vacancySearchDebounce = debounce<String>(DEBOUNCE_DELAY, viewModelScope, true) { text ->
         search(text)
@@ -35,6 +38,7 @@ class SearchViewModel(
     fun searchDebounce(text: String) {
         if (latestSearchText == text) return
         latestSearchText = text
+        inputLiveData.postValue(text)
         vacancySearchDebounce(text)
     }
 
@@ -44,56 +48,55 @@ class SearchViewModel(
 
     private fun search(text: String) {
         if (text.isNotEmpty()) {
-            setState(VacancyState.Loading)
+            var state: VacancyState = VacancyState.Loading(false)
+            vacancyLiveData.postValue(state)
 
-            val filteredQuery = createFilteredQuery()
-            filteredQuery["text"] = text
+            vacancyState.clear()
+            currentPage = 1
+            val filteredQuery = createFilteredQuery(text)
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
-                Log.d("ASD", "Inside launch")
-                vacancyLiveData.postValue(vacancyInteractor.getVacancies(filteredQuery))
+                state = vacancyInteractor.getVacancies(filteredQuery)
+                vacancyLiveData.postValue(state)
+                if (state is VacancyState.Content) {
+                    val stateContent = state as VacancyState.Content
+                    updateState(stateContent.vacanciesList, stateContent.itemsFound)
+                }
             }
         }
     }
 
-    private fun setState(state: VacancyState) {
+    fun loadMoreVacancies(text: String) {
+        var state: VacancyState = VacancyState.Loading(true)
         vacancyLiveData.postValue(state)
-    }
 
-    companion object {
-        private const val DEBOUNCE_DELAY = 2000L
-    }
-
-    fun loadMoreVacancies(): LiveData<VacancyState> {
-        val resultLiveData = MutableLiveData<VacancyState>()
-
-        if (isLoading) return resultLiveData
-        isLoading = true
+        currentPage++
+        val filteredQuery = createFilteredQuery(text)
 
         viewModelScope.launch {
-            val filteredQuery = createFilteredQuery()
-
-            try {
-                val state = vacancyInteractor.getVacancies(filteredQuery)
-                handleVacancyState(state, resultLiveData)
-            } catch (e: IOException) {
-                handleError(resultLiveData, "Ошибка сети: ${e.message}")
-            } catch (e: SocketTimeoutException) {
-                handleError(resultLiveData, "Время ожидания соединения истекло: ${e.message}")
-            } catch (e: HttpException) {
-                handleError(resultLiveData, "Ошибка подключения: ${e.message}")
-            } finally {
-                isLoading = false
+            state = vacancyInteractor.getVacancies(filteredQuery)
+            if (state is VacancyState.Content) {
+                val stateContent = state as VacancyState.Content
+                updateState(stateContent.vacanciesList, stateContent.itemsFound)
             }
+            vacancyLiveData.postValue(state)
         }
-
-        return resultLiveData
     }
 
-    private fun createFilteredQuery(): HashMap<String, String> {
+    private fun updateState(vacancyList: List<Vacancy>, itemsFound: Int) {
+        vacancyState.addAll(vacancyList)
+        vacancyStateLiveData.postValue(vacancyState to itemsFound)
+    }
+
+    fun clearLastSearchResult() {
+        vacancyLiveData.value = null
+    }
+
+    private fun createFilteredQuery(text: String): HashMap<String, String> {
         val filter: Filter = filterInteractor.output()
         val filteredQuery = HashMap<String, String>()
         filteredQuery["page"] = currentPage.toString()
+        filteredQuery["text"] = text
 
         if (filter.location.country != null) {
             if (filter.location.region != null) {
@@ -116,33 +119,6 @@ class SearchViewModel(
         return filteredQuery
     }
 
-    private fun handleVacancyState(state: VacancyState, resultLiveData: MutableLiveData<VacancyState>) {
-        when (state) {
-            is VacancyState.Content -> {
-                val vacancies = state.vacanciesList
-                if (vacancies.isNotEmpty()) {
-                    currentPage++
-                    resultLiveData.postValue(VacancyState.Content(vacancies, vacancies.size))
-                } else {
-                    resultLiveData.postValue(VacancyState.Empty)
-                }
-            }
-            is VacancyState.Error -> {
-                resultLiveData.postValue(VacancyState.Error(state.errorMessage))
-            }
-            is VacancyState.Empty -> {
-                resultLiveData.postValue(VacancyState.Empty)
-            }
-            is VacancyState.Loading -> {
-                resultLiveData.postValue(VacancyState.Loading)
-            }
-        }
-    }
-
-    private fun handleError(resultLiveData: MutableLiveData<VacancyState>, message: String) {
-        resultLiveData.postValue(VacancyState.Error(message))
-    }
-
     fun checkFilterButton(): Boolean {
         var flag = false
         runBlocking {
@@ -155,5 +131,9 @@ class SearchViewModel(
             }
         }
         return flag
+    }
+
+    companion object {
+        private const val DEBOUNCE_DELAY = 2000L
     }
 }
