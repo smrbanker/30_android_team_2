@@ -1,17 +1,16 @@
 package ru.practicum.android.diploma.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.domain.api.FilterSpInteractor
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyState
 import ru.practicum.android.diploma.util.debounce
 
@@ -19,11 +18,15 @@ class SearchViewModel(
     private val vacancyInteractor: VacancyInteractor,
     private val filterInteractor: FilterSpInteractor
 ) : ViewModel() {
-    private val vacancyLiveData = MutableLiveData<VacancyState>()
-    fun observeVacancy(): LiveData<VacancyState> = vacancyLiveData
+    private val vacancyLiveData = MutableLiveData<VacancyState?>()
+    fun observeVacancy(): LiveData<VacancyState?> = vacancyLiveData
 
     private val inputLiveData = MutableLiveData<String>()
     fun observeInput(): LiveData<String> = inputLiveData
+
+    private val vacancyState = mutableListOf<Vacancy>()
+    private val vacancyStateLiveData = MutableLiveData<Pair<List<Vacancy>, Int>>()
+    fun observeState(): LiveData<Pair<List<Vacancy>, Int>> = vacancyStateLiveData
 
     private var latestSearchText = ""
     private var currentPage = 1
@@ -43,30 +46,27 @@ class SearchViewModel(
         vacancySearchDebounce(text)
     }
 
-    fun delayToast() {
-        runBlocking {
-            delay(TOAST_DELAY)
-        }
-    }
-
     private fun search(text: String) {
-        Log.d("RENDER", "search")
         if (text.isNotEmpty()) {
             var state: VacancyState = VacancyState.Loading(false)
             vacancyLiveData.postValue(state)
 
+            vacancyState.clear()
             currentPage = 1
             val filteredQuery = createFilteredQuery(text)
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
                 state = vacancyInteractor.getVacancies(filteredQuery)
                 vacancyLiveData.postValue(state)
+                if (state is VacancyState.Content) {
+                    val stateContent = state as VacancyState.Content
+                    updateState(stateContent.vacanciesList, stateContent.itemsFound)
+                }
             }
         }
     }
 
     fun loadMoreVacancies(text: String) {
-        Log.d("RENDER", "loadMoreVacancies")
         var state: VacancyState = VacancyState.Loading(true)
         vacancyLiveData.postValue(state)
 
@@ -75,8 +75,21 @@ class SearchViewModel(
 
         viewModelScope.launch {
             state = vacancyInteractor.getVacancies(filteredQuery)
+            if (state is VacancyState.Content) {
+                val stateContent = state as VacancyState.Content
+                updateState(stateContent.vacanciesList, stateContent.itemsFound)
+            }
             vacancyLiveData.postValue(state)
         }
+    }
+
+    private fun updateState(vacancyList: List<Vacancy>, itemsFound: Int) {
+        vacancyState.addAll(vacancyList)
+        vacancyStateLiveData.postValue(vacancyState to itemsFound)
+    }
+
+    fun clearLastSearchResult() {
+        vacancyLiveData.value = null
     }
 
     private fun createFilteredQuery(text: String): HashMap<String, String> {
@@ -122,6 +135,5 @@ class SearchViewModel(
 
     companion object {
         private const val DEBOUNCE_DELAY = 2000L
-        private const val TOAST_DELAY = 1000L
     }
 }

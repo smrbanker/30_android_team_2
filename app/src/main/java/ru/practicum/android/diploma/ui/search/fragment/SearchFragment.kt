@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -32,6 +33,7 @@ class SearchFragment : Fragment() {
     private var filters = false
 
     private var isLoading = false
+    private var isToastShown = false
 
     private val viewModel by activityViewModel<SearchViewModel>()
 
@@ -58,9 +60,16 @@ class SearchFragment : Fragment() {
         initListeners()
         configureRecyclerView()
         setupScrollListener()
+        isToastShown = false
 
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            if (vacancyList.isEmpty()) {
+                viewModel.clearLastSearchResult()
+                showContent(it.first, it.second)
+            }
+        }
         viewModel.observeVacancy().observe(viewLifecycleOwner) { vacancyState ->
-            render(vacancyState)
+            if (vacancyState != null) render(vacancyState)
         }
         viewModel.observeInput().observe(viewLifecycleOwner) {
             if (binding.editText.text.toString() != it) {
@@ -117,8 +126,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupScrollListener() {
-        binding.recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -186,9 +195,7 @@ class SearchFragment : Fragment() {
             }
         } else {
             binding.apply {
-                // recyclerView.isVisible = true
-                // adapter.notifyDataSetChanged()
-                placeholder.isVisible = false // true
+                placeholder.isVisible = false
                 startImage.isVisible = false
                 progressBar.isVisible = false
                 progressBarAdd.isVisible = false
@@ -238,13 +245,10 @@ class SearchFragment : Fragment() {
                 placeholderAdd.isVisible = false
                 placeholderImageAdd.isVisible = false
             }
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.check_net),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-            viewModel.delayToast()
+            if (!isToastShown) {
+                isToastShown = true
+                showToast()
+            }
         }
     }
 
@@ -264,6 +268,15 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showToast() {
+        Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.check_net),
+            Toast.LENGTH_SHORT
+        )
+            .show()
     }
 
     companion object {
