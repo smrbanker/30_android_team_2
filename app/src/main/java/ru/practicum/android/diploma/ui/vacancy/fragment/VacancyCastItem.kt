@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.ui.vacancy.fragment
 
+import ru.practicum.android.diploma.domain.models.Phone
+
 sealed interface VacancyCastItem {
     data class GeneralHeaderItem(
         val vacancyTitle: String,
@@ -36,11 +38,10 @@ sealed interface VacancyCastItem {
     ) : VacancyCastItem
 
     data class MailItem(
-        val name: String,
         val mail: String
     ) : VacancyCastItem
 
     data class PhoneItem(
-        val phone: String
+        val phone: Phone
     ) : VacancyCastItem
 }

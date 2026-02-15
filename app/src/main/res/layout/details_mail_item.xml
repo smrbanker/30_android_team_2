@@ -12,16 +12,7 @@
         android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <TextView
-        android:id="@+id/name"
-        style="@style/DefaultTextMedium"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        tools:text="Name"
-        app:layout_constraintStart_toEndOf="@id/mail_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+
     <TextView
         android:id="@+id/mail"
         style="@style/DefaultTextMedium"
@@ -30,6 +21,7 @@
         tools:text="Mail"
         app:layout_constraintStart_toEndOf="@id/mail_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintTop_toTopOf="@id/mail_icon"
+        app:layout_constraintBottom_toBottomOf="@id/mail_icon"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
