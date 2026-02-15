@@ -96,7 +96,6 @@ class SearchViewModel(
         }
     }
 
-
     private fun updateState(vacancyList: List<Vacancy>, itemsFound: Int) {
         vacancyState.addAll(vacancyList)
         vacancyStateLiveData.postValue(vacancyState to itemsFound)
