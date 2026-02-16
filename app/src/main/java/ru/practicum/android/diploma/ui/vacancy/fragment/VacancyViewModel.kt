@@ -25,7 +25,7 @@ class VacancyViewModel(
 ) : ViewModel() {
 
     // region LiveData
-    val favouriteInfo = MutableLiveData<Boolean>()
+    private val favouriteInfo = MutableLiveData<Boolean>()
     fun observeFavouriteInfo(): LiveData<Boolean> = favouriteInfo
 
     private val stateLiveData = MutableLiveData<VacancyDetailsState>()
@@ -72,7 +72,7 @@ class VacancyViewModel(
         )
     }
 
-    fun searchVacancy(result: Resource<Vacancy>) {
+    private fun searchVacancy(result: Resource<Vacancy>) {
         val items = mutableListOf<VacancyCastItem>()
         val vacancy: Vacancy? = result.data
         if (result.data != null) items.addAll(buildVacancyCastItemList(result.data))
