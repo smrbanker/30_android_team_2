@@ -16,6 +16,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
+import ru.practicum.android.diploma.domain.models.Resource
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.ui.vacancy.fragment.VacancyViewModel.Companion.DB_ERROR_CHECK
@@ -85,10 +86,19 @@ class VacancyFragment : Fragment() {
         }
 
         binding.shareButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.setType("text/plain")
-            shareIntent.putExtra(Intent.EXTRA_TEXT, vacancyForFavourite?.url)
-            startActivity(shareIntent)
+            if (vacancyForFavourite?.url.isNullOrEmpty()) {
+                Toast.makeText(
+                    requireActivity(),
+                    requireContext().getString(R.string.url_unavailable),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val message = requireContext().getString(R.string.vacancy_link) + ":\n" + vacancyForFavourite?.url
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.setType("text/plain")
+                shareIntent.putExtra(Intent.EXTRA_TEXT, message)
+                startActivity(shareIntent)
+            }
         }
         // endregion
     }
@@ -130,8 +140,19 @@ class VacancyFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.detailRecyclerView.isVisible = false
         binding.placeholder.isVisible = true
-        binding.placeholderImage.setImageResource(R.drawable.server_error)
-        binding.placeholderText.text = errorMessage
+        setPlaceholder(errorMessage)
+    }
+    private fun setPlaceholder(errorMessage: String) {
+        when (errorMessage) {
+            Resource.CONNECTION_PROBLEM -> {
+                binding.placeholderImage.setImageResource(R.drawable.image_no_internet_placeholder)
+                binding.placeholderText.text = requireContext().resources.getString(R.string.no_internet)
+            }
+            Resource.SERVER_ERROR -> {
+                binding.placeholderImage.setImageResource(R.drawable.server_error)
+                binding.placeholderText.text = requireContext().resources.getString(R.string.server_error)
+            }
+        }
     }
     private fun showErrorDB(errorMessageDB: String) {
         when (errorMessageDB) {
@@ -173,8 +194,7 @@ class VacancyFragment : Fragment() {
 
     private fun checkSourceData() {
         if (!id.isNullOrEmpty() && vacancyFromDB == null) {
-            viewModel.checkFavourite(id!!)
-            viewModel.searchVacancyId(id!!)
+            viewModel.checkStateAndSearchVacancy(id!!)
         } else if (id.isNullOrEmpty() && vacancyFromDB != null) {
             viewModel.checkFavourite(vacancyFromDB!!.id)
             viewModel.setVacancyFromBase(vacancyFromDB!!)

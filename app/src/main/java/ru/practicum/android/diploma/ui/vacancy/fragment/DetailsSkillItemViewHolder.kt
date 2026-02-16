@@ -17,6 +17,7 @@ class DetailsSkillItemViewHolder(private val binding: DetailsListSkillsItemBindi
     }
 
     fun bind(item: VacancyCastItem.SkillItem) {
-        binding.itemText.text = item.skills
+        val skills = item.skills.dropLast(1)
+        binding.itemText.text = skills
     }
 }

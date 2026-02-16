@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.api.SearchVacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.db.FavouritesInteractor
+import ru.practicum.android.diploma.domain.models.Resource
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.util.salaryFormatter
@@ -24,53 +25,37 @@ class VacancyViewModel(
 ) : ViewModel() {
 
     // region LiveData
-    val favouriteInfo = MutableLiveData<Boolean>()
+    private val favouriteInfo = MutableLiveData<Boolean>()
     fun observeFavouriteInfo(): LiveData<Boolean> = favouriteInfo
 
     private val stateLiveData = MutableLiveData<VacancyDetailsState>()
     fun observeState(): LiveData<VacancyDetailsState> = stateLiveData
     // endregion
-
+    private var vacancyFromBase: Vacancy? = null
     // region Методы получения объекта вакансии
-    fun searchVacancyId(id: String) {
+    fun checkStateAndSearchVacancy(id: String) {
         if (!id.isNullOrEmpty()) {
+            val job = viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val vacancy = favouritesInteractor.getFavoriteVacancy(id)
+                    if (vacancy == null) {
+                        renderFavorite(false)
+                    } else {
+                        vacancyFromBase = vacancy
+                        renderFavorite(true)
+                    }
+                } catch (e: SQLException) {
+                    Log.e(SQL_EXCEPTION, e.toString())
+                    stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_CHECK))
+                }
+            }
             renderState(
                 VacancyDetailsState.Loading
             )
             viewModelScope.launch {
+                job.join()
                 val result = vacancyInteractor.searchVacancyDetails(id)
-                val items = mutableListOf<VacancyCastItem>()
-                val vacancy: Vacancy? = result.data
-                if (result.data != null) {
-                    items.addAll(buildVacancyCastItemList(result.data))
-                }
-                when {
-                    result.message != null -> {
-                        renderState(
-                            VacancyDetailsState.Error(
-                                errorMessage = context.getString(R.string.server_error),
-                            )
-                        )
-                    }
-
-                    items.isEmpty() -> {
-                        renderState(
-                            VacancyDetailsState.Empty(
-                                emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
-                            )
-                        )
-                    }
-
-                    else -> {
-                        renderState(
-                            VacancyDetailsState.Content(
-                                vacancy = items,
-                                vacancyFull = vacancy
-                            )
-                        )
-                    }
-                }
-
+                searchVacancy(result)
             }
         }
     }
@@ -85,6 +70,46 @@ class VacancyViewModel(
                 vacancyFull = vacancy
             )
         )
+    }
+
+    private fun searchVacancy(result: Resource<Vacancy>) {
+        val items = mutableListOf<VacancyCastItem>()
+        val vacancy: Vacancy? = result.data
+        if (result.data != null) items.addAll(buildVacancyCastItemList(result.data))
+        when {
+            result.message != null -> {
+                if (vacancyFromBase != null) {
+                    items.addAll(buildVacancyCastItemList(vacancyFromBase!!))
+                    renderState(
+                        VacancyDetailsState.Content(
+                            vacancy = items,
+                            vacancyFull = vacancyFromBase
+                        )
+                    )
+                } else {
+                    renderState(
+                        VacancyDetailsState.Error(
+                            errorMessage = result.message
+                        )
+                    )
+                }
+            }
+            items.isEmpty() -> {
+                renderState(
+                    VacancyDetailsState.Empty(
+                        emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
+                    )
+                )
+            }
+            else -> {
+                renderState(
+                    VacancyDetailsState.Content(
+                        vacancy = items,
+                        vacancyFull = vacancy,
+                    )
+                )
+            }
+        }
     }
     // endregion
 
