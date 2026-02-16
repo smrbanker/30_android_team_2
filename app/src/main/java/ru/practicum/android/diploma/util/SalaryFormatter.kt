@@ -13,20 +13,17 @@ fun salaryFormatter(vacancy: Vacancy, context: Context): String {
             numberFormatter(vacancy.salaryFrom),
             currencyFormatter(vacancy.currency)
         )
-
         vacancy.salaryFrom == null && vacancy.salaryTo != null -> context.getString(
             R.string.salary_to,
             numberFormatter(vacancy.salaryTo),
             currencyFormatter(vacancy.currency)
         )
-
         vacancy.salaryFrom != null && vacancy.salaryTo != null -> context.getString(
             R.string.salary_from_to,
             numberFormatter(vacancy.salaryFrom),
             numberFormatter(vacancy.salaryTo),
             currencyFormatter(vacancy.currency)
         )
-
         else -> context.getString(R.string.salary_not_specified)
     }
 }
