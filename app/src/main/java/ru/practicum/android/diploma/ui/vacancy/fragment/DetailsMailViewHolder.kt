@@ -17,7 +17,6 @@ class DetailsMailViewHolder(private val binding: DetailsMailItemBinding) :
     }
 
     fun bind(item: VacancyCastItem.MailItem) {
-        binding.name.text = item.name
         binding.mail.text = item.mail
     }
 }

@@ -17,16 +17,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="@dimen/spacing_48"
-            android:layout_height="@dimen/spacing_48"
-            android:background="@drawable/logo_background"
-            android:foreground="@drawable/logo_foreground"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription,ImageContrastCheck"
-            tools:src="@drawable/placeholder_32px" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="@dimen/icon_size_48"
+            android:layout_height="@dimen/icon_size_48"
+            android:layout_gravity="center_vertical"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+
+            app:cardBackgroundColor="@android:color/transparent">
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:src = "@drawable/placeholder_32px"
+                android:background="@drawable/logo_background"
+                android:foreground="@drawable/logo_foreground"/>
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="wrap_content"

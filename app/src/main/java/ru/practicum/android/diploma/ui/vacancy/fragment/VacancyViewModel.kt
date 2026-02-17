@@ -11,10 +11,12 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.api.SearchVacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.db.FavouritesInteractor
+import ru.practicum.android.diploma.domain.models.Resource
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetailsState
 import ru.practicum.android.diploma.util.salaryFormatter
 import java.sql.SQLException
+import kotlin.collections.plusAssign
 
 class VacancyViewModel(
     private val favouritesInteractor: FavouritesInteractor,
@@ -23,53 +25,37 @@ class VacancyViewModel(
 ) : ViewModel() {
 
     // region LiveData
-    val favouriteInfo = MutableLiveData<Boolean>()
+    private val favouriteInfo = MutableLiveData<Boolean>()
     fun observeFavouriteInfo(): LiveData<Boolean> = favouriteInfo
 
     private val stateLiveData = MutableLiveData<VacancyDetailsState>()
     fun observeState(): LiveData<VacancyDetailsState> = stateLiveData
     // endregion
-
+    private var vacancyFromBase: Vacancy? = null
     // region Методы получения объекта вакансии
-    fun searchVacancyId(id: String) {
+    fun checkStateAndSearchVacancy(id: String) {
         if (!id.isNullOrEmpty()) {
+            val job = viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val vacancy = favouritesInteractor.getFavoriteVacancy(id)
+                    if (vacancy == null) {
+                        renderFavorite(false)
+                    } else {
+                        vacancyFromBase = vacancy
+                        renderFavorite(true)
+                    }
+                } catch (e: SQLException) {
+                    Log.e(SQL_EXCEPTION, e.toString())
+                    stateLiveData.postValue(VacancyDetailsState.ErrorDB(DB_ERROR_CHECK))
+                }
+            }
             renderState(
                 VacancyDetailsState.Loading
             )
             viewModelScope.launch {
+                job.join()
                 val result = vacancyInteractor.searchVacancyDetails(id)
-                val items = mutableListOf<VacancyCastItem>()
-                val vacancy: Vacancy? = result.data
-                if (result.data != null) {
-                    items.addAll(buildVacancyCastItemList(result.data))
-                }
-                when {
-                    result.message != null -> {
-                        renderState(
-                            VacancyDetailsState.Error(
-                                errorMessage = context.getString(R.string.server_error),
-                            )
-                        )
-                    }
-
-                    items.isEmpty() -> {
-                        renderState(
-                            VacancyDetailsState.Empty(
-                                emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
-                            )
-                        )
-                    }
-
-                    else -> {
-                        renderState(
-                            VacancyDetailsState.Content(
-                                vacancy = items,
-                                vacancyFull = vacancy
-                            )
-                        )
-                    }
-                }
-
+                searchVacancy(result)
             }
         }
     }
@@ -84,6 +70,46 @@ class VacancyViewModel(
                 vacancyFull = vacancy
             )
         )
+    }
+
+    private fun searchVacancy(result: Resource<Vacancy>) {
+        val items = mutableListOf<VacancyCastItem>()
+        val vacancy: Vacancy? = result.data
+        if (result.data != null) items.addAll(buildVacancyCastItemList(result.data))
+        when {
+            result.message != null -> {
+                if (vacancyFromBase != null) {
+                    items.addAll(buildVacancyCastItemList(vacancyFromBase!!))
+                    renderState(
+                        VacancyDetailsState.Content(
+                            vacancy = items,
+                            vacancyFull = vacancyFromBase
+                        )
+                    )
+                } else {
+                    renderState(
+                        VacancyDetailsState.Error(
+                            errorMessage = result.message
+                        )
+                    )
+                }
+            }
+            items.isEmpty() -> {
+                renderState(
+                    VacancyDetailsState.Empty(
+                        emptyMessage = context.getString(R.string.vacancy_not_found_or_deleted)
+                    )
+                )
+            }
+            else -> {
+                renderState(
+                    VacancyDetailsState.Content(
+                        vacancy = items,
+                        vacancyFull = vacancy,
+                    )
+                )
+            }
+        }
     }
     // endregion
 
@@ -113,34 +139,62 @@ class VacancyViewModel(
 
     private fun buildVacancyCastItemList(vacancy: Vacancy): List<VacancyCastItem> {
         val items = buildList<VacancyCastItem>() {
-            if (vacancy.name.isNotEmpty()) {
-                val salary = salaryFormatter(vacancy, context)
-                this += VacancyCastItem.GeneralHeaderItem(
-                    vacancyTitle = vacancy.name,
-                    vacancySalary = salary)
-            }
-            if (vacancy.employer.isNotEmpty()
-                && vacancy.area.isNotEmpty()
-                && vacancy.logo.isNotEmpty()) {
-                this += VacancyCastItem.CompanyItem(
-                    employer = vacancy.employer,
-                    area = vacancy.area,
-                    logo = vacancy.logo)
-            }
-            if (vacancy.description.isNotEmpty()) {
-                this += VacancyCastItem.BigHeaderItem(context.getString(R.string.vacancy_description))
-                this.addAll(getDescriptionItemsList(vacancy.description))
-            }
-            if (vacancy.skills.isNotEmpty()) {
-                this += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
-                this += VacancyCastItem.SkillItem(vacancy.skills)
-            }
-            if (!vacancy.phone.isNullOrEmpty()) {
-                val phones = vacancy.phone.split(',')
-                this += phones.map { VacancyCastItem.PhoneItem(it) }
-            }
+            addGeneralTitle(vacancy, this)
+            addEmployer(vacancy, this)
+            addDescription(vacancy, this)
+            addSkills(vacancy, this)
+            addContacts(vacancy, this)
         }
         return items
+    }
+
+    private fun addGeneralTitle(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.name.isNotEmpty()) {
+            val salary = salaryFormatter(vacancy, context)
+            list += VacancyCastItem.GeneralHeaderItem(
+                vacancyTitle = vacancy.name,
+                vacancySalary = salary)
+        }
+    }
+
+    private fun addEmployer(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.employer.isNotEmpty()
+            && vacancy.area.isNotEmpty()
+            && vacancy.logo.isNotEmpty()) {
+            list += VacancyCastItem.CompanyItem(
+                employer = vacancy.employer,
+                area = vacancy.area,
+                logo = vacancy.logo)
+        }
+    }
+
+    private fun addDescription(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.description.isNotEmpty()) {
+            list += VacancyCastItem.BigHeaderItem(context.getString(R.string.vacancy_description))
+            list.addAll(getDescriptionItemsList(vacancy.description))
+        }
+    }
+
+    private fun addSkills(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (vacancy.skills.isNotEmpty()) {
+            list += VacancyCastItem.BigHeaderItem(context.getString(R.string.key_skills))
+            list += VacancyCastItem.SkillItem(vacancy.skills)
+        }
+    }
+
+    private fun addContacts(vacancy: Vacancy, list: MutableList<VacancyCastItem>) {
+        if (!vacancy.contact.isNullOrEmpty() || !vacancy.phone.isNullOrEmpty() || !vacancy.email.isNullOrEmpty()) {
+            list += VacancyCastItem.BigHeaderItem(context.getString(R.string.contacts))
+            if (!vacancy.contact.isNullOrEmpty()) {
+                list += VacancyCastItem.SmallHeaderItem(vacancy.contact)
+            }
+            if (!vacancy.email.isNullOrEmpty()) {
+                list += VacancyCastItem.MailItem(vacancy.email)
+            }
+            if (!vacancy.phone.isNullOrEmpty()) {
+                list += vacancy.phone.map { VacancyCastItem.PhoneItem(it) }
+            }
+        }
     }
     // endregion
 
